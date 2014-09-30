@@ -1,0 +1,30 @@
+int main()
+{
+	for(int speed=0; speed<=100;speed+=10)
+	{
+		MOTOR_SetSpeed(MOTOR_LEFT, speed);
+		MOTOR_SetSpeed(MOTOR_RIGHT, speed);
+
+		THREAD_MSleep(1000);	//Some time to reach a stable speed
+
+		//Reset counters
+		ENCODER_Read(ENCODER_LEFT);
+		ENCODER_Read(ENCODER_RIGHT);
+
+		THREAD_MSleep(1000);
+		int realSpeedLeft 	= ENCODER_Read(ENCODER_LEFT);
+		int realSpeedRight 	= ENCODER_Read(ENCODER_RIGHT);
+
+		int diffLeft = realSpeedLeft - speed;
+		int diffRight = realSpeedRight - speed;
+
+		if(speed%20==0) LCD_Printf("\n");
+		else LCD_Printf(" | ");
+		LCD_Printf("%d: %d - %d", speed, diffLeft, diffRight);
+	}
+
+	MOTOR_SetSpeed(MOTOR_LEFT, 0);
+	MOTOR_SetSpeed(MOTOR_RIGHT, 0);
+	
+	return 0;
+}
