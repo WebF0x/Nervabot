@@ -3,6 +3,10 @@ Nervabot
 
 Robot fait par 7 étudiants de l'Université de Sherbrooke en Génie Informatique et Électrique
 
+Milestones
+----------
+- Se calibre automatiquement pour rouler droit
+
 La Grande Course
 ----------------
 Compétitions de mi-session
