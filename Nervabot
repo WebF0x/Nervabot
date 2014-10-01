@@ -46,7 +46,7 @@ void calibrateWheels()
 	int realSpeedLeft0 	= ENCODER_Read(ENCODER_LEFT);
 	int realSpeedRight0 = ENCODER_Read(ENCODER_RIGHT);
 
-	///Take measurements #0
+	///Take measurements #1
 	int targetSpeed1 = 100;
 
 	int inputSpeedLeft1 = targetSpeed1;
