@@ -5,7 +5,10 @@ Robot fait par 7 étudiants de l'Université de Sherbrooke en Génie Informatiqu
 
 Milestones
 ----------
-- Se calibre automatiquement pour rouler droit
+- Calibrage pour rouler droit
+- Avancer de n'importe quelle distance
+- Tourner de n'importe quel angle
+- Parcours de la qualification hardcodé
 
 La Grande Course
 ----------------
