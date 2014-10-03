@@ -24,6 +24,8 @@ public:
 	void avancer(int distance, int vitesse);
 	void tourner(float angle, int vitesse);
 
+	void qualification();
+
 private:
 	float m_leftWheelSlope;
 	float m_rightWheelSlope;

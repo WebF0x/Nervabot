@@ -176,3 +176,52 @@ void Robot::tourner(float angle, int vitesse)
 
 	stop();
 }
+
+void Robot::qualification()
+{
+	LCD_Printf("Calibrage\n");
+		THREAD_MSleep(2000);
+		calibrateWheels(5000);
+
+		LCD_Printf("Place moi sur ligne de depart\n");
+		THREAD_MSleep(10000);
+
+		avancer(222, 50);
+		THREAD_MSleep(1000);
+		tourner(90, 50);
+
+		avancer(50, 50);
+		THREAD_MSleep(1000);
+		tourner(-90, 50);
+
+		avancer(45, 50);
+		THREAD_MSleep(1000);
+		tourner(-90, 50);
+
+		avancer(50, 50);
+		THREAD_MSleep(1000);
+		tourner(90, 50);
+
+		avancer(31, 50);
+		THREAD_MSleep(1000);
+		tourner(-45, 50);
+
+		avancer(56, 50);
+		THREAD_MSleep(1000);
+		tourner(90, 50);
+
+		avancer(82, 50);
+		THREAD_MSleep(1000);
+		tourner(-45, 50);
+
+		avancer(50, 50);
+		THREAD_MSleep(1000);
+		tourner(-12.5, 50);
+
+		avancer(100, 50);
+
+		THREAD_MSleep(3000);
+		tourner(360, 50);
+		tourner(-360, 50);
+		tourner(1080, 50);
+}
