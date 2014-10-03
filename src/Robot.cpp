@@ -125,3 +125,54 @@ void Robot::stop()
 	MOTOR_SetSpeed(MOTOR_LEFT, 0);
 	MOTOR_SetSpeed(MOTOR_RIGHT, 0);
 }
+
+void Robot::avancer(int distance, int vitesse)
+{
+	ENCODER_Read(ENCODER_LEFT);
+
+	avancer(vitesse);
+
+	int nbCocheTotal = (float)distance/(WHEEL_DIAMETER*PI) * WHEEL_NB_COCHES;
+
+	int nbCoche = 0;
+
+	while(nbCoche < nbCocheTotal)
+	{
+		THREAD_MSleep(100);
+		nbCoche += ENCODER_Read(ENCODER_LEFT);
+	}
+
+	stop();
+}
+
+void Robot::tourner(float angle, int vitesse)
+{
+	stop();
+
+	ENCODER_Read(ENCODER_LEFT);
+
+	int nbCocheTotal = (float)DISTANCE_ROUES*fabs(angle)/360/(WHEEL_DIAMETER) * WHEEL_NB_COCHES;
+
+	int nbCoche = 0;
+
+	int leftSpeed = m_leftWheelSlope * vitesse + m_leftWheelOffset;
+	int rightSpeed = m_rightWheelSlope * vitesse + m_rightWheelOffset;
+	if(angle < 0.f)
+	{
+		rightSpeed *= -1;
+	}
+	else
+	{
+		leftSpeed *= -1;
+	}
+	MOTOR_SetSpeed(MOTOR_LEFT, leftSpeed);
+	MOTOR_SetSpeed(MOTOR_RIGHT, rightSpeed);
+
+	while(nbCoche < nbCocheTotal)
+	{
+		THREAD_MSleep(100);
+		nbCoche += ENCODER_Read(ENCODER_LEFT);
+	}
+
+	stop();
+}

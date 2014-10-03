@@ -1,3 +1,9 @@
+# Armus IDE
+.project
+.cproject
+.metadata
+Debug/
+
 # Compiled Object files
 *.slo
 *.lo
@@ -14,6 +20,8 @@
 *.la
 *.a
 *.lib
+
+
 
 # Executables
 *.exe
