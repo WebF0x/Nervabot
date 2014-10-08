@@ -9,20 +9,20 @@
 #define ROBOT_H_
 
 #include <libarmus.h>
-#include <math.h>
+#include <Math.h>
+#include <stdlib.h>
 
 class Robot
 {
 public:
 	Robot();
 	virtual ~Robot();
-	void calibrateWheels(int millis);
+
 	void dispSpeedDifferences();
-	void avancer(int targetSpeed);
 	void stop();
 
-	void avancer(int distance, int vitesse);
-	void tourner(float angle, int vitesse);
+	void avancer(float distance);
+	void tourner(float angle);
 
 	void qualification();
 
@@ -36,6 +36,8 @@ private:
 	static const int WHEEL_NB_COCHES = 64;
 	static const float DISTANCE_ROUES = 13.8;
 	static const float PI = 3.1415926535897932384626433832795;
+
+	static const int SPEEDTARGET = 50;
 };
 
 #endif /* ROBOT_H_ */
