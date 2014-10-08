@@ -1,21 +1,25 @@
 /*
 ============================================================================
- Name : Nervabot.cpp
+ Name : Armus.cpp
  Author :
  Version :
- Description : Programme principal pour la qualification de la Grande Course
+ Description : Hello world - Exe source file
 ============================================================================
 */
 
-#include "Robot.h"
-#include <stdio.h>
+// Include Files
 
-/*int main()
+#include "Robot.h"
+
+// Global Functions
+
+int main()
 {
 	Robot robot;
-	robot.qualification();
 
-	FILE *f = fopen("file.txt", "w");
+	robot.qualification();
+	
+	/*FILE *f = fopen("file.txt", "w");
 	if (f == NULL)
 	{
 	    printf("Error opening file!\n");
@@ -35,8 +39,8 @@
 	/*char c = 'A';
 	fprintf(f, "A character: %c\n", c);
 
-	fclose(f);
-
+	fclose(f);*/
 
 	return 0;
-}*/
+}
+
