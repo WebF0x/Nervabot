@@ -25,7 +25,8 @@ void Robot::stop()
 	MOTOR_SetSpeed(MOTOR_RIGHT, 0);
 }
 
-void Robot::oldAvancer(float distance)
+/*	//Code que Jé avait fait
+void Robot::avancer(float distance)
 {
 	 int WAITTIME = 250;
 	 const double K = 15;
@@ -57,6 +58,7 @@ void Robot::oldAvancer(float distance)
 	 	speedLeft = speedLeft - floor(((error-1)*K) + 0.5) ;
 	 }
 }
+*/
 
 void Robot::avancer(float distance)
 {
@@ -102,7 +104,7 @@ void Robot::avancer(float distance)
 
 void Robot::tourner(float angle)
 {
-		 int nbTotal = 0;
+	int nbTotal = 0;
 
 	int nbTarget = (float)DISTANCE_ROUES*fabs(angle)/360/(WHEEL_DIAMETER) * WHEEL_NB_COCHES;
 
@@ -128,104 +130,7 @@ void Robot::tourner(float angle)
 		}
 }
 
-/*
-void Robot::oldQualification()
-{
-		LCD_Printf("Place moi sur ligne de depart\n");
 
-		THREAD_MSleep(1000);
-
-		avancer(210);
-		tourner(90);
-
-		avancer(40);
-		tourner(-90);
-
-		avancer(30);
-		tourner(-90);
-
-		avancer(30);
-		tourner(90);
-
-		avancer(20);
-		tourner(-45);
-
-		avancer(30);
-		tourner(90);
-
-		avancer(55);
-		tourner(-45);
-
-		avancer(40);
-		tourner(-12.5);
-
-		avancer(50);
-
-}
-*/
-
-/*
-void Robot::qualification()
-{
-		LCD_Printf("Place moi sur ligne de depart\n");
-
-		THREAD_MSleep(1000);
-
-		avancer(215);
-		tourner(90);
-
-
-		while(!DIGITALIO_Read(BMP_FRONT));
-
-		avancer(35);
-		tourner(-90);
-
-
-				while(!DIGITALIO_Read(BMP_FRONT));
-
-		avancer(30);
-		tourner(-90);
-
-
-				while(!DIGITALIO_Read(BMP_FRONT));
-
-		avancer(35);
-		tourner(90);
-
-
-				while(!DIGITALIO_Read(BMP_FRONT));
-
-		avancer(20);
-		tourner(-45);
-
-
-				while(!DIGITALIO_Read(BMP_FRONT));
-		avancer(30);
-		tourner(90);
-
-
-				while(!DIGITALIO_Read(BMP_FRONT));
-
-		avancer(55);
-		tourner(-45);
-
-
-				while(!DIGITALIO_Read(BMP_FRONT));
-
-		avancer(40);
-		tourner(-12.5);
-
-
-				while(!DIGITALIO_Read(BMP_FRONT));
-
-		avancer(50);
-
-//		THREAD_MSleep(3000);
-//		tourner(360);
-//		tourner(-360);
-//		tourner(1080);
-}
-*/
 
 void Robot::qualification()
 {
@@ -236,44 +141,26 @@ void Robot::qualification()
 		avancer(215.5);
 		tourner(90);
 
-
 		avancer(36);
 		tourner(-90);
-
-
-
 
 		avancer(33);
 		tourner(-90);
 
-
-
-
 		avancer(34);
 		tourner(90);
-
-
-
 
 		avancer(23);
 		tourner(-45);
 
-
 		avancer(28);
 		tourner(90);
-
-
-
 
 		avancer(63);
 		tourner(-45);
 
-
-
 		avancer(40);
 		tourner(-12.5);
-
-
 
 		avancer(100);
 
