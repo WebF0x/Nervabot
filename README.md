@@ -5,9 +5,8 @@ Robot fait par 7 étudiants de l'Université de Sherbrooke en Génie Informatiqu
 
 Milestones
 ----------
-- Calibrage pour rouler droit
-- Avancer de n'importe quelle distance
-- Tourner de n'importe quel angle
+- Avance droit d'une certaine distance
+- Tourner d'un certain angle
 - Parcours de la qualification hardcodé
 
 La Grande Course
