@@ -25,7 +25,7 @@ void Robot::stop()
 	MOTOR_SetSpeed(MOTOR_RIGHT, 0);
 }
 
-void Robot::avancer(float distance)
+void Robot::oldAvancer(float distance)
 {
 	 int WAITTIME = 250;
 	 const double K = 15;
@@ -58,11 +58,51 @@ void Robot::avancer(float distance)
 	 }
 }
 
+void Robot::avancer(float distance)
+{
+		int nbTarget = (float)distance/(WHEEL_DIAMETER*PI) * WHEEL_NB_COCHES;;
+
+		int nbLeftTotal = 0;
+		int nbRightTotal = 0;
+		double nbLeft = 0 ;
+		double nbRight = 0;
+
+		int speedLeft = SPEEDTARGET;
+		int speedRight = SPEEDTARGET;
+
+		double error = 1;
+
+		ENCODER_Read(ENCODER_LEFT);
+		ENCODER_Read(ENCODER_RIGHT);
+		while(nbLeftTotal < nbTarget)
+		{
+			if(nbLeftTotal < nbRightTotal)
+			{
+			 MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
+			 MOTOR_SetSpeed(MOTOR_RIGHT, 0);
+			}
+			else if(nbLeftTotal > nbRightTotal)
+			{
+			 MOTOR_SetSpeed(MOTOR_LEFT, 0);
+			 MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
+			}
+			else
+			{
+			 MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
+			 MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
+			}
+			nbLeft = ENCODER_Read(ENCODER_LEFT);
+			nbRight = ENCODER_Read(ENCODER_RIGHT);
+
+			nbLeftTotal += nbLeft;
+			nbRightTotal+= nbRight;
+		}
+}
+
 
 void Robot::tourner(float angle)
 {
 		 int nbTotal = 0;
-		 int WAITTIME = 10;
 
 	int nbTarget = (float)DISTANCE_ROUES*fabs(angle)/360/(WHEEL_DIAMETER) * WHEEL_NB_COCHES;
 
@@ -73,7 +113,6 @@ void Robot::tourner(float angle)
 			ENCODER_Read(ENCODER_LEFT);
 			while(nbTotal < nbTarget*2)
 			{
-				//THREAD_MSleep(WAITTIME);
 				nbTotal += ENCODER_Read(ENCODER_LEFT);
 			}
 		}
@@ -84,13 +123,13 @@ void Robot::tourner(float angle)
 			ENCODER_Read(ENCODER_RIGHT);
 			while(nbTotal < nbTarget*2)
 			{
-				//THREAD_MSleep(WAITTIME);
 				nbTotal += ENCODER_Read(ENCODER_RIGHT);
 			}
 		}
 }
 
-void Robot::qualification()
+/*
+void Robot::oldQualification()
 {
 		LCD_Printf("Place moi sur ligne de depart\n");
 
@@ -122,8 +161,121 @@ void Robot::qualification()
 
 		avancer(50);
 
-		/*THREAD_MSleep(3000);
-		tourner(360);
-		tourner(-360);
-		tourner(1080);*/
+}
+*/
+
+/*
+void Robot::qualification()
+{
+		LCD_Printf("Place moi sur ligne de depart\n");
+
+		THREAD_MSleep(1000);
+
+		avancer(215);
+		tourner(90);
+
+
+		while(!DIGITALIO_Read(BMP_FRONT));
+
+		avancer(35);
+		tourner(-90);
+
+
+				while(!DIGITALIO_Read(BMP_FRONT));
+
+		avancer(30);
+		tourner(-90);
+
+
+				while(!DIGITALIO_Read(BMP_FRONT));
+
+		avancer(35);
+		tourner(90);
+
+
+				while(!DIGITALIO_Read(BMP_FRONT));
+
+		avancer(20);
+		tourner(-45);
+
+
+				while(!DIGITALIO_Read(BMP_FRONT));
+		avancer(30);
+		tourner(90);
+
+
+				while(!DIGITALIO_Read(BMP_FRONT));
+
+		avancer(55);
+		tourner(-45);
+
+
+				while(!DIGITALIO_Read(BMP_FRONT));
+
+		avancer(40);
+		tourner(-12.5);
+
+
+				while(!DIGITALIO_Read(BMP_FRONT));
+
+		avancer(50);
+
+//		THREAD_MSleep(3000);
+//		tourner(360);
+//		tourner(-360);
+//		tourner(1080);
+}
+*/
+
+void Robot::qualification()
+{
+		LCD_Printf("Place moi sur ligne de depart\n");
+
+		THREAD_MSleep(1000);
+
+		avancer(215.5);
+		tourner(90);
+
+
+		avancer(36);
+		tourner(-90);
+
+
+
+
+		avancer(33);
+		tourner(-90);
+
+
+
+
+		avancer(34);
+		tourner(90);
+
+
+
+
+		avancer(23);
+		tourner(-45);
+
+
+		avancer(28);
+		tourner(90);
+
+
+
+
+		avancer(63);
+		tourner(-45);
+
+
+
+		avancer(40);
+		tourner(-12.5);
+
+
+
+		avancer(100);
+
+		stop();
 }
