@@ -2,14 +2,18 @@ Downloader et installer GitHub for Windows: https://windows.github.com/
 
 Dans GitHub for Windows:
 Sign in
-À gauche le (+), Clone, Nervabot, Clone, Choisir emplacement mettons Desktop
+Ã€ gauche le (+), Clone, Nervabot, Clone, Choisir emplacement mettons Desktop
 
 ArmusIDE: 
 File, New, C++ Project (Nom: "Armus", Project Type:ARMUS->Empty ARMUS project, Location: ".../Nervabot/Armus")
 
 GitHub for Windows:
-Dérouler "Uncommitted changes" (Les fichiers que vous avez modifiés)
+DÃ©rouler "Uncommitted changes" (Les fichiers que vous avez modifiÃ©s)
 
-Summary: Décrivez ce que vous avez fait comme changement
+Summary: DÃ©crivez ce que vous avez fait comme changement
 Commit to Master
 Sync (en haut a droite)
+
+
+*Avant de modifier le code, assurez vous de faire Sync (ou dans le Git Bash: "git pull"). 
+*Sinon il y a plus de chance d'avoir des conflits entre les fichiers
