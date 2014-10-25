@@ -12,9 +12,15 @@ Milestones
 
 La Grande Course
 ----------------
-Compétitions de mi-session
+Compétitions jeudi le 30 octobre 2014
 
-Détails à venir
+![Parcours](/Images/ParcoursGrandeCourse.jpg "Parcours")
+
++ Bleu : 20 points
++ Vert : 10 points
++ Jaune : 5 Points
+
+Une roue en dehors de la bande rouge = robot retiré du parcours
 
 <a href="http://www.gel.usherbrooke.ca/crj/2014/">Concours Robot-Jouet 2014</a>
 -------------------------------------------------------------------------------
