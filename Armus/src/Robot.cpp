@@ -2,63 +2,19 @@
  * Robot.cpp
  *
  *  Created on: 2014-10-01
- *      Author: dupm2216
+ *  Author: Equipe P4
  */
 
 #include "Robot.h"
 
 Robot::Robot() : m_leftWheelSlope(1), m_rightWheelSlope(1), m_leftWheelOffset(0), m_rightWheelOffset(0)
-{
-	// TODO Auto-generated constructor stub
-
-}
-
-Robot::~Robot() {
-	// TODO Auto-generated destructor stub
-}
-
-
+{}
 
 void Robot::stop()
 {
 	MOTOR_SetSpeed(MOTOR_LEFT, 0);
 	MOTOR_SetSpeed(MOTOR_RIGHT, 0);
 }
-
-/*	//Code que Jé avait fait
-void Robot::avancer(float distance)
-{
-	 int WAITTIME = 250;
-	 const double K = 15;
-	 int nbTarget = (float)distance/(WHEEL_DIAMETER*PI) * WHEEL_NB_COCHES;;
-	 double nbLeft = 0 ;
-	 int nbLeftTotal = 0;
-	 double nbRight = 0;
-
-	 int speedLeft = SPEEDTARGET;
-	 int speedRight = SPEEDTARGET;
-
-	 double error = 1;
-
-	 ENCODER_Read(ENCODER_LEFT);
-	 ENCODER_Read(ENCODER_RIGHT);
-	 while(nbLeftTotal < nbTarget)
-	 {
-
-	 	MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
-	 	MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
-
-	 	THREAD_MSleep(WAITTIME);
-	 	nbLeft = ENCODER_Read(ENCODER_LEFT);
-	 	nbRight = ENCODER_Read(ENCODER_RIGHT);
-
-	 	nbLeftTotal += nbLeft;
-	 	error = nbLeft / nbRight;
-
-	 	speedLeft = speedLeft - floor(((error-1)*K) + 0.5) ;
-	 }
-}
-*/
 
 void Robot::avancer(float distance)
 {
@@ -101,7 +57,6 @@ void Robot::avancer(float distance)
 		}
 }
 
-
 void Robot::tourner(float angle)
 {
 	int nbTotal = 0;
@@ -129,8 +84,6 @@ void Robot::tourner(float angle)
 			}
 		}
 }
-
-
 
 void Robot::qualification()
 {
@@ -166,3 +119,21 @@ void Robot::qualification()
 
 		stop();
 }
+
+void writeInFile(const char* filename, const char* text)
+{
+	FILE *f = fopen(filename, "w");
+	if (f == NULL)
+	{
+	    printf("Error opening file!\n");
+	    exit(1);
+	}
+
+	fprintf(f, text);
+
+	fclose(f);
+}
+
+
+
+

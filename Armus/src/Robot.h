@@ -2,7 +2,7 @@
  * Robot.h
  *
  *  Created on: 2014-10-01
- *      Author: dupm2216
+ *  Author: Equipe P4
  */
 
 #ifndef ROBOT_H_
