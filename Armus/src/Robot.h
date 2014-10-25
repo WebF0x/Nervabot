@@ -25,6 +25,7 @@ public:
 	void tourner(float angle);
 
 	void qualification();
+	void writeInFile(const char* filename, const char* text);
 
 private:
 	float m_leftWheelSlope;

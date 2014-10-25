@@ -120,7 +120,7 @@ void Robot::qualification()
 		stop();
 }
 
-void writeInFile(const char* filename, const char* text)
+void Robot::writeInFile(const char* filename, const char* text)
 {
 	FILE *f = fopen(filename, "w");
 	if (f == NULL)
