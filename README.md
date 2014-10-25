@@ -8,7 +8,7 @@ Milestones
 - Avance droit d'une certaine distance
 - Tourner d'un certain angle
 - Parcours de la qualification hardcodé
-- 6e position lors de la qualification => On va pouvoir choisir notre position de départ lors de la Grande Course
+- 6e position lors de la qualification
 
 La Grande Course
 ----------------
