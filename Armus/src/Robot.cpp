@@ -113,42 +113,48 @@ void Robot::endGame()
 	int corde = 0;
 	int nb_Coche = 0;
 	int rayon = 75;
-	while(lecture_couleur == couleur_present)
+	while(lecture_couleur() == couleur_present)
 	{
 		Deplacement d = avancerPrudemment(x);
 		corde = d.distance;
-
-		else if(d.raison==Raison::DistanceParcourue)
-		{
-
-		}
-
-		else if(d.raison==Raison::MeilleureCouleur)
-		{
-			couleur_present = VERT;
-			x = 30;
-			corde = 0;
-			nb_Coche = 0;
-			rayon = 50;
-		}
-
 		switch(d.raison)
 		{
 		case Raison::PireCouleur:
+			int n = 0;
 			tourner(180);
 			avancer(corde/2);
 			tourner(90); //Le sens va dépendre de la position du robot (GPS)
-			avancer(sqrt(rayon*rayon - corde * corde / 4));
+			avancerPrudemment(sqrt(rayon*rayon - corde * corde / 4));
+			int D1 = d.distance;
+			while(d.raison==Raison::Bumper && n < 6)
+			{
+				n++;
+				tourner(90); // Le sens va dependre de la position
+				Deplacement dist = suivreArc(sqrt(rayon*rayon - corde * corde / 4)-D1, true, 60);
+				tourner(-90);
+				avancerPrudemment(sqrt(rayon*rayon - corde * corde / 4)-D1);
+				D1 = d.distance + D1;
+			}
 			break;
 		case Raison::DistanceParcourue:
-				break;
+			bool versDroite = true;	//Guesser avec le gps
+			Deplacement dist = suivreArc(x, versDroite, 2*PI*x);
+			avancerPrudemment(40);
+			if(d.raison==Raison::MeilleureCouleur)
+			{
+				couleur_present = BLEU;
+				avancer(15);
+			}
+			break;
 		case Raison::MeilleureCouleur:
-				break;
+			couleur_present = VERT;
+			x = 30;
+			rayon = 50;
+			break;
 		case Raison::Bumper:
-				break;
+			//Decider qu'est-ce qu'on fait en cas de contact
+			break;
 		}
-
-
 
 	}
 

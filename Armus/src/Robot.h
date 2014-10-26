@@ -43,6 +43,7 @@ public:
 	};
 
 	Deplacement avancerPrudemment(float distance);
+	Deplacement suivreArc(float rayon, bool versDroite, float distance);
 
 private:
 	float m_leftWheelSlope;
