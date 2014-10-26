@@ -56,6 +56,7 @@ private:
 	static const float PI = 3.1415926535897932384626433832795;
 
 	static const int SPEEDTARGET = 50;
+	static const int SPEEDTARGETPRUDENT = 40;
 };
 
 #endif /* ROBOT_H_ */

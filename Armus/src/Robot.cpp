@@ -28,18 +28,9 @@ void Robot::avancer(float distance)
 		int speedLeft = SPEEDTARGET;
 		int speedRight = SPEEDTARGET;
 
-		double error = 1;
-/*
-		Deplacement d = avancer();
-		int dist = d.distance;
-		if(d.raison==Raison::PireCouleur)
-		{
-
-		}*/
-
 		ENCODER_Read(ENCODER_LEFT);
 		ENCODER_Read(ENCODER_RIGHT);
-		while(nbLeftTotal < nbTarget)
+		while(nbLeftTotal < nbTarget || nbRightTotal < nbTarget)
 		{
 			if(nbLeftTotal < nbRightTotal)
 			{
@@ -163,6 +154,70 @@ void Robot::endGame()
 
 }
 
+Robot::Deplacement Robot::avancerPrudemment(float distance)
+{
+		int nbTarget = (float)distance/(WHEEL_DIAMETER*PI) * WHEEL_NB_COCHES;;
 
+		int nbLeftTotal = 0;
+		int nbRightTotal = 0;
+		double nbLeft = 0 ;
+		double nbRight = 0;
+
+		int speedLeft = SPEEDTARGETPRUDENT;
+		int speedRight = SPEEDTARGETPRUDENT;
+
+		int startColor = lecture_couleur();
+		int currentColor = startColor;
+
+		Deplacement resultat;
+		resultat.raison = Raison::DistanceParcourue;
+
+		ENCODER_Read(ENCODER_LEFT);
+		ENCODER_Read(ENCODER_RIGHT);
+		while(nbLeftTotal < nbTarget || nbRightTotal < nbTarget)
+		{
+
+			if(currentColor < startColor)
+			{
+				resultat.raison = Raison::MeilleureCouleur;
+				break;
+			}
+			else if(currentColor > startColor)
+			{
+				resultat.raison = Raison::PireCouleur;
+				break;
+			}
+
+			if(DIGITALIO_Read(BMP_FRONT))
+			{
+				resultat.raison = Raison::Bumper;
+				break;
+			}
+
+			if(nbLeftTotal < nbRightTotal)
+			{
+			 MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
+			 MOTOR_SetSpeed(MOTOR_RIGHT, 0);
+			}
+			else if(nbLeftTotal > nbRightTotal)
+			{
+			 MOTOR_SetSpeed(MOTOR_LEFT, 0);
+			 MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
+			}
+			else
+			{
+			 MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
+			 MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
+			}
+			nbLeft = ENCODER_Read(ENCODER_LEFT);
+			nbRight = ENCODER_Read(ENCODER_RIGHT);
+
+			nbLeftTotal += nbLeft;
+			nbRightTotal+= nbRight;
+		}
+
+		resultat.distance = nbLeftTotal*PI*WHEEL_DIAMETER/WHEEL_NB_COCHES;
+		stop();
+}
 
 
