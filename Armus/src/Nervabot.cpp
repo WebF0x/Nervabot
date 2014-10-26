@@ -11,7 +11,8 @@
 int main()
 {
 	Robot robot;
-	robot.qualification();
+
+
 
 	return 0;
 }

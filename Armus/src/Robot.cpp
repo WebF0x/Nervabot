@@ -29,6 +29,13 @@ void Robot::avancer(float distance)
 		int speedRight = SPEEDTARGET;
 
 		double error = 1;
+/*
+		Deplacement d = avancer();
+		int dist = d.distance;
+		if(d.raison==Raison::PireCouleur)
+		{
+
+		}*/
 
 		ENCODER_Read(ENCODER_LEFT);
 		ENCODER_Read(ENCODER_RIGHT);
@@ -132,6 +139,63 @@ void Robot::writeInFile(const char* filename, const char* text)
 	fprintf(f, text);
 
 	fclose(f);
+}
+
+int Robot::lecture_couleur()
+{
+	return 0;
+}
+
+void Robot::endGame()
+{
+	const int BLANC = 3;
+	const int JAUNE = 2;
+	const int VERT = 1;
+	const int BLEU = 0;
+	int couleur_present = JAUNE;
+	int x = 60;
+	int corde = 0;
+	int nb_Coche = 0;
+	int rayon = 75;
+	while(lecture_couleur == couleur_present)
+	{
+		Deplacement d = avancerPrudemment(x);
+		corde = d.distance;
+
+		else if(d.raison==Raison::DistanceParcourue)
+		{
+
+		}
+
+		else if(d.raison==Raison::MeilleureCouleur)
+		{
+			couleur_present = VERT;
+			x = 30;
+			corde = 0;
+			nb_Coche = 0;
+			rayon = 50;
+		}
+
+		switch(d.raison)
+		{
+		case Raison::PireCouleur:
+			tourner(180);
+			avancer(corde/2);
+			tourner(90); //Le sens va dépendre de la position du robot (GPS)
+			avancer(sqrt(rayon*rayon - corde * corde / 4));
+			break;
+		case Raison::DistanceParcourue:
+				break;
+		case Raison::MeilleureCouleur:
+				break;
+		case Raison::Bumper:
+				break;
+		}
+
+
+
+	}
+
 }
 
 

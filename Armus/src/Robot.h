@@ -24,8 +24,25 @@ public:
 	void avancer(float distance);
 	void tourner(float angle);
 
-	void qualification();
+	void endGame();
+	int lecture_couleur();
 	void writeInFile(const char* filename, const char* text);
+
+	enum class Raison
+	{
+		PireCouleur,
+		MeilleureCouleur,
+		Bumper,
+		DistanceParcourue
+	};
+
+	struct Deplacement
+	{
+		Raison raison;
+		int distance;
+	};
+
+	Deplacement avancerPrudemment(float distance);
 
 private:
 	float m_leftWheelSlope;
