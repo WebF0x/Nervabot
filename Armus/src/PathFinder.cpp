@@ -93,4 +93,10 @@ void PathFinder::printWorld()
     }
 }
 
+//Don't forget to call updateWorld() when done!
+void PathFinder::addDeath(int x, int y)
+{
+    m_deaths.insert(make_pair(x,y));
+}
+
 */
