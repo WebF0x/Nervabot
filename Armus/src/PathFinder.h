@@ -16,7 +16,8 @@ class PathFinder
     void updateWorld();
     void setHeight(int x, int y, int height);
     int getHeight(int x, int y);
-    void printWorld();
+    //void printWorld();
+    void addDeath(int x, int y);
 
     private:
     static const int GOAL=0;
