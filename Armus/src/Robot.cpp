@@ -92,41 +92,6 @@ void Robot::tourner(float angle)
 		}
 }
 
-void Robot::qualification()
-{
-		LCD_Printf("Place moi sur ligne de depart\n");
-
-		THREAD_MSleep(1000);
-
-		avancer(215.5);
-		tourner(90);
-
-		avancer(36);
-		tourner(-90);
-
-		avancer(33);
-		tourner(-90);
-
-		avancer(34);
-		tourner(90);
-
-		avancer(23);
-		tourner(-45);
-
-		avancer(28);
-		tourner(90);
-
-		avancer(63);
-		tourner(-45);
-
-		avancer(40);
-		tourner(-12.5);
-
-		avancer(100);
-
-		stop();
-}
-
 void Robot::writeInFile(const char* filename, const char* text)
 {
 	FILE *f = fopen(filename, "w");
