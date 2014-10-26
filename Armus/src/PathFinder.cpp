@@ -77,21 +77,21 @@ int PathFinder::getHeight(int x, int y)
     }
 }
 
-void PathFinder::printWorld()
-{
-    for(auto line : m_world)
-    {
-        for(auto height : line)
-        {
-            if(height==UNKNOWN) cout<<'?';
-            else if(height==GOAL) cout<<'*';
-            else if(height==DEATH) cout<<'X';
-            else cout<<height;
-            cout<<'\t';
-        }
-        cout<<endl;
-    }
-}
+//void PathFinder::printWorld()
+//{
+//    for(auto line : m_world)
+//    {
+//        for(auto height : line)
+//        {
+//            if(height==UNKNOWN) cout<<'?';
+//            else if(height==GOAL) cout<<'*';
+//            else if(height==DEATH) cout<<'X';
+//            else cout<<height;
+//            cout<<'\t';
+//        }
+//        cout<<endl;
+//    }
+//}
 
 //Don't forget to call updateWorld() when done!
 void PathFinder::addDeath(int x, int y)
