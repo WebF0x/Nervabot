@@ -1,5 +1,3 @@
-/*
-
 #ifndef PATHFINDER_H
 #define PATHFINDER_H
 
@@ -33,4 +31,4 @@ class PathFinder
 
 
 #endif // PATHFINDER_H
-*/
+
