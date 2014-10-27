@@ -16,7 +16,7 @@ class Robot
 {
 public:
 	Robot();
-	virtual ~Robot();
+	//virtual ~Robot();
 
 	void dispSpeedDifferences();
 	void stop();
@@ -29,7 +29,7 @@ public:
 	void writeInFile(const char* filename, const char* text);
 	void Attendre5kHz();
 
-	enum class Raison
+	enum Raison
 	{
 		PireCouleur,
 		MeilleureCouleur,

@@ -2,43 +2,43 @@
 
 using namespace std;
 
-PathFinder::PathFinder(int worldWidth, int worldLength, const set<pair<int,int>>& goals, const set<pair<int,int>>& deaths) : WORLD_WIDTH(worldWidth), WORLD_LENGTH(worldLength)
+PathFinder::PathFinder(int worldWidth, int worldLength, const set<pair<int,int> >& goals, const set<pair<int,int> >& deaths) : WORLD_WIDTH(worldWidth), WORLD_LENGTH(worldLength)
 {
     setGoals(goals);
     setDeaths(deaths);
-    m_world = vector<vector<int>>(WORLD_WIDTH, vector<int>(WORLD_LENGTH,UNKNOWN));
+    m_world = vector<vector<int> >(WORLD_WIDTH, vector<int>(WORLD_LENGTH,UNKNOWN));
 }
 
-void PathFinder::setGoals(const set<pair<int,int>>& goals)
+void PathFinder::setGoals(const set<pair<int,int> >& goals)
 {
     m_goals = goals;
 }
 
-void PathFinder::setDeaths(const set<pair<int,int>>& deaths)
+void PathFinder::setDeaths(const set<pair<int,int> >& deaths)
 {
     m_deaths = deaths;
 }
 
 void PathFinder::updateWorld()
 {
-    m_world = vector<vector<int>>(WORLD_WIDTH, vector<int>(WORLD_LENGTH,UNKNOWN));
+    m_world = vector<vector<int> >(WORLD_WIDTH, vector<int>(WORLD_LENGTH,UNKNOWN));
 
-    for(auto death : m_deaths)
+    for(set<pair<int,int> >::iterator death=m_deaths.begin(); death!=m_deaths.end(); ++death)
     {
-        int x = death.first;
-        int y = death.second;
+        int x = death->first;
+        int y = death->second;
         setHeight(x,y,DEATH);
     }
 
     int height = GOAL;
     while(!m_goals.empty())
     {
-        decltype(m_goals) nextGoals;
+    	set<pair<int,int> > nextGoals;
 
-        for(auto goal : m_goals)
+        for(set<pair<int,int> >::iterator goal=m_goals.begin(); goal!=m_goals.end(); ++goal)
         {
-            int x = goal.first;
-            int y = goal.second;
+            int x = goal->first;
+            int y = goal->second;
 
             if(getHeight(x,y) == UNKNOWN)
             {

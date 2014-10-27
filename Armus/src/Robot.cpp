@@ -127,49 +127,58 @@ void Robot::endGame()
 		corde = d.distance;
 		switch(d.raison)
 		{
-		case Raison::PireCouleur:
-			int n = 0;
-			tourner(180);
-			avancer(corde/2);
-			tourner(90); //Le sens va dépendre de la position du robot (GPS)
-			avancerPrudemment(sqrt(rayon*rayon - corde * corde / 4));
-			int D1 = d.distance;
-			while(d.raison==Raison::Bumper && n < 6)
+			case PireCouleur:
 			{
-				n++;
-				tourner(90); // Le sens va dependre de la position
-				Deplacement dist = suivreArc(sqrt(rayon*rayon - corde * corde / 4)-D1, true, 60);
-				tourner(-90);
-				avancerPrudemment(sqrt(rayon*rayon - corde * corde / 4)-D1);
-				D1 = d.distance + D1;
+				int n = 0;
+				tourner(180);
+				avancer(corde/2);
+				tourner(90); //Le sens va dépendre de la position du robot (GPS)
+				avancerPrudemment(sqrt(rayon*rayon - corde * corde / 4));
+				int D1 = d.distance;
+				while(d.raison==Bumper && n < 6)
+				{
+					n++;
+					tourner(90); // Le sens va dependre de la position
+					Deplacement dist = suivreArc(sqrt(rayon*rayon - corde * corde / 4)-D1, true, 60);
+					tourner(-90);
+					avancerPrudemment(sqrt(rayon*rayon - corde * corde / 4)-D1);
+					D1 = d.distance + D1;
+				}
+				break;
 			}
-			break;
-		case Raison::DistanceParcourue:
-			bool versDroite = true;	//Guesser avec le gps
-			Deplacement dist = suivreArc(x, versDroite, 2*PI*x);
-			avancerPrudemment(40);
-			if(d.raison==Raison::MeilleureCouleur)
+			case DistanceParcourue:
 			{
-				couleur_present = BLEU;
-				avancer(15);
+				bool versDroite = true;	//Guesser avec le gps
+				Deplacement dist = suivreArc(x, versDroite, 2*PI*x);
+				avancerPrudemment(40);
+				if(d.raison==MeilleureCouleur)
+				{
+					couleur_present = BLEU;
+					avancer(15);
+				}
+				break;
 			}
-			break;
-		case Raison::MeilleureCouleur:
-			couleur_present = VERT;
-			x = 30;
-			rayon = 50;
-			break;
-		case Raison::Bumper:
-			//Decider qu'est-ce qu'on fait en cas de contact
-			break;
+			case MeilleureCouleur:
+			{
+				couleur_present = VERT;
+				x = 30;
+				rayon = 50;
+				break;
+			}
+			case Bumper:
+			{
+				//Decider qu'est-ce qu'on fait en cas de contact
+				break;
+			}
 		}
-
 	}
 
 }
 
 Robot::Deplacement Robot::suivreArc(float rayon, bool versDroite, float distance)
 {
+	Deplacement resultat;
+	resultat.raison = DistanceParcourue;
 
 	float vraiRayonLeft = (versDroite) ? rayon + DISTANCE_ROUES/2 : rayon - DISTANCE_ROUES/2;
 	float vraiRayonRight = (versDroite) ? rayon - DISTANCE_ROUES/2 : rayon + DISTANCE_ROUES/2;
@@ -214,8 +223,9 @@ Robot::Deplacement Robot::suivreArc(float rayon, bool versDroite, float distance
 		nbTotalRight += nbRight;
 	}
 
-	float dist = (nbTotalLeft / WHEEL_NB_COCHES * (WHEEL_DIAMETER*PI))+(nbTotalRight / WHEEL_NB_COCHES * (WHEEL_DIAMETER*PI))/2;
-	return dist;
+	resultat.distance = (nbTotalLeft / WHEEL_NB_COCHES * (WHEEL_DIAMETER*PI))+(nbTotalRight / WHEEL_NB_COCHES * (WHEEL_DIAMETER*PI))/2;
+
+	return resultat;
 }
 
 Robot::Deplacement Robot::avancerPrudemment(float distance)
@@ -234,7 +244,7 @@ Robot::Deplacement Robot::avancerPrudemment(float distance)
 		int currentColor = startColor;
 
 		Deplacement resultat;
-		resultat.raison = Raison::DistanceParcourue;
+		resultat.raison = DistanceParcourue;
 
 		ENCODER_Read(ENCODER_LEFT);
 		ENCODER_Read(ENCODER_RIGHT);
@@ -243,18 +253,18 @@ Robot::Deplacement Robot::avancerPrudemment(float distance)
 
 			if(currentColor < startColor)
 			{
-				resultat.raison = Raison::MeilleureCouleur;
+				resultat.raison = MeilleureCouleur;
 				break;
 			}
 			else if(currentColor > startColor)
 			{
-				resultat.raison = Raison::PireCouleur;
+				resultat.raison = PireCouleur;
 				break;
 			}
 
 			if(DIGITALIO_Read(BMP_FRONT))
 			{
-				resultat.raison = Raison::Bumper;
+				resultat.raison = Bumper;
 				break;
 			}
 
