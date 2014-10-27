@@ -123,7 +123,7 @@ void Robot::endGame()
 			int n = 0;
 			tourner(180);
 			avancer(corde/2);
-			tourner(90); //Le sens va dépendre de la position du robot (GPS)
+			tourner(90); //Le sens va dÃ©pendre de la position du robot (GPS)
 			avancerPrudemment(sqrt(rayon*rayon - corde * corde / 4));
 			int D1 = d.distance;
 			while(d.raison==Raison::Bumper && n < 6)
@@ -164,6 +164,9 @@ Robot::Deplacement Robot::suivreArc(float rayon, bool versDroite, float distance
 {
 	float vraiRayonLeft = rayon - DISTANCE_ROUES/2; //VA DEPENDRE DE LA POSITION
 	float vraiRayonRight = rayon + DISTANCE_ROUES/2; // VA DEPENDRE DE LA POSITION
+	//Si vers la droite, c'est le contraire
+	if(versDroite) swap(vraiRayonLeft, vraiRayonRight);
+	
 	float rapport = vraiRayonLeft/vraiRayonRight;
 	float portion = distance / (2*PI*rayon);
 	float distanceLeft = 2*PI*vraiRayonLeft*portion;
