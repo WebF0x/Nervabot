@@ -160,6 +160,51 @@ void Robot::endGame()
 
 }
 
+Robot::Deplacement Robot::suivreArc(float rayon, bool versDroite, float distance)
+{
+	float vraiRayonLeft = rayon - DISTANCE_ROUES/2; //VA DEPENDRE DE LA POSITION
+	float vraiRayonRight = rayon + DISTANCE_ROUES/2; // VA DEPENDRE DE LA POSITION
+	float rapport = vraiRayonLeft/vraiRayonRight;
+	float portion = distance / (2*PI*rayon);
+	float distanceLeft = 2*PI*vraiRayonLeft*portion;
+	float distanceRight = 2*PI*vraiRayonRight*portion;
+	int nbTargetLeft = distanceLeft / (WHEEL_DIAMETER*PI) * WHEEL_NB_COCHES;
+	int nbTargetRight = distanceRight / (WHEEL_DIAMETER*PI) * WHEEL_NB_COCHES;
+	int nbTotalRight = 0;
+	int nbTotalLeft = 0;
+	int nbLeft = 0;
+	int nbRight = 0;
+
+	int speedLeft = SPEEDTARGETPRUDENT;
+	int speedRight = SPEEDTARGETPRUDENT*rapport;
+
+	ENCODER_Read(ENCODER_LEFT);
+	ENCODER_Read(ENCODER_RIGHT);
+	while(nbTotalLeft < nbTargetLeft || nbTotalRight < nbTargetRight)
+	{
+		if(nbTotalLeft < rapport*nbTotalRight)
+		{
+			MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
+			MOTOR_SetSpeed(MOTOR_RIGHT, 0);
+		}
+		else if(nbTotalLeft > rapport*nbTotalRight)
+		{
+			MOTOR_SetSpeed(MOTOR_LEFT, 0);
+			MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
+		}
+		else
+		{
+			MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
+			MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
+		}
+		nbLeft = ENCODER_Read(ENCODER_LEFT);
+		nbRight = ENCODER_Read(ENCODER_RIGHT);
+
+		nbTotalLeft += nbLeft;
+		nbTotalRight += nbRight;
+	}
+}
+
 Robot::Deplacement Robot::avancerPrudemment(float distance)
 {
 		int nbTarget = (float)distance/(WHEEL_DIAMETER*PI) * WHEEL_NB_COCHES;;
