@@ -10,13 +10,14 @@
 
 #include <libarmus.h>
 #include <Math.h>
-#include <stdlib.h>
+//#include <stdlib.h>
+#include "PathFinder.h"
 
 class Robot
 {
 public:
 	Robot();
-	//virtual ~Robot();
+	virtual ~Robot();
 
 	void dispSpeedDifferences();
 	void stop();
@@ -28,6 +29,16 @@ public:
 	int lecture_couleur();
 	void writeInFile(const char* filename, const char* text);
 	void Attendre5kHz();
+
+	void grandeCourse();
+	void inputStartPosition();
+	void attendreBruitDepart();
+	bool isSecondRobot();
+	void ecouterBruitFin();
+	void trouverCible();
+	void endgame();
+	void freeze();
+	void initGPS();
 
 	enum Raison
 	{
@@ -47,10 +58,7 @@ public:
 	Deplacement suivreArc(float rayon, bool versDroite, float distance);
 
 private:
-	float m_leftWheelSlope;
-	float m_rightWheelSlope;
-	float m_leftWheelOffset;
-	float m_rightWheelOffset;
+	PathFinder* m_gps;
 
 	static const float WHEEL_DIAMETER = 7.6;
 	static const int WHEEL_NB_COCHES = 64;

@@ -7,8 +7,36 @@
 
 #include "Robot.h"
 
-Robot::Robot() : m_leftWheelSlope(1), m_rightWheelSlope(1), m_leftWheelOffset(0), m_rightWheelOffset(0)
-{}
+Robot::Robot()
+{
+	initGPS();
+}
+
+Robot::~Robot()
+{
+	delete m_gps;
+}
+
+void Robot::initGPS()
+{
+	int worldWidth = 1;
+	int worldLength = 1;
+	std::set<std::pair<int,int> > goals, deaths;
+
+	m_gps->addGoal(0,0);
+
+	m_gps->addDeath(1,1);
+	m_gps->addDeath(1,1);
+	m_gps->addDeath(2,1);
+	m_gps->addDeath(3,1);
+	m_gps->addDeath(1,2);
+	m_gps->addDeath(3,2);
+	m_gps->addDeath(2,3);
+
+
+
+	m_gps = new PathFinder(worldWidth, worldLength, goals, deaths);
+}
 
 void Robot::stop()
 {
@@ -294,4 +322,74 @@ Robot::Deplacement Robot::avancerPrudemment(float distance)
 		stop();
 }
 
+void Robot::grandeCourse()
+{
+	inputStartPosition();
+	m_gps->updateWorld();
+	attendreBruitDepart();
+	if(isSecondRobot()) attendreBruitDepart();
+
+	//THREAD( ecouterBruitFin() )
+
+	//Debut de la course
+	trouverCible();
+	endgame();
+}
+
+void Robot::inputStartPosition()
+{
+
+}
+
+void Robot::attendreBruitDepart()
+{
+
+}
+
+bool Robot::isSecondRobot()
+{
+	return false;
+}
+
+void Robot::ecouterBruitFin()
+{
+	/*
+	wait(unPeuMoinsDeTroisMinutes)
+
+	while(true)
+	{
+		wait(fraction de la durée du son de fin)
+		si(lireSonFin())
+			robot.freeze(); //robot stops everything
+	}
+	*/
+}
+
+void Robot::trouverCible()
+{
+	/*
+	cibleTrouvee = false;
+	while(!cibleTrouvee)
+	{
+		raisonStop = avancerPrudemment(ouLeGpsDit)
+		si(raisonStop == Bumper ou PireCouleur)
+			m_gps->ajouterObstacle(enAvantDuRobot)
+			m_gps->updateWorld()
+		si(raisonStop == DistanceParcourue) rien
+		si(raisonStop == MeilleureCouleur)
+			cibleTrouvee=true
+	}
+	*/
+}
+
+void Robot::endgame()
+{
+
+}
+
+void Robot::freeze()
+{
+	stop();
+	FPGA_StopAll();
+}
 

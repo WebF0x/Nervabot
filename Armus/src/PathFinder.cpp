@@ -22,7 +22,6 @@ void PathFinder::setDeaths(const set<pair<int,int> >& deaths)
 void PathFinder::updateWorld()
 {
     m_world = vector<vector<int> >(WORLD_WIDTH, vector<int>(WORLD_LENGTH,UNKNOWN));
-
     for(set<pair<int,int> >::iterator death=m_deaths.begin(); death!=m_deaths.end(); ++death)
     {
         int x = death->first;
@@ -79,4 +78,9 @@ int PathFinder::getHeight(int x, int y)
 void PathFinder::addDeath(int x, int y)
 {
     m_deaths.insert(make_pair(x,y));
+}
+
+void PathFinder::addGoal(int x, int y)
+{
+    m_goals.insert(make_pair(x,y));
 }

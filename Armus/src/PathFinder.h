@@ -1,7 +1,7 @@
 #ifndef PATHFINDER_H
 #define PATHFINDER_H
 
-#include <iostream>
+//#include <iostream>
 #include <vector>
 #include <set>
 
@@ -15,6 +15,7 @@ class PathFinder
     void setHeight(int x, int y, int height);
     int getHeight(int x, int y);
     void addDeath(int x, int y);
+    void addGoal(int x, int y);
 
     private:
     static const int GOAL=0;

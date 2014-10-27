@@ -11,6 +11,7 @@
 int main()
 {
 	Robot robot;
+	robot.grandeCourse();
 
 	return 0;
 }
