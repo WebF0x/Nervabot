@@ -27,6 +27,7 @@ public:
 	void endGame();
 	int lecture_couleur();
 	void writeInFile(const char* filename, const char* text);
+	void Attendre5kHz();
 
 	enum class Raison
 	{

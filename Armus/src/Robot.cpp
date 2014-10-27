@@ -97,6 +97,14 @@ void Robot::writeInFile(const char* filename, const char* text)
 	fclose(f);
 }
 
+void Robot::Attendre5kHz()
+{
+	while(ANALOG_Read(1) == 0)
+	{
+		THREAD_MSleep(100);
+	}
+}
+
 int Robot::lecture_couleur()
 {
 	return 0;
@@ -162,10 +170,9 @@ void Robot::endGame()
 
 Robot::Deplacement Robot::suivreArc(float rayon, bool versDroite, float distance)
 {
-	float vraiRayonLeft = rayon - DISTANCE_ROUES/2; //VA DEPENDRE DE LA POSITION
-	float vraiRayonRight = rayon + DISTANCE_ROUES/2; // VA DEPENDRE DE LA POSITION
-	//Si vers la droite, c'est le contraire
-	if(versDroite) swap(vraiRayonLeft, vraiRayonRight);
+
+	float vraiRayonLeft = (versDroite) ? rayon + DISTANCE_ROUES/2 : rayon - DISTANCE_ROUES/2;
+	float vraiRayonRight = (versDroite) ? rayon - DISTANCE_ROUES/2 : rayon + DISTANCE_ROUES/2;
 	
 	float rapport = vraiRayonLeft/vraiRayonRight;
 	float portion = distance / (2*PI*rayon);
@@ -206,6 +213,9 @@ Robot::Deplacement Robot::suivreArc(float rayon, bool versDroite, float distance
 		nbTotalLeft += nbLeft;
 		nbTotalRight += nbRight;
 	}
+
+	float dist = (nbTotalLeft / WHEEL_NB_COCHES * (WHEEL_DIAMETER*PI))+(nbTotalRight / WHEEL_NB_COCHES * (WHEEL_DIAMETER*PI))/2;
+	return dist;
 }
 
 Robot::Deplacement Robot::avancerPrudemment(float distance)
