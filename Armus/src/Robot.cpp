@@ -85,7 +85,7 @@ void Robot::avancer(float distance)
 }
 
 /*
- * Si vous avez besoin de la position et l'orientation du robot précise, preferez la fonction tournerSurPlace()
+ * Si vous avez besoin de la position et l'orientation du robot, preferez la fonction tournerSurPlace()
  */
 void Robot::tourner(float angle)
 {
@@ -152,6 +152,7 @@ void Robot::tournerSurPlace(float angle)
 	}
 
 	stop();
+	setOrientation(m_orientation + angle);
 }
 
 /*
@@ -436,4 +437,15 @@ void Robot::freeze()
 	stop();
 	//FPGA_StopAll();
 }
+
+void Robot::setOrientation(float orientation)
+{
+	//Amener entre -180 et 180
+	orientation %= 360;
+	if(orientation > 180) orientation = -(orientation-180);
+
+	m_orientation = orientation;
+}
+
+
 

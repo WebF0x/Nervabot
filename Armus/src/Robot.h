@@ -40,6 +40,8 @@ public:
 	void freeze();
 	void initGPS();
 
+	void setOrientation(float orientation);
+
 	enum Raison
 	{
 		PireCouleur,
