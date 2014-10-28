@@ -9,7 +9,7 @@ PathFinder::PathFinder(int worldWidth, int worldLength, const set<pair<int,int> 
     m_world = vector<vector<int> >(WORLD_WIDTH, vector<int>(WORLD_LENGTH,UNKNOWN));
 }
 
-PathFinder::PathFinder(int worldWidth, int worldLength)
+PathFinder::PathFinder(int worldWidth, int worldLength) : WORLD_WIDTH(worldWidth), WORLD_LENGTH(worldLength)
 {
     m_world = vector<vector<int> >(WORLD_WIDTH, vector<int>(WORLD_LENGTH,UNKNOWN));
 }

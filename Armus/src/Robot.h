@@ -58,6 +58,8 @@ public:
 
 private:
 	PathFinder* m_gps;
+	float m_posX,m_posY;
+	float m_orientation;
 
 	static const float WHEEL_DIAMETER = 7.6;
 	static const int WHEEL_NB_COCHES = 64;

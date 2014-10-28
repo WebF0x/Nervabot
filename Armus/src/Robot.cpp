@@ -335,7 +335,21 @@ void Robot::grandeCourse()
 
 void Robot::inputStartPosition()
 {
+	int startPosX = 0;	//Depart #6: 0
+	bool premierRobot = true;
 
+	/*
+	 * Lorsqu'on pese bumper droit, "startPosX = (startPosX+1)%6;"
+	 */
+
+	/*
+	 * Lorsqu'on pese bumper bas, "premierRobot = !premierRobot;"
+	 */
+
+	//Afficher sur l'ecran LCD la position de depart actuelles
+
+	//Bumper avant update, robot.x, robot.y et quitte la fonction
+	m_orientation = 0.f;
 }
 
 void Robot::attendreBruitDepart()
