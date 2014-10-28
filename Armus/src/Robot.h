@@ -11,6 +11,8 @@
 #include <libarmus.h>
 #include <Math.h>
 #include "PathFinder.h"
+#include <stdlib.h>
+#include <time.h>
 
 class Robot
 {
@@ -42,6 +44,8 @@ public:
 
 	void setOrientation(float orientation);
 	void printPosition();
+	float rayon(int couleur);
+	float maxDistToBestColor(int couleur);
 
 	enum Raison
 	{
@@ -77,6 +81,12 @@ private:
 	static const int WHEEL_NB_COCHES = 64;
 	static const float DISTANCE_ROUES = 14;
 	static const float PI = 3.1415926535897932384626433832795;
+
+	static 	const int BLANC = 3;
+	static const int JAUNE = 2;
+	static const int VERT = 1;
+	static const int BLEU = 0;
+	static const float FLECHE_CIBLE = 30.f;
 };
 
 #endif /* ROBOT_H_ */
