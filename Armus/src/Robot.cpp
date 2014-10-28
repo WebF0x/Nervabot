@@ -322,7 +322,7 @@ void Robot::grandeCourse()
 
 	//Debut de la course
 	trouverCible();
-	endgame();
+	endGame();
 }
 
 void Robot::inputStartPosition()
@@ -382,14 +382,9 @@ void Robot::trouverCible()
 	*/
 }
 
-void Robot::endgame()
-{
-
-}
-
 void Robot::freeze()
 {
 	stop();
-	FPGA_StopAll();
+	//FPGA_StopAll();
 }
 
