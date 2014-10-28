@@ -84,6 +84,9 @@ void Robot::avancer(float distance)
 		}
 }
 
+/*
+ * Si vous avez besoin de la position et l'orientation du robot précise, preferez la fonction tournerSurPlace()
+ */
 void Robot::tourner(float angle)
 {
 	int nbTotal = 0;
@@ -151,6 +154,9 @@ void Robot::tournerSurPlace(float angle)
 	stop();
 }
 
+/*
+ * A tester
+ */
 void Robot::writeInFile(const char* filename, const char* text)
 {
 	FILE *f = fopen(filename, "w");
