@@ -383,21 +383,54 @@ void Robot::grandeCourse()
 
 void Robot::inputStartPosition()
 {
-	int startPosX = 0;	//Depart #6: 0
-	bool premierRobot = true;
+	short rawStartPosX  = 0; // Position par défaut X
+	bool  premierRobot  = true; //Premier robot par défaut
+	bool  fini 		    = false;
+	bool  boutonEnfonce = true;
 
-	/*
-	 * Lorsqu'on pese bumper droit, "startPosX = (startPosX+1)%6;"
-	 */
+	while(!fini)
+	{
+		if(DIGITALIO_Read(BMP_FRONT))
+		{
+			fini = true;
+		}
+		else if(DIGITALIO_Read(BMP_REAR))
+		{
+			premierRobot = !premierRobot;
+			boutonEnfonce = true;
+		}
+		else if(DIGITALIO_Read(BMP_LEFT))
+		{
+			boutonEnfonce = true;
+			rawStartPosX --;
+			if(rawStartPosX < 0)
+			{
+				rawStartPosX = 5;
+			}
+		}
+		else if(DIGITALIO_Read(BMP_RIGHT))
+		{
+			boutonEnfonce = true;
+			rawStartPosX = (rawStartPosX+1)%6;
+		}
 
-	/*
-	 * Lorsqu'on pese bumper bas, "premierRobot = !premierRobot;"
-	 */
+		if(boutonEnfonce)
+		{
+			if (premierRobot)
+			{
+				LCD_Printf("Premier robot, position: %i\n", rawStartPosX+1);
+			}
+			else
+			{
+				LCD_Printf("Deuxieme robot, position: %i\n", rawStartPosX+1);
+			}
+		}
+		boutonEnfonce = false;
 
-	//Afficher sur l'ecran LCD la position de depart actuelles
+		THREAD_MSleep(100);
+	}
 
-	//Bumper avant update, robot.x, robot.y et quitte la fonction
-	m_orientation = 0.f;
+	m_startPos = rawStartPosX;
 	isFirstRobot = premierRobot;
 }
 

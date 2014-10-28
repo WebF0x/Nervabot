@@ -64,6 +64,7 @@ private:
 	PathFinder* m_gps;
 	float m_posX,m_posY;
 	float m_orientation;
+	short m_startPos;
 	bool isFirstRobot;
 
 	static const int PIN_DETECTEUR_SIFFLET = 1;

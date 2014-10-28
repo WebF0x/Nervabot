@@ -11,6 +11,9 @@
 int main()
 {
 	Robot robot;
+
+	LCD_ClearAndPrint("");
+	robot.inputStartPosition();
 	for(int i=0; i<10; ++i)
 	{
 		robot.tournerSurPlace(90.f);
