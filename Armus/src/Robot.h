@@ -60,14 +60,18 @@ private:
 	PathFinder* m_gps;
 	float m_posX,m_posY;
 	float m_orientation;
+	bool isFirstRobot;
+
+	static const int PIN_DETECTEUR_SIFFLET = 1;
+	static const int THRESHOLD_SIFFLET = 600;
+
+	static const int SPEEDTARGET = 50;
+	static const int SPEEDTARGETPRUDENT = 40;
 
 	static const float WHEEL_DIAMETER = 7.6;
 	static const int WHEEL_NB_COCHES = 64;
 	static const float DISTANCE_ROUES = 13.8;
 	static const float PI = 3.1415926535897932384626433832795;
-
-	static const int SPEEDTARGET = 50;
-	static const int SPEEDTARGETPRUDENT = 40;
 };
 
 #endif /* ROBOT_H_ */

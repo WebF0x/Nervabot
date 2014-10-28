@@ -122,14 +122,6 @@ void Robot::writeInFile(const char* filename, const char* text)
 	fclose(f);
 }
 
-void Robot::Attendre5kHz()
-{
-	while(ANALOG_Read(1) == 0)
-	{
-		THREAD_MSleep(100);
-	}
-}
-
 int Robot::lecture_couleur()
 {
 	return 0;
@@ -324,7 +316,7 @@ void Robot::grandeCourse()
 	inputStartPosition();
 	m_gps->updateWorld();
 	attendreBruitDepart();
-	if(isSecondRobot()) attendreBruitDepart();
+	if(!isFirstRobot) attendreBruitDepart();
 
 	//THREAD( ecouterBruitFin() )
 
@@ -350,30 +342,27 @@ void Robot::inputStartPosition()
 
 	//Bumper avant update, robot.x, robot.y et quitte la fonction
 	m_orientation = 0.f;
+	isFirstRobot = premierRobot;
+}
+
+void Robot::Attendre5kHz()
+{
+	while(ANALOG_Read(PIN_DETECTEUR_SIFFLET) < THRESHOLD_SIFFLET)
+	{
+		THREAD_MSleep(100);
+	}
 }
 
 void Robot::attendreBruitDepart()
 {
-
-}
-
-bool Robot::isSecondRobot()
-{
-	return false;
+	Attendre5kHz();
 }
 
 void Robot::ecouterBruitFin()
 {
-	/*
-	wait(unPeuMoinsDeTroisMinutes)
-
-	while(true)
-	{
-		wait(fraction de la durée du son de fin)
-		si(lireSonFin())
-			robot.freeze(); //robot stops everything
-	}
-	*/
+	THREAD_MSleep((60*3 - 10) * 1000); //Attendre un peu moins de 3 minutes (duree de la course)
+	Attendre5kHz();
+	freeze();
 }
 
 void Robot::trouverCible()
