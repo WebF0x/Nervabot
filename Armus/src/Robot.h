@@ -23,6 +23,7 @@ public:
 
 	void avancer(float distance);
 	void tourner(float angle);
+	void tournerSurPlace(float angle);
 
 	void endGame();
 	int lecture_couleur();
@@ -66,11 +67,11 @@ private:
 	static const int THRESHOLD_SIFFLET = 600;
 
 	static const int SPEEDTARGET = 50;
-	static const int SPEEDTARGETPRUDENT = 40;
+	static const int SPEEDTARGETPRUDENT = 50;
 
 	static const float WHEEL_DIAMETER = 7.6;
 	static const int WHEEL_NB_COCHES = 64;
-	static const float DISTANCE_ROUES = 13.8;
+	static const float DISTANCE_ROUES = 14;
 	static const float PI = 3.1415926535897932384626433832795;
 };
 

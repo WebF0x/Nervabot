@@ -41,6 +41,10 @@ void Robot::stop()
 	MOTOR_SetSpeed(MOTOR_RIGHT, 0);
 }
 
+/*
+ * Naif, assume qu'il n'y a aucune collision
+ * Privilégier avancerPrudemment() pour la grande course
+ */
 void Robot::avancer(float distance)
 {
 		int nbTarget = (float)distance/(WHEEL_DIAMETER*PI) * WHEEL_NB_COCHES;;
@@ -106,6 +110,45 @@ void Robot::tourner(float angle)
 				nbTotal += ENCODER_Read(ENCODER_RIGHT);
 			}
 		}
+}
+
+//Angle entre -180 et 180
+void Robot::tournerSurPlace(float angle)
+{
+	float distance = (PI*DISTANCE_ROUES)*fabs(angle)/360;
+	int nbTarget = distance * WHEEL_NB_COCHES/PI/WHEEL_DIAMETER;
+
+	int leftSpeed = (angle > 0.f) ? -SPEEDTARGETPRUDENT : SPEEDTARGETPRUDENT;
+	int rightSpeed = (angle > 0.f) ? SPEEDTARGETPRUDENT : -SPEEDTARGETPRUDENT;
+
+	int nbLeftTotal = 0;
+	int nbRightTotal = 0;
+	ENCODER_Read(ENCODER_LEFT);
+	ENCODER_Read(ENCODER_RIGHT);
+
+	while(nbLeftTotal < nbTarget || nbRightTotal < nbTarget)
+	{
+		if(nbLeftTotal < nbRightTotal)
+		{
+			 MOTOR_SetSpeed(MOTOR_LEFT, leftSpeed);
+			 MOTOR_SetSpeed(MOTOR_RIGHT, 0);
+		}
+		else if(nbLeftTotal > nbRightTotal)
+		{
+			 MOTOR_SetSpeed(MOTOR_LEFT, 0);
+			 MOTOR_SetSpeed(MOTOR_RIGHT, rightSpeed);
+		}
+		else
+		{
+			 MOTOR_SetSpeed(MOTOR_LEFT, leftSpeed);
+			 MOTOR_SetSpeed(MOTOR_RIGHT, rightSpeed);
+		}
+
+		nbLeftTotal += ENCODER_Read(ENCODER_LEFT);
+		nbRightTotal+= ENCODER_Read(ENCODER_RIGHT);
+	}
+
+	stop();
 }
 
 void Robot::writeInFile(const char* filename, const char* text)
