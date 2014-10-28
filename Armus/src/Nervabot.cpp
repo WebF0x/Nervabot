@@ -11,14 +11,11 @@
 int main()
 {
 	Robot robot;
-
-	LCD_Printf("constructeur ok");
-	LCD_Printf("90");
-	robot.tournerSurPlace(90.f);
-	THREAD_MSleep(1000);
-	LCD_Printf("-180");
-	robot.tournerSurPlace(-180.f);
-
+	for(int i=0; i<10; ++i)
+	{
+		robot.tournerSurPlace(90.f);
+		robot.printPosition();
+	}
 	return 0;
 }
 

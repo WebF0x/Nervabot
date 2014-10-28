@@ -41,6 +41,7 @@ public:
 	void initGPS();
 
 	void setOrientation(float orientation);
+	void printPosition();
 
 	enum Raison
 	{

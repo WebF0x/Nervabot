@@ -42,6 +42,7 @@ void Robot::stop()
 }
 
 /*
+ * Si vous avez besoin de la position et l'orientation du robot, preferez la fonction avancerPrudemment()
  * Naif, assume qu'il n'y a aucune collision
  * Privilégier avancerPrudemment() pour la grande course
  */
@@ -356,9 +357,14 @@ Robot::Deplacement Robot::avancerPrudemment(float distance)
 			nbLeftTotal += nbLeft;
 			nbRightTotal+= nbRight;
 		}
+		stop();
 
 		resultat.distance = nbLeftTotal*PI*WHEEL_DIAMETER/WHEEL_NB_COCHES;
-		stop();
+
+		m_posX += resultat.distance * cos(m_orientation);
+		m_posY += resultat.distance * sin(m_orientation);
+
+		return resultat;
 }
 
 void Robot::grandeCourse()
@@ -441,11 +447,15 @@ void Robot::freeze()
 void Robot::setOrientation(float orientation)
 {
 	//Amener entre -180 et 180
-	orientation %= 360;
+	orientation = fmod(orientation, 360);
 	if(orientation > 180) orientation = -(orientation-180);
 
 	m_orientation = orientation;
 }
 
+void Robot::printPosition()
+{
+	LCD_Printf("Position: %f , %f\nOrientation: %f", m_posX, m_posY, m_orientation);
+}
 
 
