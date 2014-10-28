@@ -9,6 +9,11 @@ PathFinder::PathFinder(int worldWidth, int worldLength, const set<pair<int,int> 
     m_world = vector<vector<int> >(WORLD_WIDTH, vector<int>(WORLD_LENGTH,UNKNOWN));
 }
 
+PathFinder::PathFinder(int worldWidth, int worldLength)
+{
+    m_world = vector<vector<int> >(WORLD_WIDTH, vector<int>(WORLD_LENGTH,UNKNOWN));
+}
+
 void PathFinder::setGoals(const set<pair<int,int> >& goals)
 {
     m_goals = goals;
@@ -79,7 +84,6 @@ void PathFinder::addDeath(int x, int y)
 {
     m_deaths.insert(make_pair(x,y));
 }
-
 void PathFinder::addGoal(int x, int y)
 {
     m_goals.insert(make_pair(x,y));

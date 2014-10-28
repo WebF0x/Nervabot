@@ -1,7 +1,6 @@
 #ifndef PATHFINDER_H
 #define PATHFINDER_H
 
-//#include <iostream>
 #include <vector>
 #include <set>
 
@@ -9,6 +8,7 @@ class PathFinder
 {
     public:
     PathFinder(int worldWidth, int worldLength, const std::set<std::pair<int,int> >& goals, const std::set<std::pair<int,int> >& deaths);
+    PathFinder(int worldWidth, int worldLength);
     void setGoals(const std::set<std::pair<int,int> >& goals);
     void setDeaths(const std::set<std::pair<int,int> >& deaths);
     void updateWorld();

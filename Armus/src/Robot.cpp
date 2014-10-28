@@ -21,7 +21,8 @@ void Robot::initGPS()
 {
 	int worldWidth = 1;
 	int worldLength = 1;
-	std::set<std::pair<int,int> > goals, deaths;
+
+	m_gps = new PathFinder(worldWidth, worldLength);
 
 	m_gps->addGoal(0,0);
 
@@ -32,10 +33,6 @@ void Robot::initGPS()
 	m_gps->addDeath(1,2);
 	m_gps->addDeath(3,2);
 	m_gps->addDeath(2,3);
-
-
-
-	m_gps = new PathFinder(worldWidth, worldLength, goals, deaths);
 }
 
 void Robot::stop()
