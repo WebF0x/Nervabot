@@ -2,14 +2,7 @@
 
 using namespace std;
 
-PathFinder::PathFinder(int worldWidth, int worldLength, const set<pair<int,int> >& goals, const set<pair<int,int> >& deaths) : WORLD_WIDTH(worldWidth), WORLD_LENGTH(worldLength)
-{
-    setGoals(goals);
-    setDeaths(deaths);
-    m_world = vector<vector<int> >(WORLD_WIDTH, vector<int>(WORLD_LENGTH,UNKNOWN));
-}
-
-PathFinder::PathFinder(int worldWidth, int worldLength) : WORLD_WIDTH(worldWidth), WORLD_LENGTH(worldLength)
+PathFinder::PathFinder(int worldWidth, int worldLength, float realWorldWidth, float realWorldLength) : WORLD_WIDTH(worldWidth), WORLD_LENGTH(worldLength), REAL_WORLD_WIDTH(realWorldWidth), REAL_WORLD_LENGTH(realWorldLength)
 {
     m_world = vector<vector<int> >(WORLD_WIDTH, vector<int>(WORLD_LENGTH,UNKNOWN));
 }

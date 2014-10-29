@@ -8,8 +8,7 @@
 class PathFinder
 {
     public:
-    PathFinder(int worldWidth, int worldLength, const std::set<std::pair<int,int> >& goals, const std::set<std::pair<int,int> >& deaths);
-    PathFinder(int worldWidth, int worldLength);
+	PathFinder(int worldWidth, int worldLength, float realWorldWidth, float realWorldLength);
     void setGoals(const std::set<std::pair<int,int> >& goals);
     void setDeaths(const std::set<std::pair<int,int> >& deaths);
     void updateWorld();
@@ -28,6 +27,7 @@ class PathFinder
     static const int UNKNOWN=-2;
 
     const int WORLD_WIDTH, WORLD_LENGTH;
+    const float REAL_WORLD_WIDTH, REAL_WORLD_LENGTH;
 
     std::vector<std::vector<int> > m_world;
     std::set<std::pair<int,int> > m_goals;  //(x:first, y:second)

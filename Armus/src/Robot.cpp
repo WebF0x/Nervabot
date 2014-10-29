@@ -7,6 +7,8 @@
 
 #include "Robot.h"
 
+using namespace std;
+
 Robot::Robot()
 {
 	initGPS();
@@ -30,17 +32,38 @@ void Robot::initGPS()
 	obstacles.insert(make_pair(OBSTACLE_MILIEU_X,OBSTACLE_MILIEU_Y));
 	obstacles.insert(make_pair(OBSTACLE_DROITE_X,OBSTACLE_DROITE_Y));
 
-	m_gps = new PathFinder(worldWidth, worldLength);
+	for(set<pair<float,float> >::iterator obstacle=obstacles.begin(); obstacle!=obstacles.end(); ++obstacle)	//For each obstacle
+	{
+		set<pair<int,int> > boxesToCheck;
+		boxesToCheck.insert(m_gps->pointToBox(obstacle->first, obstacle->second));	//first box is the one containing the obstacle's center
 
-	m_gps->addGoal(0,0);
+		while(!boxesToCheck.empty())
+		{
+			set<pair<int,int> > nextBoxes;
 
-	m_gps->addDeath(1,1);
-	m_gps->addDeath(1,1);
-	m_gps->addDeath(2,1);
-	m_gps->addDeath(3,1);
-	m_gps->addDeath(1,2);
-	m_gps->addDeath(3,2);
-	m_gps->addDeath(2,3);
+			for(set<pair<int,int> >::iterator box=boxesToCheck.begin(); box!=boxesToCheck.end(); ++box) //For each box to check
+			{
+				//Take the center of the box
+				pair<float,float> center  = m_gps->boxToPoint(box->first, box->second);
+				float x = center.first;
+				float y = center.second;
+				float deltaX = obstacle->first - x;
+				float deltaY = obstacle->second - y;
+				bool isInsideObstacle = (deltaX*deltaX + deltaY*deltaY <= OBSTACLE_RAYON*OBSTACLE_RAYON);
+
+				if(isInsideObstacle)
+				{
+					m_gps->addDeath(box->first,box->second);
+
+					nextBoxes.insert(make_pair(x+1,y));
+					nextBoxes.insert(make_pair(x-1,y));
+					nextBoxes.insert(make_pair(x,y+1));
+					nextBoxes.insert(make_pair(x,y-1));
+				}
+			}
+			boxesToCheck = nextBoxes;
+		}
+	}
 }
 
 void Robot::stop()
@@ -582,10 +605,10 @@ Robot::Deplacement Robot::avancerPrudemment(float distance)
 
 void Robot::grandeCourse()
 {
-	inputStartPosition();
+	inputInitialConditions();
 	m_gps->updateWorld();
 	attendreBruitDepart();
-	if(!isFirstRobot) attendreBruitDepart();
+	if(!m_isFirstRobot) attendreBruitDepart();	//Attendre le deuxieme sifflet de depart
 
 	//THREAD( ecouterBruitFin() )
 
@@ -594,63 +617,86 @@ void Robot::grandeCourse()
 	endGame();
 }
 
-void Robot::inputStartPosition()
-{
-	short rawStartPosX  = 0; // Position par défaut X
-	bool  premierRobot  = true; //Premier robot par défaut
-	bool  fini 		    = false;
-	bool  boutonEnfonce = true;
+void Robot::inputInitialConditions()
+ {
+ 	short rawStartPosX  = 0; // Position par defaut X
+	bool premierRobot  = true; //Premier robot par defaut
+	bool boutonEnfonce = true;
 
-	while(!fini)
-	{
+	while(true)
+ 	{
 		if(DIGITALIO_Read(BMP_FRONT))
 		{
-			fini = true;
-		}
-		else if(DIGITALIO_Read(BMP_REAR))
-		{
-			premierRobot = !premierRobot;
 			boutonEnfonce = true;
+			break;
 		}
-		else if(DIGITALIO_Read(BMP_LEFT))
-		{
-			boutonEnfonce = true;
+
+		if(DIGITALIO_Read(BMP_REAR))
+ 		{
+ 			premierRobot = !premierRobot;
+ 			boutonEnfonce = true;
+ 		}
+
+		if(DIGITALIO_Read(BMP_LEFT))
+ 		{
+ 			boutonEnfonce = true;
 			rawStartPosX --;
 			if(rawStartPosX < 0)
 			{
 				rawStartPosX = 5;
 			}
-		}
-		else if(DIGITALIO_Read(BMP_RIGHT))
-		{
-			boutonEnfonce = true;
-			rawStartPosX = (rawStartPosX+1)%6;
-		}
+ 		}
 
-		if(boutonEnfonce)
-		{
-			if (premierRobot)
-			{
-				LCD_Printf("Premier robot, position: %i\n", rawStartPosX+1);
-			}
-			else
-			{
-				LCD_Printf("Deuxieme robot, position: %i\n", rawStartPosX+1);
-			}
-		}
-		boutonEnfonce = false;
+		if(DIGITALIO_Read(BMP_RIGHT))
+ 		{
+ 			boutonEnfonce = true;
+ 			rawStartPosX = (rawStartPosX+1)%6;
+ 		}
 
-		THREAD_MSleep(100);
-	}
+ 		if(boutonEnfonce)
+ 		{
+			LCD_Printf("Position de depart:\n");
+			for(int i=0; i<2; ++i)
+ 			{
+				for(int j=0; j<6; ++j)
+				{
+					LCD_Printf("|");
 
-	m_startPos = rawStartPosX;
-	m_isFirstRobot = premierRobot;
-	initStartPosition();
-	m_gps->updateWorld();
+					char pos;
+					if((i==0 == premierRobot) && j==rawStartPosX)
+					{
+						pos = 'X';
+					}
+					else
+					{
+						switch(j)
+						{
+							case 0: pos = '6'; break;
+							case 1: pos = '4'; break;
+							case 2: pos = '2'; break;
+							case 3: pos = '1'; break;
+							case 4: pos = '3'; break;
+							case 5: pos = '5'; break;
+							default: pos = '?'; break;
+						}
+					}
 
-	if(capteurCouleurBlanc) initCapteurCouleurBlanc();
-	else initCapteurCouleurAutre();
-}
+					LCD_Printf("%c", pos);
+				}
+				LCD_Printf("|\n");
+ 			}
+ 		}
+ 		boutonEnfonce = false;
+
+ 		THREAD_MSleep(100);
+ 	}
+
+ 	m_startPos = rawStartPosX;
+ 	m_isFirstRobot = premierRobot;
+ 	initStartPosition();
+ 	m_gps->updateWorld();
+
+ }
 
 void Robot::initStartPosition()
 {
@@ -692,8 +738,7 @@ void Robot::ecouterBruitFin()
 
 void Robot::trouverCible()
 {
-	cibleTrouvee = false;
-	while(!cibleTrouvee)
+	while(true)
 	{
 		pair<float,float> destination = m_gps->nextWaypoint(m_posX, m_posY);
 		float x2 = destination.first;
