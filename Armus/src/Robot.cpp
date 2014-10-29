@@ -728,8 +728,18 @@ void Robot::inputInitialConditions()
 
 void Robot::initStartPosition()
 {
-	//Trouver les bonnes valeurs pour  m_posX, m_posY
-	//en fonction de m_startPos  entre 0 et 5 et m_isFirstRobot et des mesures du parcours
+	switch(m_startPos)
+	{
+	case 0: m_posX=POS0+START_SQUARE_WIDTH/2; break;
+	case 1: m_posX=POS1+START_SQUARE_WIDTH/2; break;
+	case 2: m_posX=POS2+START_SQUARE_WIDTH/2; break;
+	case 3: m_posX=POS3+START_SQUARE_WIDTH/2; break;
+	case 4: m_posX=POS4+START_SQUARE_WIDTH/2; break;
+	case 5: m_posX=POS5+START_SQUARE_WIDTH/2; break;
+	default: m_posX=POS0+START_SQUARE_WIDTH/2; break;
+	}
+
+	m_posY = (m_isFirstRobot) ? TOP_START_AREA+START_SQUARE_LENGTH/2 : MID_START_AREA+START_SQUARE_LENGTH/2;
 }
 
 void Robot::Attendre5kHz()

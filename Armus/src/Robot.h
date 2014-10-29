@@ -107,8 +107,8 @@ private:
 
 	bool m_capteurCouleurBlanc;
 
-	static const int GPS_RESOLUTION_X=20;
-	static const int GPS_RESOLUTION_Y=50;
+	static const int GPS_RESOLUTION_X = 20;
+	static const int GPS_RESOLUTION_Y = 50;
 
 	static const int PIN_DETECTEUR_SIFFLET = 1;
 	static const int THRESHOLD_SIFFLET = 600;

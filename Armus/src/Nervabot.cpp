@@ -10,13 +10,9 @@
 
 int main()
 {
-	while(true)
-	{
-		LCD_Printf("%d\n", ANALOG_Read(1));
-	}
-
 	Robot robot;
-	robot.grandeCourse();
+	robot.initStartPosition();
+	robot.trouverCible();
 	return 0;
 }
 
