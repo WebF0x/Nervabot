@@ -7,6 +7,8 @@
 
 #include "Robot.h"
 
+using namespace std;
+
 Robot::Robot()
 {
 	initGPS();
@@ -24,15 +26,46 @@ void Robot::initGPS()
 
 	m_gps = new PathFinder(worldWidth, worldLength, REAL_WORLD_WIDTH, REAL_WORLD_LENGTH);
 
-	m_gps->addGoal(0,0);
+	m_gps->addGoal(CIBLE_X,CIBLE_Y);
 
-	m_gps->addDeath(1,1);
-	m_gps->addDeath(1,1);
-	m_gps->addDeath(2,1);
-	m_gps->addDeath(3,1);
-	m_gps->addDeath(1,2);
-	m_gps->addDeath(3,2);
-	m_gps->addDeath(2,3);
+	/// If the center of a box is inside an obstacle, this box is a death
+	set<pair<float,float> > obstacles;
+	obstacles.insert(make_pair(OBSTACLE_GAUCHE_X,OBSTACLE_GAUCHE_Y));
+	obstacles.insert(make_pair(OBSTACLE_MILIEU_X,OBSTACLE_MILIEU_Y));
+	obstacles.insert(make_pair(OBSTACLE_DROITE_X,OBSTACLE_DROITE_Y));
+
+	for(set<pair<float,float> >::iterator obstacle=obstacles.begin(); obstacle!=obstacles.end(); ++obstacle)	//For each obstacle
+	{
+		set<pair<int,int> > boxesToCheck;
+		boxesToCheck.insert(m_gps->pointToBox(obstacle->first, obstacle->second));	//first box is the one containing the obstacle's center
+
+		while(!boxesToCheck.empty())
+		{
+			set<pair<int,int> > nextBoxes;
+
+			for(set<pair<int,int> >::iterator box=boxesToCheck.begin(); box!=boxesToCheck.end(); ++box) //For each box to check
+			{
+				//Take the center of the box
+				pair<float,float> center  = m_gps->boxToPoint(box->first, box->second);
+				float x = center.first;
+				float y = center.second;
+				float deltaX = obstacle->first - x;
+				float deltaY = obstacle->second - y;
+				bool isInsideObstacle = (deltaX*deltaX + deltaY*deltaY <= OBSTACLE_RAYON*OBSTACLE_RAYON);
+
+				if(isInsideObstacle)
+				{
+					m_gps->addDeath(box->first,box->second);
+
+					nextBoxes.insert(make_pair(x+1,y));
+					nextBoxes.insert(make_pair(x-1,y));
+					nextBoxes.insert(make_pair(x,y+1));
+					nextBoxes.insert(make_pair(x,y-1));
+				}
+			}
+			boxesToCheck = nextBoxes;
+		}
+	}
 }
 
 void Robot::initCapteurCouleur()

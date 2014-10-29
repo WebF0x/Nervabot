@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "capteurCouleur.h"
+#include <set>
 
 //Prise de mesures du parcours (A FAIRE)
 //Origine en haut a gauche du parcours
@@ -35,7 +36,7 @@
 #define POS4 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*4)
 #define POS5 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*5)
 
-#define OBSTACLE_DIAMETRE 0.f
+#define OBSTACLE_RAYON 0.f
 #define OBSTACLE_GAUCHE_X 0.f
 #define OBSTACLE_GAUCHE_Y 0.f
 #define OBSTACLE_MILIEU_X 0.f
