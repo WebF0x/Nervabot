@@ -11,8 +11,7 @@
 int main()
 {
 	Robot robot;
-
-	robot.inputInitialConditions();
+	robot.grandeCourse();
 
 	return 0;
 }

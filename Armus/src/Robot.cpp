@@ -21,10 +21,7 @@ Robot::~Robot()
 
 void Robot::initGPS()
 {
-	int worldWidth = 1;
-	int worldLength = 1;
-
-	m_gps = new PathFinder(worldWidth, worldLength, REAL_WORLD_WIDTH, REAL_WORLD_LENGTH);
+	m_gps = new PathFinder(GPS_RESOLUTION_X, GPS_RESOLUTION_Y, REAL_WORLD_WIDTH, REAL_WORLD_LENGTH);
 
 	m_gps->addGoal(CIBLE_X,CIBLE_Y);
 
