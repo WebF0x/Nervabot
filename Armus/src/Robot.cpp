@@ -203,7 +203,7 @@ void Robot::tournerSurPlace(float angle)
 }
 
 /*
- * A tester
+ * Pas full utile pour la course mais je garde peut-etre pour plus tard
  */
 void Robot::writeInFile(const char* filename, const char* text)
 {
@@ -247,6 +247,7 @@ int random(int low, int high)
 	srand(time(NULL));
 	return rand() % (high - low + 1) + low;
 }
+
 /*
  * Je m<excuse Jesus pour cette longue fonction
  */
@@ -509,7 +510,7 @@ float Robot::rayon(int couleur)
 float Robot::maxDistToBestColor(int couleur)
 {
 	float r = rayon(couleur);
-	return sqrt((2*r-FLECHE_CIBLE)*FLECHE_CIBLE);
+	return sqrt((2.f*r-FLECHE_CIBLE)*FLECHE_CIBLE);
 }
 
 Robot::Deplacement Robot::suivreArc(float rayon, bool versDroite, float distance)
@@ -730,7 +731,8 @@ void Robot::inputInitialConditions()
 
 void Robot::initStartPosition()
 {
-	//m_startPos, m_isFirstRobot, m_posX, m_posY
+	//Trouver les bonnes valeurs pour  m_posX, m_posY
+	//en fonction de m_startPos  entre 0 et 5 et m_isFirstRobot et des mesures du parcours
 }
 
 void Robot::Attendre5kHz()
