@@ -44,7 +44,7 @@ void Robot::stop()
 /*
  * Si vous avez besoin de la position et l'orientation du robot, preferez la fonction avancerPrudemment()
  * Naif, assume qu'il n'y a aucune collision
- * Privilégier avancerPrudemment() pour la grande course
+ * Privilegier avancerPrudemment() pour la grande course
  */
 void Robot::avancer(float distance)
 {
@@ -178,69 +178,274 @@ int Robot::lecture_couleur()
 	return 0;
 }
 
+int random(int low, int high)
+{
+	srand(time(NULL));
+	return rand() % (high - low + 1) + low;
+}
+/*
+ * Je m<excuse Jesus pour cette longue fonction
+ */
 void Robot::endGame()
 {
-	const int BLANC = 3;
-	const int JAUNE = 2;
-	const int VERT = 1;
-	const int BLEU = 0;
 	int couleur_present = JAUNE;
-	int x = 60;
-	int corde = 0;
 	int nb_Coche = 0;
-	int rayon = 75;
-	while(lecture_couleur() == couleur_present)
+
+	while(lecture_couleur() == couleur_present && couleur_present != BLEU)
 	{
-		Deplacement d = avancerPrudemment(x);
-		corde = d.distance;
+		bool returnToYolo = false;
+		//Point: yolo
+		Deplacement d = avancerPrudemment(maxDistToBestColor(couleur_present));
+
 		switch(d.raison)
 		{
-			case PireCouleur:
-			{
-				int n = 0;
-				tourner(180);
-				avancer(corde/2);
-				tourner(90); //Le sens va dÃ©pendre de la position du robot (GPS)
-				avancerPrudemment(sqrt(rayon*rayon - corde * corde / 4));
-				int D1 = d.distance;
-				while(d.raison==Bumper && n < 6)
-				{
-					n++;
-					tourner(90); // Le sens va dependre de la position
-					Deplacement dist = suivreArc(sqrt(rayon*rayon - corde * corde / 4)-D1, true, 60);
-					tourner(-90);
-					avancerPrudemment(sqrt(rayon*rayon - corde * corde / 4)-D1);
-					D1 = d.distance + D1;
-				}
-				break;
-			}
 			case DistanceParcourue:
 			{
-				bool versDroite = true;	//Guesser avec le gps
-				Deplacement dist = suivreArc(x, versDroite, 2*PI*x);
-				avancerPrudemment(40);
-				if(d.raison==MeilleureCouleur)
+				tournerSurPlace(90);
+				Deplacement d2 = suivreArc(maxDistToBestColor(couleur_present), true, 300);	//Aucune idee de vers droite ou pas, fais juste continuer pour trouver une autre couleur
+				switch(d2.raison)
 				{
-					couleur_present = BLEU;
-					avancer(15);
+					case MeilleureCouleur:	//Exactly according to the plan
+					{
+						--couleur_present;
+						returnToYolo = true;
+						break;
+					}
+					case DistanceParcourue:	//WTF
+					{
+						returnToYolo=true;
+						break;
+					}
+					case PireCouleur:
+					{
+						tournerSurPlace(180);
+						returnToYolo=true;
+						break;
+					}
+					case Bumper:
+					{
+						do
+						{
+							tournerSurPlace(random(-180, 180));
+							d2 = avancerPrudemment(300); //Avance a l'infini
+						}while(d2.raison == Bumper);
+
+						if(d2.raison==PireCouleur)
+						{
+							tournerSurPlace(180);
+							returnToYolo = true;
+							break;
+						}
+						else if (d2.raison==MeilleureCouleur)
+						{
+							--couleur_present;
+							returnToYolo = true;
+							break;
+						}
+
+						break;
+					}
 				}
 				break;
 			}
+
 			case MeilleureCouleur:
 			{
-				couleur_present = VERT;
-				x = 30;
-				rayon = 50;
+				--couleur_present;
+				returnToYolo = true;
 				break;
 			}
+
 			case Bumper:
 			{
-				//Decider qu'est-ce qu'on fait en cas de contact
+				while(d.raison == Bumper)
+				{
+					tournerSurPlace(random(-180, 180));
+					d = avancerPrudemment(300); //Avance a l'infini
+				}
+
+				if(d.raison==PireCouleur)
+				{
+					tournerSurPlace(180);
+					returnToYolo = true;
+					break;
+				}
+				else if (d.raison==MeilleureCouleur)
+				{
+					--couleur_present;
+					returnToYolo = true;
+					break;
+				}
+
+				break;
+			}
+
+			case PireCouleur:	//Oops mauvaise hypothese, je suis retourner sur l'arc
+			{
+				int corde = d.distance;
+				tournerSurPlace(180);
+				Deplacement d2 = avancerPrudemment(corde/2);	//Attention calculer si cest la bonne distance (a cause de difference entre capteur et centre de roues
+				switch(d2.raison)
+				{
+					case Bumper:
+					{
+						while(d2.raison == Bumper)
+						{
+							tournerSurPlace(random(-180, 180));
+							d2 = avancerPrudemment(300); //Avance a l'infini
+						}
+
+						if(d2.raison==PireCouleur)
+						{
+							tournerSurPlace(180);
+							returnToYolo = true;
+							break;
+						}
+						else if (d2.raison==MeilleureCouleur)
+						{
+							--couleur_present;
+							returnToYolo = true;
+							break;
+						}
+
+						break;
+					}
+					case PireCouleur:
+					{
+						tournerSurPlace(180);
+						returnToYolo = true;
+						break;
+					}
+					case MeilleureCouleur:
+					{
+						--couleur_present;
+						returnToYolo = true;
+						break;
+					}
+					case DistanceParcourue:
+					{
+						//On est au centre d'une corde
+						tournerSurPlace(90);
+						bool returnToHashTag = false;
+						do
+						{
+							//Point: HashTag
+							Deplacement d3 = avancerPrudemment(sqrt(rayon(couleur_present)*rayon(couleur_present) - corde * corde / 4));
+							switch(d3.raison)
+							{
+								case DistanceParcourue:
+								{
+									//wtf a guess on s'est fait tasse
+									{
+										do
+										{
+											tournerSurPlace(random(-180, 180));
+											d2 = avancerPrudemment(300); //Avance a l'infini
+										}while(d2.raison == Bumper);
+
+										if(d2.raison==PireCouleur)
+										{
+											tournerSurPlace(180);
+											returnToYolo = true;
+											break;
+										}
+										else if (d2.raison==MeilleureCouleur)
+										{
+											--couleur_present;
+											returnToYolo = true;
+											break;
+										}
+
+										break;
+									}
+								}
+								case MeilleureCouleur:
+								{
+									//Sur le bon chemin!
+									--couleur_present;
+									returnToYolo = true;
+									break;
+								}
+								case PireCouleur:
+								{
+									//Whoops mauvais bord
+									tournerSurPlace(180);
+									returnToYolo = true;
+								}
+								case Bumper:
+								{
+									//Aww on allait vers le centre pourtant snif snif
+									tournerSurPlace(90);
+									d3 = suivreArc(rayon(couleur_present)-d2.distance, true, 60); //60 = A peu pres 2 largeur de robot
+									switch(d3.raison)
+									{
+										case Bumper: //God fucking damnit, rage quit j,essaye nimporte quoi
+										{
+											do
+											{
+												tournerSurPlace(random(-180, 180));
+												d2 = avancerPrudemment(300); //Avance a l'infini
+											}while(d2.raison == Bumper);
+
+											if(d2.raison==PireCouleur)
+											{
+												tournerSurPlace(180);
+												returnToYolo = true;
+												break;
+											}
+											else if (d2.raison==MeilleureCouleur)
+											{
+												--couleur_present;
+												returnToYolo = true;
+												break;
+											}
+
+											break;
+										}
+										case DistanceParcourue:	//reessaye de penetrer la cible
+										{
+											tournerSurPlace(-90);
+											returnToHashTag = true;
+											break;
+										}
+										case PireCouleur:	//Wtf cest meme pas sense arriver
+										{
+											tournerSurPlace(180);
+											returnToYolo = true;
+											break;
+										}
+										case MeilleureCouleur:	//Wtf cest meme pas sense arriver mais fuck yeah!
+										{
+											--couleur_present;
+											returnToYolo = true;
+											break;
+										}
+									}
+									if(returnToYolo) break;
+								}
+							}
+							if(returnToYolo) break;
+						}while(returnToHashTag);
+					}
+				}
 				break;
 			}
 		}
 	}
+	avancerPrudemment(300);
+}
 
+float Robot::rayon(int couleur)
+{
+	if(couleur==BLEU) return 15.5f;
+	else if(couleur==VERT) return 45.5f;
+	else return 76.0f; //Jaune
+}
+
+float Robot::maxDistToBestColor(int couleur)
+{
+	float r = rayon(couleur);
+	return sqrt((2*r-FLECHE_CIBLE)*FLECHE_CIBLE);
 }
 
 Robot::Deplacement Robot::suivreArc(float rayon, bool versDroite, float distance)
@@ -383,21 +588,54 @@ void Robot::grandeCourse()
 
 void Robot::inputStartPosition()
 {
-	int startPosX = 0;	//Depart #6: 0
-	bool premierRobot = true;
+	short rawStartPosX  = 0; // Position par défaut X
+	bool  premierRobot  = true; //Premier robot par défaut
+	bool  fini 		    = false;
+	bool  boutonEnfonce = true;
 
-	/*
-	 * Lorsqu'on pese bumper droit, "startPosX = (startPosX+1)%6;"
-	 */
+	while(!fini)
+	{
+		if(DIGITALIO_Read(BMP_FRONT))
+		{
+			fini = true;
+		}
+		else if(DIGITALIO_Read(BMP_REAR))
+		{
+			premierRobot = !premierRobot;
+			boutonEnfonce = true;
+		}
+		else if(DIGITALIO_Read(BMP_LEFT))
+		{
+			boutonEnfonce = true;
+			rawStartPosX --;
+			if(rawStartPosX < 0)
+			{
+				rawStartPosX = 5;
+			}
+		}
+		else if(DIGITALIO_Read(BMP_RIGHT))
+		{
+			boutonEnfonce = true;
+			rawStartPosX = (rawStartPosX+1)%6;
+		}
 
-	/*
-	 * Lorsqu'on pese bumper bas, "premierRobot = !premierRobot;"
-	 */
+		if(boutonEnfonce)
+		{
+			if (premierRobot)
+			{
+				LCD_Printf("Premier robot, position: %i\n", rawStartPosX+1);
+			}
+			else
+			{
+				LCD_Printf("Deuxieme robot, position: %i\n", rawStartPosX+1);
+			}
+		}
+		boutonEnfonce = false;
 
-	//Afficher sur l'ecran LCD la position de depart actuelles
+		THREAD_MSleep(100);
+	}
 
-	//Bumper avant update, robot.x, robot.y et quitte la fonction
-	m_orientation = 0.f;
+	m_startPos = rawStartPosX;
 	isFirstRobot = premierRobot;
 }
 
