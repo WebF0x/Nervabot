@@ -35,6 +35,19 @@ void Robot::initGPS()
 	m_gps->addDeath(2,3);
 }
 
+void Robot::initCapteurCouleur()
+{
+	if(m_capteurCouleurBlanc)
+	{
+		initCapteurCouleurBlanc();
+	}
+	else
+	{
+		//L'autre capteur
+	}
+
+}
+
 void Robot::stop()
 {
 	MOTOR_SetSpeed(MOTOR_LEFT, 0);
@@ -175,7 +188,25 @@ void Robot::writeInFile(const char* filename, const char* text)
 
 int Robot::lecture_couleur()
 {
-	return 0;
+	int r, b, g, clear;
+	color_Read(r, b, g, clear);
+	float hue = rgbToHue(r,b,g);
+	float red = 0.03;
+	float green = 0.44;
+	float blue = 0.62;
+	float yellow = 0.1;
+	float inc = 0.04;
+
+	if(hue > (red-inc) && hue < (red+inc))
+		return ROUGE;
+	else if(hue > (green-inc) && hue < (green+inc))
+		return VERT;
+	else if(hue > (blue-inc) && hue < (blue+inc))
+		return BLEU;
+	else if(hue > (yellow-inc) && hue < (yellow+inc))
+		return JAUNE;
+	else
+		return BLANC;
 }
 
 int random(int low, int high)
@@ -574,10 +605,9 @@ Robot::Deplacement Robot::avancerPrudemment(float distance)
 
 void Robot::grandeCourse()
 {
-	inputStartPosition();
-	m_gps->updateWorld();
+	inputInitialConditions();
 	attendreBruitDepart();
-	if(!isFirstRobot) attendreBruitDepart();
+	if(!m_isFirstRobot) attendreBruitDepart();	//Attendre le deuxieme sifflet de depart
 
 	//THREAD( ecouterBruitFin() )
 
@@ -586,34 +616,30 @@ void Robot::grandeCourse()
 	endGame();
 }
 
-void Robot::inputStartPosition()
+void Robot::inputInitialConditions()
 {
 	short rawStartPosX  = 0; // Position par défaut X
-	bool  premierRobot  = true; //Premier robot par défaut
-	bool  fini 		    = false;
-	bool  boutonEnfonce = true;
+	bool premierRobot  = true; //Premier robot par défaut
+	bool capteurCouleurBlanc = true;
+	bool boutonEnfonce = true;
 
-	while(!fini)
+	while(true)
 	{
-		if(DIGITALIO_Read(BMP_FRONT))
-		{
-			fini = true;
-		}
-		else if(DIGITALIO_Read(BMP_REAR))
+		if(DIGITALIO_Read(BMP_FRONT)) break;
+
+		if(DIGITALIO_Read(BMP_REAR))
 		{
 			premierRobot = !premierRobot;
 			boutonEnfonce = true;
 		}
-		else if(DIGITALIO_Read(BMP_LEFT))
+
+		if(DIGITALIO_Read(BMP_LEFT))
 		{
 			boutonEnfonce = true;
-			rawStartPosX --;
-			if(rawStartPosX < 0)
-			{
-				rawStartPosX = 5;
-			}
+			capteurCouleurBlanc = !capteurCouleurBlanc;
 		}
-		else if(DIGITALIO_Read(BMP_RIGHT))
+
+		if(DIGITALIO_Read(BMP_RIGHT))
 		{
 			boutonEnfonce = true;
 			rawStartPosX = (rawStartPosX+1)%6;
@@ -621,14 +647,39 @@ void Robot::inputStartPosition()
 
 		if(boutonEnfonce)
 		{
-			if (premierRobot)
+			LCD_Printf("Position de depart:\n");
+			for(int i=0; i<2; ++i)
 			{
-				LCD_Printf("Premier robot, position: %i\n", rawStartPosX+1);
+				for(int j=0; j<6; ++j)
+				{
+					LCD_Printf("|");
+
+					char pos;
+					if((i==0 == premierRobot) && j==rawStartPosX)
+					{
+						pos = 'X';
+					}
+					else
+					{
+						switch(j)
+						{
+							case 0: pos = '6'; break;
+							case 1: pos = '4'; break;
+							case 2: pos = '2'; break;
+							case 3: pos = '1'; break;
+							case 4: pos = '3'; break;
+							case 5: pos = '5'; break;
+							default: pos = '?'; break;
+						}
+					}
+
+					LCD_Printf("%c", pos);
+				}
+				LCD_Printf("|\n");
 			}
-			else
-			{
-				LCD_Printf("Deuxieme robot, position: %i\n", rawStartPosX+1);
-			}
+			LCD_Printf("Capteur de couleur: ");
+			if(capteurCouleurBlanc) LCD_Printf("Blanc\n");
+			else LCD_Printf("Autre\n");
 		}
 		boutonEnfonce = false;
 
@@ -636,7 +687,17 @@ void Robot::inputStartPosition()
 	}
 
 	m_startPos = rawStartPosX;
-	isFirstRobot = premierRobot;
+	m_isFirstRobot = premierRobot;
+	initStartPosition();
+	m_gps->updateWorld();
+
+	if(capteurCouleurBlanc) initCapteurCouleurBlanc();
+	else initCapteurCouleurAutre();
+}
+
+void Robot::initStartPosition()
+{
+	//m_startPos, m_isFirstRobot, m_posX, m_posY
 }
 
 void Robot::Attendre5kHz()

@@ -13,6 +13,37 @@
 #include "PathFinder.h"
 #include <stdlib.h>
 #include <time.h>
+#include "capteurCouleur.h"
+
+//Prise de mesures du parcours (A FAIRE)
+//Origine en haut a gauche du parcours
+#define REAL_WORLD_WIDTH 0.f
+#define REAL_WORLD_LENGTH 0.f
+#define RED_MARGIN_WIDTH 0.f
+
+#define TOP_START_AREA 0.f
+#define MID_START_AREA (TOP_START_AREA + (REAL_WORLD_LENGTH - TOP_START_AREA)/2)
+#define BOT_START_AREA REAL_WORLD_LENGTH
+
+#define START_SQUARE_WIDTH ((REAL_WORLD_WIDTH-2*RED_MARGIN_WIDTH)/6)
+#define START_SQUARE_LENGTH ((REAL_WORLD_LENGTH-TOP_START_AREA)/2)
+
+#define POS0 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*0)
+#define POS1 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*1)
+#define POS2 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*2)
+#define POS3 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*3)
+#define POS4 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*4)
+#define POS5 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*5)
+
+#define OBSTACLE_DIAMETRE 0.f
+#define OBSTACLE_GAUCHE_X 0.f
+#define OBSTACLE_GAUCHE_Y 0.f
+#define OBSTACLE_MILIEU_X 0.f
+#define OBSTACLE_MILIEU_Y 0.f
+#define OBSTACLE_DROITE_X 0.f
+#define OBSTACLE_DROITE_Y OBSTACLE_GAUCHE_Y
+#define CIBLE_X 0.f
+#define CIBLE_Y 0.f
 
 class Robot
 {
@@ -33,7 +64,8 @@ public:
 	void Attendre5kHz();
 
 	void grandeCourse();
-	void inputStartPosition();
+	void inputInitialConditions();
+	void initStartPosition();
 	void attendreBruitDepart();
 	bool isSecondRobot();
 	void ecouterBruitFin();
@@ -41,6 +73,7 @@ public:
 	void endgame();
 	void freeze();
 	void initGPS();
+	void initCapteurCouleur();
 
 	void setOrientation(float orientation);
 	void printPosition();
@@ -69,7 +102,9 @@ private:
 	float m_posX,m_posY;
 	float m_orientation;
 	short m_startPos;
-	bool isFirstRobot;
+	bool m_isFirstRobot;
+
+	bool m_capteurCouleurBlanc;
 
 	static const int PIN_DETECTEUR_SIFFLET = 1;
 	static const int THRESHOLD_SIFFLET = 600;
@@ -82,10 +117,12 @@ private:
 	static const float DISTANCE_ROUES = 14;
 	static const float PI = 3.1415926535897932384626433832795;
 
-	static 	const int BLANC = 3;
+	static const int ROUGE = 4;
+	static const int BLANC = 3;
 	static const int JAUNE = 2;
 	static const int VERT = 1;
 	static const int BLEU = 0;
+
 	static const float FLECHE_CIBLE = 30.f;
 };
 

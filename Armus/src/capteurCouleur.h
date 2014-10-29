@@ -11,6 +11,8 @@
 #ifndef CAPTEURCOULEUR_H_
 #define CAPTEURCOULEUR_H_
 
+
+
 #define ADJD_S371_QR999_SADR 	0x74
 #define CAP_RED					0x6
 #define CAP_GREEN				0x7
@@ -48,8 +50,8 @@ void color_ReadToCalibrate(int& data_red, int& data_blue, int& data_green, int& 
 int color_Init(int& dev_handle);
 float fmax(float, float, float);
 float rgbToHue(float,float,float);
-int getCurrentColor();
-void showCurrentColor();
-void init();
+
+void initCapteurCouleurBlanc();
+void initCapteurCouleurAutre();
 
 #endif /* CAPTEURCOULEUR_H_ */

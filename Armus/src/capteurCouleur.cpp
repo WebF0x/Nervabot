@@ -5,14 +5,11 @@
  *      Author: Jeremie
  */
 
-#include <capteurCouleur.h>
-
-int adjd_dev;
-
+#include "capteurCouleur.h"
 
 // fonctions globales
 
-
+int adjd_dev;
 //permet de changer la valeur des registres
 void adjd_SetRegister(unsigned char reg, unsigned char val)
 {
@@ -192,8 +189,6 @@ float rgbToHue(float r, float b, float g)
     float rgb_min = fmin(r, g, b);
     float delta = rgb_max - rgb_min;
 
-
-
     float hue;
     if (r == rgb_max)
         hue = (g - b) / (delta + 1e-20f);
@@ -206,55 +201,11 @@ float rgbToHue(float r, float b, float g)
     return hue * (1.f / 6.f);
 }
 
-int getCurrentColor()
+void initCapteurCouleurBlanc()
 {
-	int r, b, g, clear;
-	color_Read(r, b, g, clear);
-	float hue = rgbToHue(r,b,g);
-	float red = 0.03;
-	float green = 0.44;
-	float blue = 0.62;
-	float yellow = 0.1;
-	float inc = 0.04;
+	//Fils rouge noir mauve bleu blanc
 
-	if(hue > (red-inc) && hue < (red+inc))
-		return 1;
-	else if(hue > (green-inc) && hue < (green+inc))
-		return 2;
-	else if(hue > (blue-inc) && hue < (blue+inc))
-		return 3;
-	else if(hue > (yellow-inc) && hue < (yellow+inc))
-		return 4;
-	else
-		return 0;
-}
-
-void showCurrentColor()
-{
-	int r, b, g, clear;
-	color_Read(r, b, g, clear);
-	float hue = rgbToHue(r,b,g);
-	float red = 0.03;
-	float green = 0.44;
-	float blue = 0.62;
-	float yellow = 0.1;
-	float inc = 0.04;
-
-	if(hue > (red-inc) && hue < (red+inc))
-		LCD_Printf("RED");
-	else if(hue > (green-inc) && hue < (green+inc))
-		LCD_Printf("GREEN");
-	else if(hue > (blue-inc) && hue < (blue+inc))
-		LCD_Printf("BLUE");
-	else if(hue > (yellow-inc) && hue < (yellow+inc))
-		LCD_Printf("YELLOW");
-	else
-		LCD_Printf("NONE");
-}
-
-void init()
-{
-	//initialisation du capteur
+	//Initialisation du capteur
 	ERROR_CHECK(color_Init(adjd_dev));
 
 	cap_SetValue(CAP_RED, 15);
@@ -262,10 +213,32 @@ void init()
 	cap_SetValue(CAP_BLUE, 15);
 	cap_SetValue(CAP_CLEAR, 15);
 
+	//Varie en fonction du capteur
 	integrationTime_SetValue(INTEGRATION_RED, 1250);
 	integrationTime_SetValue(INTEGRATION_GREEN, 1050);
 	integrationTime_SetValue(INTEGRATION_BLUE, 1300);
 	integrationTime_SetValue(INTEGRATION_CLEAR, 255);
 }
 
+void initCapteurCouleurAutre()
+{
+	/*
+
+	//Code du capteur Fils rouge noir mauve bleu blanc
+
+	//Initialisation du capteur
+	ERROR_CHECK(color_Init(adjd_dev));
+
+	cap_SetValue(CAP_RED, 15);
+	cap_SetValue(CAP_GREEN, 15);
+	cap_SetValue(CAP_BLUE, 15);
+	cap_SetValue(CAP_CLEAR, 15);
+
+	//Varie en fonction du capteur
+	integrationTime_SetValue(INTEGRATION_RED, 1250);
+	integrationTime_SetValue(INTEGRATION_GREEN, 1050);
+	integrationTime_SetValue(INTEGRATION_BLUE, 1300);
+	integrationTime_SetValue(INTEGRATION_CLEAR, 255);
+	//*/
+}
 
