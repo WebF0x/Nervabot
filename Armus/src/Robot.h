@@ -36,7 +36,7 @@
 #define POS4 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*4.f)
 #define POS5 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*5.f)
 
-#define OBSTACLE_RAYON 0.f
+#define OBSTACLE_RAYON 13.f
 #define OBSTACLE_GAUCHE_X 60.f
 #define OBSTACLE_GAUCHE_Y 228.f
 #define OBSTACLE_MILIEU_X 121.f
@@ -97,9 +97,10 @@ public:
 
 	Deplacement avancerPrudemment(float distance);
 	Deplacement suivreArc(float rayon, bool versDroite, float distance);
+	PathFinder* m_gps;
 
 private:
-	PathFinder* m_gps;
+
 	float m_posX,m_posY;
 	float m_orientation;
 	short m_startPos;
@@ -107,8 +108,8 @@ private:
 
 	bool m_capteurCouleurBlanc;
 
-	static const int GPS_RESOLUTION_X = 20;
-	static const int GPS_RESOLUTION_Y = 50;
+	static const int GPS_RESOLUTION_X = 50;
+	static const int GPS_RESOLUTION_Y = 125;
 
 	static const int PIN_DETECTEUR_SIFFLET = 1;
 	static const int THRESHOLD_SIFFLET = 600;

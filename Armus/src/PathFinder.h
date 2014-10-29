@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <set>
+#include <libarmus.h>
 
 class PathFinder
 {
@@ -19,6 +20,7 @@ class PathFinder
     std::pair<float,float> boxToPoint(int x, int y);
     std::pair<int,int> pointToBox(float x, float y);
     std::pair<float,float> nextWaypoint(float x, float y);
+    void debug();
 
     private:
     static const int GOAL=0;

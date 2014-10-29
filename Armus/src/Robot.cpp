@@ -23,9 +23,10 @@ void Robot::initGPS()
 {
 	m_gps = new PathFinder(GPS_RESOLUTION_X, GPS_RESOLUTION_Y, REAL_WORLD_WIDTH, REAL_WORLD_LENGTH);
 
-	m_gps->addGoal(CIBLE_X,CIBLE_Y);
+	pair<int,int> boxCible = m_gps->pointToBox(CIBLE_X,CIBLE_Y);
+	m_gps->addGoal(boxCible.first,boxCible.second);
 
-	/// If the center of a box is inside an obstacle, this box is a death
+	/// If the center of a box is  inside an obstacle, this box is a death
 	set<pair<float,float> > obstacles;
 	obstacles.insert(make_pair(OBSTACLE_GAUCHE_X,OBSTACLE_GAUCHE_Y));
 	obstacles.insert(make_pair(OBSTACLE_MILIEU_X,OBSTACLE_MILIEU_Y));
@@ -728,15 +729,17 @@ void Robot::inputInitialConditions()
 
 void Robot::initStartPosition()
 {
+	setOrientation(90.f);
+
 	switch(m_startPos)
 	{
-	case 0: m_posX=POS0+START_SQUARE_WIDTH/2; break;
-	case 1: m_posX=POS1+START_SQUARE_WIDTH/2; break;
-	case 2: m_posX=POS2+START_SQUARE_WIDTH/2; break;
-	case 3: m_posX=POS3+START_SQUARE_WIDTH/2; break;
-	case 4: m_posX=POS4+START_SQUARE_WIDTH/2; break;
-	case 5: m_posX=POS5+START_SQUARE_WIDTH/2; break;
-	default: m_posX=POS0+START_SQUARE_WIDTH/2; break;
+	case 0: m_posX=POS0+START_SQUARE_WIDTH/2.f; break;
+	case 1: m_posX=POS1+START_SQUARE_WIDTH/2.f; break;
+	case 2: m_posX=POS2+START_SQUARE_WIDTH/2.f; break;
+	case 3: m_posX=POS3+START_SQUARE_WIDTH/2.f; break;
+	case 4: m_posX=POS4+START_SQUARE_WIDTH/2.f; break;
+	case 5: m_posX=POS5+START_SQUARE_WIDTH/2.f; break;
+	default: m_posX=POS0+START_SQUARE_WIDTH/2.f; break;
 	}
 
 	m_posY = (m_isFirstRobot) ? TOP_START_AREA+START_SQUARE_LENGTH/2 : MID_START_AREA+START_SQUARE_LENGTH/2;
@@ -771,6 +774,12 @@ void Robot::trouverCible()
 		float y2 = destination.second;
 		float a = x2-m_posX;
 		float b = y2-m_posY;
+
+		/*
+		LCD_Printf("Position: %f , %f\n",m_posX,m_posY );
+		LCD_Printf("Destination: %f , %f\n",x2,y2 );
+		m_gps->debug();
+		//*/
 
 		float distanceVoulue = sqrt(a*a + b*b);
 

@@ -89,6 +89,17 @@ void PathFinder::addGoal(int x, int y)
     m_goals.insert(make_pair(x,y));
 }
 
+void PathFinder::debug()
+{
+	//*
+	LCD_Printf("size: %d\n", m_deaths.size());
+	for(set<pair<int,int> >::iterator death=m_deaths.begin(); death!=m_deaths.end(); ++death)
+	{
+		LCD_Printf("Death: %d, %d\n",death->first,death->second);
+	}
+	//*/
+}
+
 /*
  * Returns center of box(x,y) in real world coordinates
  */
@@ -121,10 +132,27 @@ pair<float,float> PathFinder::nextWaypoint(float x, float y)
 	int boxY = currentBox.second;
 
 	int currentHeight = getHeight(boxX, boxY);
+	int height;
 
-	if(getHeight(boxX-1,boxY) < currentHeight) return boxToPoint(boxX-1,boxY);
-	if(getHeight(boxX+1,boxY) < currentHeight) return boxToPoint(boxX+1,boxY);
-	if(getHeight(boxX,boxY-1) < currentHeight) return boxToPoint(boxX,boxY-1);
-	if(getHeight(boxX,boxY+1) < currentHeight) return boxToPoint(boxX,boxY+1);
+	LCD_Printf("currentHeight: %d\n", currentHeight);
+
+
+	height = getHeight(boxX-1,boxY);LCD_Printf("height: %d\n", height);
+	if(height < currentHeight && height!=UNKNOWN && height!=DEATH) return boxToPoint(boxX-1,boxY);
+
+	height = getHeight(boxX+1,boxY);LCD_Printf("height: %d\n", height);
+	if(height < currentHeight && height!=UNKNOWN && height!=DEATH) return boxToPoint(boxX+1,boxY);
+
+	height = getHeight(boxX,boxY+1);LCD_Printf("height: %d\n", height);
+	if(height < currentHeight && height!=UNKNOWN && height!=DEATH) return boxToPoint(boxX,boxY+1);
+
+	height = getHeight(boxX,boxY-1);LCD_Printf("height: %d\n", height);
+	if(height < currentHeight && height!=UNKNOWN && height!=DEATH) return boxToPoint(boxX,boxY-1);
+
+	return boxToPoint(boxX,boxY);
 }
+
+
+
+
 

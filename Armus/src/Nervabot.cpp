@@ -8,11 +8,43 @@
 
 #include "Robot.h"
 
+using namespace std;
+
 int main()
 {
 	Robot robot;
-	robot.initStartPosition();
+
+	Robot::Deplacement d = robot.avancerPrudemment(100);
+	switch(d.raison)
+	{
+		case Robot::DistanceParcourue:
+		{
+			LCD_Printf("DistanceParcourue");
+			break;
+		}
+		case Robot::PireCouleur:
+		{
+			LCD_Printf("PireCouleur");
+			break;
+		}
+		case Robot::MeilleureCouleur:
+		{
+			LCD_Printf("MeilleureCouleur");
+			break;
+		}
+		case Robot::Bumper:
+		{
+			LCD_Printf("Bumper");
+			break;
+		}
+	}
+	return 0;
+
+	robot.inputInitialConditions();
 	robot.trouverCible();
+
+	//robot.endGame();
+
 	return 0;
 }
 
