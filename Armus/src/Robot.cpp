@@ -249,7 +249,7 @@ int random(int low, int high)
 }
 
 /*
- * Je m<excuse Jesus pour cette longue fonction
+ * Je m'excuse Jesus pour cette longue fonction
  */
 void Robot::endGame()
 {
@@ -757,33 +757,86 @@ void Robot::ecouterBruitFin()
 
 void Robot::trouverCible()
 {
-
-	/*
-	cibleTrouvee = false;
-	while(!cibleTrouvee)
+	while(true)
 	{
-		raisonStop = avancerPrudemment(ouLeGpsDit)
-		si(raisonStop == Bumper ou PireCouleur)
-			m_gps->ajouterObstacle(enAvantDuRobot)
-			m_gps->updateWorld()
-		si(raisonStop == DistanceParcourue) rien
-		si(raisonStop == MeilleureCouleur)
-			cibleTrouvee=true
+		pair<float,float> destination = m_gps->nextWaypoint(m_posX, m_posY);
+		float x2 = destination.first;
+		float y2 = destination.second;
+		float a = x2-m_posX;
+		float b = y2-m_posY;
+
+		float distanceVoulue = sqrt(a*a + b*b);
+
+		float orientationVoulue = atan(b/a);	//http://bv.alloprof.qc.ca/mathematique/geometrie/les-vecteurs/le-vecteur-dans-un-plan-cartesien-et-ses-composantes.aspx#orientationcompo
+		if(a<0) orientationVoulue+=180;
+		else if(b<0) orientationVoulue+=360;
+
+		float angleVirage = orientationVoulue-m_orientation;
+		//Ramener entre -180 et 180
+		angleVirage = fmod(angleVirage, 360);
+		if(angleVirage > 180) angleVirage = angleVirage-360 ;
+
+		tournerSurPlace(angleVirage);
+		Deplacement d = avancerPrudemment(distanceVoulue);
+		switch(d.raison)
+		{
+			case DistanceParcourue:
+			{
+				//Parfait, passer au prochain waypoint
+				break;
+			}
+			case PireCouleur:
+			{
+				//On touche la bande rouge, quoi faire? C'est pas sense arriver...Peut-etre ajuster notre m_posX...
+				break;
+			}
+			case MeilleureCouleur:
+			{
+				//Cible trouvee! La seule raison de quitter la fonction
+				return;
+			}
+			case Bumper:
+			{
+				pair<int,int> box = m_gps->pointToBox(m_posX, m_posY);
+				int boxX = box.first;
+				int boxY = box.second;
+
+				if(45 <= m_orientation && m_orientation <= 135)	//North is bad!
+				{
+					m_gps->addDeath(boxX, boxY-1);
+				}
+				else if(-135 <= m_orientation && m_orientation <= -45)	//South is bad!
+				{
+					m_gps->addDeath(boxX, boxY+1);
+				}
+				else if(135 <= m_orientation || m_orientation <= -135)	//West is bad!
+				{
+					m_gps->addDeath(boxX-1, boxY);
+				}
+				else if(-45 <= m_orientation || m_orientation <= 45)	//East is bad!
+				{
+					m_gps->addDeath(boxX+1, boxY);
+				}
+
+				m_gps->updateWorld();
+
+				break;
+			}
+		}
 	}
-	*/
 }
 
 void Robot::freeze()
 {
 	stop();
-	//FPGA_StopAll();
+	//FPGA_StopAll(); 	//Couper les peripheriques de robos ?
 }
 
 void Robot::setOrientation(float orientation)
 {
 	//Amener entre -180 et 180
 	orientation = fmod(orientation, 360);
-	if(orientation > 180) orientation = -(orientation-180);
+	if(orientation > 180) orientation = orientation-360;
 
 	m_orientation = orientation;
 }

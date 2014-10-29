@@ -128,9 +128,3 @@ pair<float,float> PathFinder::nextWaypoint(float x, float y)
 	if(getHeight(boxX,boxY+1) < currentHeight) return boxToPoint(boxX,boxY+1);
 }
 
-
-
-
-
-
-
