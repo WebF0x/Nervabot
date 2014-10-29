@@ -201,10 +201,98 @@ float rgbToHue(float r, float b, float g)
     return hue * (1.f / 6.f);
 }
 
-void initCapteurCouleurBlanc()
+int getCurrentColorA()
 {
-	//Fils rouge noir mauve bleu blanc
 
+}
+
+int getCurrentColorB()
+{
+	int r, b, g, clear;
+	color_Read(r, b, g, clear);
+	float hue = rgbToHue(r,b,g);
+	float red = 0.995;
+	float green = 0.5;
+	float blue = 0.68;
+	float yellow = 0.15;
+	float inc = 0.07;
+
+	if((hue > 0.8 && hue > (red-inc)) || (hue < 0.2 && hue < (red-1+inc))){
+		LCD_Printf("RED");
+		return 4;
+	}
+	else if(hue > (green-inc) && hue < (green+inc)){
+		LCD_Printf("GREEN");
+		return 1;
+	}
+	else if(hue > (blue-inc) && hue < (blue+inc)){
+		LCD_Printf("BLUE");
+		return 0;
+	}
+	else if(hue > (yellow-inc) && hue < (yellow+0.02)){
+		LCD_Printf("YELLOW");
+		return 2;
+	}
+	else
+		return 3;
+}
+
+void showCurrentColorA()
+{
+	int r, b, g, clear;
+	color_Read(r, b, g, clear);
+	float hue = rgbToHue(r,b,g);
+	float red = 0.03;
+	float green = 0.44;
+	float blue = 0.62;
+	float yellow = 0.1;
+	float inc = 0.04;
+
+	if(hue > (red-inc) && hue < (red+inc))
+		LCD_Printf("RED");
+	else if(hue > (green-inc) && hue < (green+inc))
+		LCD_Printf("GREEN");
+	else if(hue > (blue-inc) && hue < (blue+inc))
+		LCD_Printf("BLUE");
+	else if(hue > (yellow-inc) && hue < (yellow+inc))
+		LCD_Printf("YELLOW");
+	else
+		LCD_Printf("NONE");
+}
+
+void showCurrentColorB()
+{
+	int r, b, g, clear;
+	color_Read(r, b, g, clear);
+	float hue = rgbToHue(r,b,g);
+	float red = 0.995;
+	float green = 0.5;
+	float blue = 0.68;
+	float yellow = 0.15;
+	float inc = 0.07;
+
+	if((hue > 0.8 && hue > (red-inc)) || (hue < 0.2 && hue < (red-1+inc)))
+		LCD_Printf("RED");
+	else if(hue > (green-inc) && hue < (green+inc))
+		LCD_Printf("GREEN");
+	else if(hue > (blue-inc) && hue < (blue+inc))
+		LCD_Printf("BLUE");
+	else if(hue > (yellow-inc) && hue < (yellow+0.02))
+		LCD_Printf("YELLOW");
+	else
+		LCD_Printf("NONE");
+}
+
+void showRGB()
+{
+	int r, b, g, clear;
+	color_Read(r, b, g, clear);
+	float hue = rgbToHue(r, b,g);
+	LCD_ClearAndPrint("R : %i  B : %i G : %i H %5f", r, b, g, hue);
+}
+
+void initA()
+{
 	//Initialisation du capteur
 	ERROR_CHECK(color_Init(adjd_dev));
 
@@ -220,13 +308,9 @@ void initCapteurCouleurBlanc()
 	integrationTime_SetValue(INTEGRATION_CLEAR, 255);
 }
 
-void initCapteurCouleurAutre()
+void initB()
 {
-	/*
-
-	//Code du capteur Fils rouge noir mauve bleu blanc
-
-	//Initialisation du capteur
+	//initialisation du capteur
 	ERROR_CHECK(color_Init(adjd_dev));
 
 	cap_SetValue(CAP_RED, 15);
@@ -234,11 +318,8 @@ void initCapteurCouleurAutre()
 	cap_SetValue(CAP_BLUE, 15);
 	cap_SetValue(CAP_CLEAR, 15);
 
-	//Varie en fonction du capteur
-	integrationTime_SetValue(INTEGRATION_RED, 1250);
-	integrationTime_SetValue(INTEGRATION_GREEN, 1050);
-	integrationTime_SetValue(INTEGRATION_BLUE, 1300);
+	integrationTime_SetValue(INTEGRATION_RED, 160);
+	integrationTime_SetValue(INTEGRATION_GREEN, 165);
+	integrationTime_SetValue(INTEGRATION_BLUE, 197);
 	integrationTime_SetValue(INTEGRATION_CLEAR, 255);
-	//*/
 }
-

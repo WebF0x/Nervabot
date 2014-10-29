@@ -7,8 +7,6 @@
 
 #include "Robot.h"
 
-using namespace std;
-
 Robot::Robot()
 {
 	initGPS();
@@ -32,51 +30,17 @@ void Robot::initGPS()
 	obstacles.insert(make_pair(OBSTACLE_MILIEU_X,OBSTACLE_MILIEU_Y));
 	obstacles.insert(make_pair(OBSTACLE_DROITE_X,OBSTACLE_DROITE_Y));
 
-	for(set<pair<float,float> >::iterator obstacle=obstacles.begin(); obstacle!=obstacles.end(); ++obstacle)	//For each obstacle
-	{
-		set<pair<int,int> > boxesToCheck;
-		boxesToCheck.insert(m_gps->pointToBox(obstacle->first, obstacle->second));	//first box is the one containing the obstacle's center
+	m_gps = new PathFinder(worldWidth, worldLength);
 
-		while(!boxesToCheck.empty())
-		{
-			set<pair<int,int> > nextBoxes;
+	m_gps->addGoal(0,0);
 
-			for(set<pair<int,int> >::iterator box=boxesToCheck.begin(); box!=boxesToCheck.end(); ++box) //For each box to check
-			{
-				//Take the center of the box
-				pair<float,float> center  = m_gps->boxToPoint(box->first, box->second);
-				float x = center.first;
-				float y = center.second;
-				float deltaX = obstacle->first - x;
-				float deltaY = obstacle->second - y;
-				bool isInsideObstacle = (deltaX*deltaX + deltaY*deltaY <= OBSTACLE_RAYON*OBSTACLE_RAYON);
-
-				if(isInsideObstacle)
-				{
-					m_gps->addDeath(box->first,box->second);
-
-					nextBoxes.insert(make_pair(x+1,y));
-					nextBoxes.insert(make_pair(x-1,y));
-					nextBoxes.insert(make_pair(x,y+1));
-					nextBoxes.insert(make_pair(x,y-1));
-				}
-			}
-			boxesToCheck = nextBoxes;
-		}
-	}
-}
-
-void Robot::initCapteurCouleur()
-{
-	if(m_capteurCouleurBlanc)
-	{
-		initCapteurCouleurBlanc();
-	}
-	else
-	{
-		//L'autre capteur
-	}
-
+	m_gps->addDeath(1,1);
+	m_gps->addDeath(1,1);
+	m_gps->addDeath(2,1);
+	m_gps->addDeath(3,1);
+	m_gps->addDeath(1,2);
+	m_gps->addDeath(3,2);
+	m_gps->addDeath(2,3);
 }
 
 void Robot::stop()
@@ -201,7 +165,7 @@ void Robot::tournerSurPlace(float angle)
 }
 
 /*
- * Pas full utile pour la course mais je garde peut-etre pour plus tard
+ * A tester
  */
 void Robot::writeInFile(const char* filename, const char* text)
 {
@@ -219,25 +183,7 @@ void Robot::writeInFile(const char* filename, const char* text)
 
 int Robot::lecture_couleur()
 {
-	int r, b, g, clear;
-	color_Read(r, b, g, clear);
-	float hue = rgbToHue(r,b,g);
-	float red = 0.03;
-	float green = 0.44;
-	float blue = 0.62;
-	float yellow = 0.1;
-	float inc = 0.04;
-
-	if(hue > (red-inc) && hue < (red+inc))
-		return ROUGE;
-	else if(hue > (green-inc) && hue < (green+inc))
-		return VERT;
-	else if(hue > (blue-inc) && hue < (blue+inc))
-		return BLEU;
-	else if(hue > (yellow-inc) && hue < (yellow+inc))
-		return JAUNE;
-	else
-		return BLANC;
+	return 0;
 }
 
 int random(int low, int high)
@@ -245,9 +191,8 @@ int random(int low, int high)
 	srand(time(NULL));
 	return rand() % (high - low + 1) + low;
 }
-
 /*
- * Je m'excuse Jesus pour cette longue fonction
+ * Je m<excuse Jesus pour cette longue fonction
  */
 void Robot::endGame()
 {
@@ -508,7 +453,7 @@ float Robot::rayon(int couleur)
 float Robot::maxDistToBestColor(int couleur)
 {
 	float r = rayon(couleur);
-	return sqrt((2.f*r-FLECHE_CIBLE)*FLECHE_CIBLE);
+	return sqrt((2*r-FLECHE_CIBLE)*FLECHE_CIBLE);
 }
 
 Robot::Deplacement Robot::suivreArc(float rayon, bool versDroite, float distance)
@@ -637,9 +582,10 @@ Robot::Deplacement Robot::avancerPrudemment(float distance)
 
 void Robot::grandeCourse()
 {
-	inputInitialConditions();
+	inputStartPosition();
+	m_gps->updateWorld();
 	attendreBruitDepart();
-	if(!m_isFirstRobot) attendreBruitDepart();	//Attendre le deuxieme sifflet de depart
+	if(!isFirstRobot) attendreBruitDepart();
 
 	//THREAD( ecouterBruitFin() )
 
@@ -648,30 +594,34 @@ void Robot::grandeCourse()
 	endGame();
 }
 
-void Robot::inputInitialConditions()
+void Robot::inputStartPosition()
 {
 	short rawStartPosX  = 0; // Position par défaut X
-	bool premierRobot  = true; //Premier robot par défaut
-	bool capteurCouleurBlanc = true;
-	bool boutonEnfonce = true;
+	bool  premierRobot  = true; //Premier robot par défaut
+	bool  fini 		    = false;
+	bool  boutonEnfonce = true;
 
-	while(true)
+	while(!fini)
 	{
-		if(DIGITALIO_Read(BMP_FRONT)) break;
-
-		if(DIGITALIO_Read(BMP_REAR))
+		if(DIGITALIO_Read(BMP_FRONT))
+		{
+			fini = true;
+		}
+		else if(DIGITALIO_Read(BMP_REAR))
 		{
 			premierRobot = !premierRobot;
 			boutonEnfonce = true;
 		}
-
-		if(DIGITALIO_Read(BMP_LEFT))
+		else if(DIGITALIO_Read(BMP_LEFT))
 		{
 			boutonEnfonce = true;
-			capteurCouleurBlanc = !capteurCouleurBlanc;
+			rawStartPosX --;
+			if(rawStartPosX < 0)
+			{
+				rawStartPosX = 5;
+			}
 		}
-
-		if(DIGITALIO_Read(BMP_RIGHT))
+		else if(DIGITALIO_Read(BMP_RIGHT))
 		{
 			boutonEnfonce = true;
 			rawStartPosX = (rawStartPosX+1)%6;
@@ -679,39 +629,14 @@ void Robot::inputInitialConditions()
 
 		if(boutonEnfonce)
 		{
-			LCD_Printf("Position de depart:\n");
-			for(int i=0; i<2; ++i)
+			if (premierRobot)
 			{
-				for(int j=0; j<6; ++j)
-				{
-					LCD_Printf("|");
-
-					char pos;
-					if((i==0 == premierRobot) && j==rawStartPosX)
-					{
-						pos = 'X';
-					}
-					else
-					{
-						switch(j)
-						{
-							case 0: pos = '6'; break;
-							case 1: pos = '4'; break;
-							case 2: pos = '2'; break;
-							case 3: pos = '1'; break;
-							case 4: pos = '3'; break;
-							case 5: pos = '5'; break;
-							default: pos = '?'; break;
-						}
-					}
-
-					LCD_Printf("%c", pos);
-				}
-				LCD_Printf("|\n");
+				LCD_Printf("Premier robot, position: %i\n", rawStartPosX+1);
 			}
-			LCD_Printf("Capteur de couleur: ");
-			if(capteurCouleurBlanc) LCD_Printf("Blanc\n");
-			else LCD_Printf("Autre\n");
+			else
+			{
+				LCD_Printf("Deuxieme robot, position: %i\n", rawStartPosX+1);
+			}
 		}
 		boutonEnfonce = false;
 
@@ -733,13 +658,13 @@ void Robot::initStartPosition()
 
 	switch(m_startPos)
 	{
-	case 0: m_posX=POS0+START_SQUARE_WIDTH/2.f; break;
-	case 1: m_posX=POS1+START_SQUARE_WIDTH/2.f; break;
-	case 2: m_posX=POS2+START_SQUARE_WIDTH/2.f; break;
-	case 3: m_posX=POS3+START_SQUARE_WIDTH/2.f; break;
-	case 4: m_posX=POS4+START_SQUARE_WIDTH/2.f; break;
-	case 5: m_posX=POS5+START_SQUARE_WIDTH/2.f; break;
-	default: m_posX=POS0+START_SQUARE_WIDTH/2.f; break;
+		case 0: m_posX=POS0+START_SQUARE_WIDTH/2.f; break;
+		case 1: m_posX=POS1+START_SQUARE_WIDTH/2.f; break;
+		case 2: m_posX=POS2+START_SQUARE_WIDTH/2.f; break;
+		case 3: m_posX=POS3+START_SQUARE_WIDTH/2.f; break;
+		case 4: m_posX=POS4+START_SQUARE_WIDTH/2.f; break;
+		case 5: m_posX=POS5+START_SQUARE_WIDTH/2.f; break;
+		default: m_posX=POS0+START_SQUARE_WIDTH/2.f; break;
 	}
 
 	m_posY = (m_isFirstRobot) ? TOP_START_AREA+START_SQUARE_LENGTH/2 : MID_START_AREA+START_SQUARE_LENGTH/2;
@@ -767,7 +692,8 @@ void Robot::ecouterBruitFin()
 
 void Robot::trouverCible()
 {
-	while(true)
+	cibleTrouvee = false;
+	while(!cibleTrouvee)
 	{
 		pair<float,float> destination = m_gps->nextWaypoint(m_posX, m_posY);
 		float x2 = destination.first;
@@ -845,14 +771,14 @@ void Robot::trouverCible()
 void Robot::freeze()
 {
 	stop();
-	//FPGA_StopAll(); 	//Couper les peripheriques de robos ?
+	//FPGA_StopAll();
 }
 
 void Robot::setOrientation(float orientation)
 {
 	//Amener entre -180 et 180
 	orientation = fmod(orientation, 360);
-	if(orientation > 180) orientation = orientation-360;
+	if(orientation > 180) orientation = -(orientation-180);
 
 	m_orientation = orientation;
 }

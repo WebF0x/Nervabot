@@ -13,6 +13,7 @@
 #include "PathFinder.h"
 #include <stdlib.h>
 #include <time.h>
+<<<<<<< HEAD
 #include "capteurCouleur.h"
 #include <set>
 
@@ -45,6 +46,8 @@
 #define OBSTACLE_DROITE_Y OBSTACLE_GAUCHE_Y
 #define CIBLE_X OBSTACLE_MILIEU_X
 #define CIBLE_Y 122.f
+=======
+>>>>>>> 56af366d6915ea9a8917f3bf76b7acb4d8fdde07
 
 class Robot
 {
@@ -65,8 +68,7 @@ public:
 	void Attendre5kHz();
 
 	void grandeCourse();
-	void inputInitialConditions();
-	void initStartPosition();
+	void inputStartPosition();
 	void attendreBruitDepart();
 	bool isSecondRobot();
 	void ecouterBruitFin();
@@ -74,7 +76,6 @@ public:
 	void endgame();
 	void freeze();
 	void initGPS();
-	void initCapteurCouleur();
 
 	void setOrientation(float orientation);
 	void printPosition();
@@ -122,12 +123,10 @@ private:
 	static const float DISTANCE_ROUES = 14;
 	static const float PI = 3.1415926535897932384626433832795;
 
-	static const int ROUGE = 4;
-	static const int BLANC = 3;
+	static 	const int BLANC = 3;
 	static const int JAUNE = 2;
 	static const int VERT = 1;
 	static const int BLEU = 0;
-
 	static const float FLECHE_CIBLE = 30.f;
 };
 
