@@ -423,6 +423,7 @@ void Robot::ecouterBruitFin()
 
 void Robot::trouverCible()
 {
+
 	/*
 	cibleTrouvee = false;
 	while(!cibleTrouvee)

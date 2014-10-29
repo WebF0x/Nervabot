@@ -88,3 +88,11 @@ void PathFinder::addGoal(int x, int y)
 {
     m_goals.insert(make_pair(x,y));
 }
+
+pair<float,float> PathFinder::centreCase(int x, int y, float realWorldWidth, float realWorldLength)
+{
+	float resX = (x +.5f) * realWorldWidth/WORLD_WIDTH;
+	float resY = (y +.5f) * realWorldLength/WORLD_LENGTH;
+
+	return make_pair(resX, resY);
+}

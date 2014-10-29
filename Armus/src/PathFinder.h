@@ -16,6 +16,7 @@ class PathFinder
     int getHeight(int x, int y);
     void addDeath(int x, int y);
     void addGoal(int x, int y);
+    std::pair<float,float> centreCase(int x, int y, float realWorldWidth, float realWorldLength);
 
     private:
     static const int GOAL=0;
