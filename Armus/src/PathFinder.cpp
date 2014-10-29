@@ -2,14 +2,14 @@
 
 using namespace std;
 
-PathFinder::PathFinder(int worldWidth, int worldLength, const set<pair<int,int> >& goals, const set<pair<int,int> >& deaths) : WORLD_WIDTH(worldWidth), WORLD_LENGTH(worldLength)
+PathFinder::PathFinder(int worldWidth, int worldLength, float realWorldWidth, float realWorldLength, const set<pair<int,int> >& goals, const set<pair<int,int> >& deaths) : WORLD_WIDTH(worldWidth), WORLD_LENGTH(worldLength), REAL_WORLD_WIDTH(realWorldWidth), REAL_WORLD_LENGTH(realWorldLength)
 {
     setGoals(goals);
     setDeaths(deaths);
     m_world = vector<vector<int> >(WORLD_WIDTH, vector<int>(WORLD_LENGTH,UNKNOWN));
 }
 
-PathFinder::PathFinder(int worldWidth, int worldLength) : WORLD_WIDTH(worldWidth), WORLD_LENGTH(worldLength)
+PathFinder::PathFinder(int worldWidth, int worldLength, float realWorldWidth, float realWorldLength) : WORLD_WIDTH(worldWidth), WORLD_LENGTH(worldLength), REAL_WORLD_WIDTH(realWorldWidth), REAL_WORLD_LENGTH(realWorldLength)
 {
     m_world = vector<vector<int> >(WORLD_WIDTH, vector<int>(WORLD_LENGTH,UNKNOWN));
 }
@@ -89,10 +89,48 @@ void PathFinder::addGoal(int x, int y)
     m_goals.insert(make_pair(x,y));
 }
 
-pair<float,float> PathFinder::centreCase(int x, int y, float realWorldWidth, float realWorldLength)
+/*
+ * Returns center of box(x,y) in real world coordinates
+ */
+pair<float,float> PathFinder::boxToPoint(int x, int y)
 {
-	float resX = (x +.5f) * realWorldWidth/WORLD_WIDTH;
-	float resY = (y +.5f) * realWorldLength/WORLD_LENGTH;
+	float resultX = ((float)x +.5f) * REAL_WORLD_WIDTH/WORLD_WIDTH;
+	float resultY = ((float)y +.5f) * REAL_WORLD_LENGTH/WORLD_LENGTH;
 
-	return make_pair(resX, resY);
+	return make_pair(resultX, resultY);
 }
+
+/*
+ * Returns box containing point(x,y)
+ */
+pair<int,int> PathFinder::pointToBox(float x, float y)
+{
+	int resultX = x*WORLD_WIDTH/REAL_WORLD_WIDTH;
+	int resultY = y*WORLD_LENGTH/REAL_WORLD_LENGTH;
+
+	return make_pair(resultX, resultY);
+}
+
+/*
+ * Returns the real world coordinates of a more interesting neighbor point
+ */
+pair<float,float> PathFinder::nextWaypoint(float x, float y)
+{
+	pair<int,int> currentBox = pointToBox(x,y);
+	int boxX = currentBox.first;
+	int boxY = currentBox.second;
+
+	int currentHeight = getHeight(boxX, boxY);
+
+	if(getHeight(boxX-1,boxY) < currentHeight) return boxToPoint(boxX-1,boxY);
+	if(getHeight(boxX+1,boxY) < currentHeight) return boxToPoint(boxX+1,boxY);
+	if(getHeight(boxX,boxY-1) < currentHeight) return boxToPoint(boxX,boxY-1);
+	if(getHeight(boxX,boxY+1) < currentHeight) return boxToPoint(boxX,boxY+1);
+}
+
+
+
+
+
+
+
