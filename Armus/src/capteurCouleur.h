@@ -48,8 +48,12 @@ void color_ReadToCalibrate(int& data_red, int& data_blue, int& data_green, int& 
 int color_Init(int& dev_handle);
 float fmax(float, float, float);
 float rgbToHue(float,float,float);
-int getCurrentColor();
-void showCurrentColor();
-void init();
+int getCurrentColorA();
+int getCurrentColorB();
+void showCurrentColorA();
+void showCurrentColorB();
+void showRGB();
+void initA();
+void initB();
 
 #endif /* CAPTEURCOULEUR_H_ */
