@@ -825,7 +825,6 @@ void Robot::stopAll()
 {
 	m_stopAll = true;
 	stop();
-	//FPGA_StopAll(); 	//Couper les peripheriques de robos ?
 }
 
 void Robot::setOrientation(float orientation)

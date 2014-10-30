@@ -12,7 +12,7 @@ void* attendreSignal(void* arg);
 
 int main()
 {
-	Robot robot;
+	Robot robot(true);
 	THREAD bruitFin;
 	bool isFirstRobot;
 
@@ -28,6 +28,36 @@ int main()
 	}
 
 	THREAD_Create(&bruitFin, attendreSignal, &robot);
+/*
+	Robot::Deplacement d = robot.avancerPrudemment(100);
+	switch(d.raison)
+	{
+		case Robot::DistanceParcourue:
+		{
+			LCD_Printf("DistanceParcourue");
+			break;
+		}
+		case Robot::PireCouleur:
+		{
+			LCD_Printf("PireCouleur");
+			break;
+		}
+		case Robot::MeilleureCouleur:
+		{
+			LCD_Printf("MeilleureCouleur");
+			break;
+		}
+		case Robot::Bumper:
+		{
+			LCD_Printf("Bumper");
+			break;
+		}
+	}
+	return 0;
+	//*/
+
+	robot.inputInitialConditions();
+	robot.trouverCible();
 
 	//Debut de la course
 	robot.trouverCible();
@@ -44,78 +74,3 @@ void* attendreSignal(void* arg)
 	r->ecouterBruitFin();
 	LCD_Printf("******* Son entendu *******\n");
 }
-
-
-
-
-
-
-/// Code de David pour threads et bumpers:
-/*
-typedef char* Robot_event_t;
-
-void bumper_watch(Robot_event_t R_Event);
-void robot_move();
-
-enum
-{
-	BUMPER_FRONT_PUSHED = 1,
-	BUMPER_REAR_PUSHED = 2,
-	BUMPER_LEFT_PUSHED = 3,
-	BUMPER_RIGHT_PUSHED = 4,
-};
-
-
-int main()
-{
-	THREAD thread_bumpers;
-	THREAD thread_robot;
-	Robot_event_t RobotEvent;
-
-	LCD_ClearAndPrint("Demarage\n");
-	thread_robot = THREAD_CreateSimple(robot_move);
-	thread_robot = THREAD_CreateSimple(robot_move);
-
-	for(bool fin = false;;)
-	{
-		if (RobotEvent != 0)
-		{
-
-		}
-	}
-
-	THREAD_Destroy(&thread_bumpers);
-	THREAD_Destroy(&thread_robot);
-	return 0;
-}
-
-
-void bumper_watch(Robot_event_t R_Event)
-{
-
-	while(1)
-	{
-		if(DIGITALIO_Read(BMP_FRONT))
-		{
-			LCD_Printf("Bumper front enfonce\n");
-			//R_Event = BUMPER_FRONT_PUSHED;
-		}
-		else if(DIGITALIO_Read(BMP_REAR))
-		{
-			LCD_Printf("Bumper rear enfonce\n");
-		}
-		else if(DIGITALIO_Read(BMP_LEFT))
-		{
-			LCD_Printf("Bumper left enfonce\n");
-		}
-		else if(DIGITALIO_Read(BMP_RIGHT))
-		{
-			LCD_Printf("Bumper right enfonce\n");
-		}
-
-
-		THREAD_MSleep(100);
-	}
-}
-
-//*/

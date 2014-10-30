@@ -18,38 +18,38 @@
 
 //Prise de mesures du parcours (A FAIRE)
 //Origine en haut a gauche du parcours
-#define REAL_WORLD_WIDTH 0.f
-#define REAL_WORLD_LENGTH 0.f
-#define RED_MARGIN_WIDTH 0.f
+#define REAL_WORLD_WIDTH 243.f
+#define REAL_WORLD_LENGTH 610.f
+#define RED_MARGIN_WIDTH 30.f
 
-#define TOP_START_AREA 0.f
-#define MID_START_AREA (TOP_START_AREA + (REAL_WORLD_LENGTH - TOP_START_AREA)/2)
+#define TOP_START_AREA (REAL_WORLD_LENGTH - 30.f)
+#define MID_START_AREA (TOP_START_AREA + (REAL_WORLD_LENGTH - TOP_START_AREA)/2.f)
 #define BOT_START_AREA REAL_WORLD_LENGTH
 
-#define START_SQUARE_WIDTH ((REAL_WORLD_WIDTH-2*RED_MARGIN_WIDTH)/6)
-#define START_SQUARE_LENGTH ((REAL_WORLD_LENGTH-TOP_START_AREA)/2)
+#define START_SQUARE_WIDTH ((REAL_WORLD_WIDTH-2.f*RED_MARGIN_WIDTH)/6.f)
+#define START_SQUARE_LENGTH ((REAL_WORLD_LENGTH-TOP_START_AREA)/2.f)
 
-#define POS0 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*0)
-#define POS1 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*1)
-#define POS2 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*2)
-#define POS3 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*3)
-#define POS4 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*4)
-#define POS5 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*5)
+#define POS0 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*0.f)
+#define POS1 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*1.f)
+#define POS2 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*2.f)
+#define POS3 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*3.f)
+#define POS4 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*4.f)
+#define POS5 (RED_MARGIN_WIDTH + START_SQUARE_WIDTH*5.f)
 
-#define OBSTACLE_RAYON 0.f
-#define OBSTACLE_GAUCHE_X 0.f
-#define OBSTACLE_GAUCHE_Y 0.f
-#define OBSTACLE_MILIEU_X 0.f
-#define OBSTACLE_MILIEU_Y 0.f
-#define OBSTACLE_DROITE_X 0.f
+#define OBSTACLE_RAYON 13.f
+#define OBSTACLE_GAUCHE_X 60.f
+#define OBSTACLE_GAUCHE_Y 228.f
+#define OBSTACLE_MILIEU_X 121.f
+#define OBSTACLE_MILIEU_Y 274.f
+#define OBSTACLE_DROITE_X 182.f
 #define OBSTACLE_DROITE_Y OBSTACLE_GAUCHE_Y
-#define CIBLE_X 0.f
-#define CIBLE_Y 0.f
+#define CIBLE_X OBSTACLE_MILIEU_X
+#define CIBLE_Y 122.f
 
 class Robot
 {
 public:
-	Robot();
+	Robot(bool isArmu022);
 	virtual ~Robot();
 
 	void dispSpeedDifferences();
@@ -73,7 +73,6 @@ public:
 	void endgame();
 	void stopAll();
 	void initGPS();
-	void initCapteurCouleur();
 
 	void setOrientation(float orientation);
 	void printPosition();
@@ -96,19 +95,18 @@ public:
 
 	Deplacement avancerPrudemment(float distance);
 	Deplacement suivreArc(float rayon, bool versDroite, float distance);
+	PathFinder* m_gps;
 
 private:
-	PathFinder* m_gps;
+
 	float m_posX,m_posY;
 	float m_orientation;
 	short m_startPos;
 	bool m_isFirstRobot;
 	bool m_stopAll;
 
-	bool m_capteurCouleurBlanc;
-
-	static const int GPS_RESOLUTION_X=1;
-	static const int GPS_RESOLUTION_Y=1;
+	static const int GPS_RESOLUTION_X = 50;
+	static const int GPS_RESOLUTION_Y = 125;
 
 	static const int PIN_DETECTEUR_SIFFLET = 1;
 	static const int THRESHOLD_SIFFLET = 600;
@@ -122,12 +120,13 @@ private:
 	static const float PI = 3.1415926535897932384626433832795;
 
 	static const int ROUGE = 4;
-	static const int BLANC = 3;
+	static 	const int BLANC = 3;
 	static const int JAUNE = 2;
 	static const int VERT = 1;
 	static const int BLEU = 0;
-
 	static const float FLECHE_CIBLE = 30.f;
+
+	bool m_isArmu022;
 };
 
 #endif /* ROBOT_H_ */
