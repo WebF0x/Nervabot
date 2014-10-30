@@ -9,8 +9,11 @@
 
 using namespace std;
 
-Robot::Robot()
+Robot::Robot(bool isArmu022)
 {
+	if(isArmu022) initB();
+	else initA();
+
 	initGPS();
 }
 
@@ -63,19 +66,6 @@ void Robot::initGPS()
 			boxesToCheck = nextBoxes;
 		}
 	}
-}
-
-void Robot::initCapteurCouleur()
-{
-	if(m_capteurCouleurBlanc)
-	{
-		initCapteurCouleurBlanc();
-	}
-	else
-	{
-		//L'autre capteur
-	}
-
 }
 
 void Robot::stop()
@@ -642,7 +632,7 @@ Robot::Deplacement Robot::avancerPrudemment(float distance)
 		return resultat;
 }
 
-void Robot::inputInitialConditions()
+bool Robot::inputInitialConditions()
  {
  	short rawStartPosX  = 0; // Position par defaut X
 	bool premierRobot  = true; //Premier robot par defaut
@@ -661,7 +651,6 @@ void Robot::inputInitialConditions()
 		if(DIGITALIO_Read(BMP_LEFT))
 		{
 			boutonEnfonce = true;
-			capteurCouleurBlanc = !capteurCouleurBlanc;
 		}
 
 		if(DIGITALIO_Read(BMP_RIGHT))
@@ -703,9 +692,6 @@ void Robot::inputInitialConditions()
 				}
 				LCD_Printf("|\n");
 			}
-			LCD_Printf("Capteur de couleur: ");
-			if(capteurCouleurBlanc) LCD_Printf("Blanc\n");
-			else LCD_Printf("Autre\n");
 		}
 		boutonEnfonce = false;
 

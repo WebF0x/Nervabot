@@ -230,6 +230,7 @@ int getCurrentColorA()
 	float blue = 0.63;
 	float yellow = 0.12;
 	float inc = 0.045;
+	int couleur;
 
 	if(saturation < 0.3)
 		couleur= 3;
@@ -249,8 +250,6 @@ int getCurrentColorA()
 		couleur= 3;
 
 	return couleur;
-
-	}
 }
 
 int getCurrentColorB()
@@ -265,6 +264,7 @@ int getCurrentColorB()
 	float blue = 0.68;
 	float yellow = 0.15;
 	float inc = 0.07;
+	int couleur;
 
 	if(saturation < 0.1)
 	{
