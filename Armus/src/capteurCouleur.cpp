@@ -5,11 +5,14 @@
  *      Author: Jeremie
  */
 
-#include "capteurCouleur.h"
+#include <capteurCouleur.h>
+
+int adjd_dev;
+
 
 // fonctions globales
 
-int adjd_dev;
+
 //permet de changer la valeur des registres
 void adjd_SetRegister(unsigned char reg, unsigned char val)
 {
@@ -189,6 +192,8 @@ float rgbToHue(float r, float b, float g)
     float rgb_min = fmin(r, g, b);
     float delta = rgb_max - rgb_min;
 
+
+
     float hue;
     if (r == rgb_max)
         hue = (g - b) / (delta + 1e-20f);
@@ -201,9 +206,43 @@ float rgbToHue(float r, float b, float g)
     return hue * (1.f / 6.f);
 }
 
+float rgbToSaturation(float r, float b, float g)
+{
+    float rgb_max = fmax(r,g, b);
+    float rgb_min = fmin(r, g, b);
+    float delta = rgb_max - rgb_min;
+
+    return delta / (rgb_max + 1e-20f);
+}
+
 int getCurrentColorA()
 {
+	int r, b, g, clear;
+	color_Read(r, b, g, clear);
+	float hue = rgbToHue(r,b,g);
+	float saturation = rgbToSaturation(r,b,g);
+	float red = 0.02;
+	float green = 0.46;
+	float blue = 0.63;
+	float yellow = 0.12;
+	float inc = 0.045;
 
+	if(saturation < 0.3)
+		return 3;
+	else if(hue > (red-inc) && hue < (red+inc)){
+		return 4;
+	}
+	else if(hue > (green-inc) && hue < (green+inc)){
+		return 1;
+	}
+	else if(hue > (blue-inc) && hue < (blue+inc)){
+		return 0;
+	}
+	else if(hue > (yellow-inc) && hue < (yellow+inc)){
+		return 2;
+	}
+	else
+		return 3;
 }
 
 int getCurrentColorB()
@@ -211,76 +250,29 @@ int getCurrentColorB()
 	int r, b, g, clear;
 	color_Read(r, b, g, clear);
 	float hue = rgbToHue(r,b,g);
+	float saturation = rgbToSaturation(r,b,g);
 	float red = 0.995;
 	float green = 0.5;
 	float blue = 0.68;
 	float yellow = 0.15;
 	float inc = 0.07;
 
-	if((hue > 0.8 && hue > (red-inc)) || (hue < 0.2 && hue < (red-1+inc))){
-		LCD_Printf("RED");
+	if(saturation < 0.3)
+			return 3;
+	else if((hue > 0.8 && hue > (red-inc)) || (hue < 0.2 && hue < (red-1+inc))){
 		return 4;
 	}
 	else if(hue > (green-inc) && hue < (green+inc)){
-		LCD_Printf("GREEN");
 		return 1;
 	}
 	else if(hue > (blue-inc) && hue < (blue+inc)){
-		LCD_Printf("BLUE");
 		return 0;
 	}
 	else if(hue > (yellow-inc) && hue < (yellow+0.02)){
-		LCD_Printf("YELLOW");
 		return 2;
 	}
 	else
 		return 3;
-}
-
-void showCurrentColorA()
-{
-	int r, b, g, clear;
-	color_Read(r, b, g, clear);
-	float hue = rgbToHue(r,b,g);
-	float red = 0.03;
-	float green = 0.44;
-	float blue = 0.62;
-	float yellow = 0.1;
-	float inc = 0.04;
-
-	if(hue > (red-inc) && hue < (red+inc))
-		LCD_Printf("RED");
-	else if(hue > (green-inc) && hue < (green+inc))
-		LCD_Printf("GREEN");
-	else if(hue > (blue-inc) && hue < (blue+inc))
-		LCD_Printf("BLUE");
-	else if(hue > (yellow-inc) && hue < (yellow+inc))
-		LCD_Printf("YELLOW");
-	else
-		LCD_Printf("NONE");
-}
-
-void showCurrentColorB()
-{
-	int r, b, g, clear;
-	color_Read(r, b, g, clear);
-	float hue = rgbToHue(r,b,g);
-	float red = 0.995;
-	float green = 0.5;
-	float blue = 0.68;
-	float yellow = 0.15;
-	float inc = 0.07;
-
-	if((hue > 0.8 && hue > (red-inc)) || (hue < 0.2 && hue < (red-1+inc)))
-		LCD_Printf("RED");
-	else if(hue > (green-inc) && hue < (green+inc))
-		LCD_Printf("GREEN");
-	else if(hue > (blue-inc) && hue < (blue+inc))
-		LCD_Printf("BLUE");
-	else if(hue > (yellow-inc) && hue < (yellow+0.02))
-		LCD_Printf("YELLOW");
-	else
-		LCD_Printf("NONE");
 }
 
 void showRGB()
@@ -288,12 +280,13 @@ void showRGB()
 	int r, b, g, clear;
 	color_Read(r, b, g, clear);
 	float hue = rgbToHue(r, b,g);
-	LCD_ClearAndPrint("R : %i  B : %i G : %i H %5f", r, b, g, hue);
+	float saturation = rgbToSaturation(r, b,g);
+	LCD_ClearAndPrint("%i  %i %i %5f %5f", r, b, g, hue, saturation);
 }
 
 void initA()
 {
-	//Initialisation du capteur
+	//initialisation du capteur
 	ERROR_CHECK(color_Init(adjd_dev));
 
 	cap_SetValue(CAP_RED, 15);
@@ -301,9 +294,8 @@ void initA()
 	cap_SetValue(CAP_BLUE, 15);
 	cap_SetValue(CAP_CLEAR, 15);
 
-	//Varie en fonction du capteur
-	integrationTime_SetValue(INTEGRATION_RED, 1250);
-	integrationTime_SetValue(INTEGRATION_GREEN, 1050);
+	integrationTime_SetValue(INTEGRATION_RED, 1120);
+	integrationTime_SetValue(INTEGRATION_GREEN, 980);
 	integrationTime_SetValue(INTEGRATION_BLUE, 1300);
 	integrationTime_SetValue(INTEGRATION_CLEAR, 255);
 }
@@ -323,3 +315,4 @@ void initB()
 	integrationTime_SetValue(INTEGRATION_BLUE, 197);
 	integrationTime_SetValue(INTEGRATION_CLEAR, 255);
 }
+
