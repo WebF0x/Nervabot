@@ -11,7 +11,7 @@ using namespace std;
 
 Robot::Robot()
 {
-	//initGPS();
+	initGPS();
 }
 
 Robot::~Robot()
@@ -715,8 +715,8 @@ bool Robot::inputInitialConditions()
 
 	m_startPos = rawStartPosX;
 	m_isFirstRobot = premierRobot;
-	//initStartPosition();
-	//m_gps->updateWorld();
+	initStartPosition();
+	m_gps->updateWorld();
 
 	if(capteurCouleurBlanc) initCapteurCouleurBlanc();
 	else initCapteurCouleurAutre();
