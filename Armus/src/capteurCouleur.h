@@ -49,6 +49,7 @@ int color_Init(int& dev_handle);
 float fmax(float, float, float);
 float rgbToHue(float,float,float);
 float rgbToSaturation(float, float, float);
+float rgbToValue(float, float, float);
 int getCurrentColorA();
 int getCurrentColorB();
 void showRGB();

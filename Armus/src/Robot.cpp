@@ -9,12 +9,9 @@
 
 using namespace std;
 
-Robot::Robot(bool isArmu022) : m_isArmu022(isArmu022)
+Robot::Robot()
 {
 	initGPS();
-
-	if(isArmu022) initB();
-	else initA();
 }
 
 Robot::~Robot()
@@ -26,10 +23,9 @@ void Robot::initGPS()
 {
 	m_gps = new PathFinder(GPS_RESOLUTION_X, GPS_RESOLUTION_Y, REAL_WORLD_WIDTH, REAL_WORLD_LENGTH);
 
-	pair<int,int> boxCible = m_gps->pointToBox(CIBLE_X,CIBLE_Y);
-	m_gps->addGoal(boxCible.first,boxCible.second);
+	m_gps->addGoal(CIBLE_X,CIBLE_Y);
 
-	/// If the center of a box is  inside an obstacle, this box is a death
+	/// If the center of a box is inside an obstacle, this box is a death
 	set<pair<float,float> > obstacles;
 	obstacles.insert(make_pair(OBSTACLE_GAUCHE_X,OBSTACLE_GAUCHE_Y));
 	obstacles.insert(make_pair(OBSTACLE_MILIEU_X,OBSTACLE_MILIEU_Y));
@@ -69,6 +65,19 @@ void Robot::initGPS()
 	}
 }
 
+void Robot::initCapteurCouleur()
+{
+	if(m_capteurCouleurBlanc)
+	{
+		initCapteurCouleurBlanc();
+	}
+	else
+	{
+		//L'autre capteur
+	}
+
+}
+
 void Robot::stop()
 {
 	MOTOR_SetSpeed(MOTOR_LEFT, 0);
@@ -82,41 +91,44 @@ void Robot::stop()
  */
 void Robot::avancer(float distance)
 {
-		int nbTarget = (float)distance/(WHEEL_DIAMETER*PI) * WHEEL_NB_COCHES;;
+	int nbTarget = (float)distance/(WHEEL_DIAMETER*PI) * WHEEL_NB_COCHES;;
 
-		int nbLeftTotal = 0;
-		int nbRightTotal = 0;
-		double nbLeft = 0 ;
-		double nbRight = 0;
+	int nbLeftTotal = 0;
+	int nbRightTotal = 0;
+	double nbLeft = 0 ;
+	double nbRight = 0;
 
-		int speedLeft = SPEEDTARGET;
-		int speedRight = SPEEDTARGET;
+	int speedLeft = SPEEDTARGET;
+	int speedRight = SPEEDTARGET;
 
-		ENCODER_Read(ENCODER_LEFT);
-		ENCODER_Read(ENCODER_RIGHT);
-		while(nbLeftTotal < nbTarget || nbRightTotal < nbTarget)
+	ENCODER_Read(ENCODER_LEFT);
+	ENCODER_Read(ENCODER_RIGHT);
+	while(nbLeftTotal < nbTarget || nbRightTotal < nbTarget)
+	{
+		if (m_stopAll == false)
 		{
 			if(nbLeftTotal < nbRightTotal)
 			{
-			 MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, 0);
+				MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
+				MOTOR_SetSpeed(MOTOR_RIGHT, 0);
 			}
 			else if(nbLeftTotal > nbRightTotal)
 			{
-			 MOTOR_SetSpeed(MOTOR_LEFT, 0);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
+				MOTOR_SetSpeed(MOTOR_LEFT, 0);
+				MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
 			}
 			else
 			{
-			 MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
+				MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
+				MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
 			}
-			nbLeft = ENCODER_Read(ENCODER_LEFT);
-			nbRight = ENCODER_Read(ENCODER_RIGHT);
-
-			nbLeftTotal += nbLeft;
-			nbRightTotal+= nbRight;
+				nbLeft = ENCODER_Read(ENCODER_LEFT);
+				nbRight = ENCODER_Read(ENCODER_RIGHT);
+	
+				nbLeftTotal += nbLeft;
+				nbRightTotal+= nbRight;
 		}
+	}
 }
 
 /*
@@ -124,11 +136,13 @@ void Robot::avancer(float distance)
  */
 void Robot::tourner(float angle)
 {
-	int nbTotal = 0;
+	if (m_stopAll == false)
+	{
+		int nbTotal = 0;
 
-	int nbTarget = (float)DISTANCE_ROUES*fabs(angle)/360/(WHEEL_DIAMETER) * WHEEL_NB_COCHES;
+		int nbTarget = (float)DISTANCE_ROUES*fabs(angle)/360/(WHEEL_DIAMETER) * WHEEL_NB_COCHES;
 
-	if(angle < 0.f)
+		if(angle < 0.f)
 		{
 			MOTOR_SetSpeed(MOTOR_LEFT, SPEEDTARGET);
 			MOTOR_SetSpeed(MOTOR_RIGHT, 0);
@@ -148,50 +162,54 @@ void Robot::tourner(float angle)
 				nbTotal += ENCODER_Read(ENCODER_RIGHT);
 			}
 		}
+	}
 }
 
 //Angle entre -180 et 180
 void Robot::tournerSurPlace(float angle)
 {
-	float distance = (PI*DISTANCE_ROUES)*fabs(angle)/360;
-	int nbTarget = distance * WHEEL_NB_COCHES/PI/WHEEL_DIAMETER;
-
-	int leftSpeed = (angle > 0.f) ? -SPEEDTARGETPRUDENT : SPEEDTARGETPRUDENT;
-	int rightSpeed = (angle > 0.f) ? SPEEDTARGETPRUDENT : -SPEEDTARGETPRUDENT;
-
-	int nbLeftTotal = 0;
-	int nbRightTotal = 0;
-	ENCODER_Read(ENCODER_LEFT);
-	ENCODER_Read(ENCODER_RIGHT);
-
-	while(nbLeftTotal < nbTarget || nbRightTotal < nbTarget)
+	if (m_stopAll == false)
 	{
-		if(nbLeftTotal < nbRightTotal)
+		float distance = (PI*DISTANCE_ROUES)*fabs(angle)/360;
+		int nbTarget = distance * WHEEL_NB_COCHES/PI/WHEEL_DIAMETER;
+	
+		int leftSpeed = (angle > 0.f) ? -SPEEDTARGETPRUDENT : SPEEDTARGETPRUDENT;
+		int rightSpeed = (angle > 0.f) ? SPEEDTARGETPRUDENT : -SPEEDTARGETPRUDENT;
+	
+		int nbLeftTotal = 0;
+		int nbRightTotal = 0;
+		ENCODER_Read(ENCODER_LEFT);
+		ENCODER_Read(ENCODER_RIGHT);
+	
+		while(nbLeftTotal < nbTarget || nbRightTotal < nbTarget)
 		{
-			 MOTOR_SetSpeed(MOTOR_LEFT, leftSpeed);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, 0);
-		}
-		else if(nbLeftTotal > nbRightTotal)
-		{
-			 MOTOR_SetSpeed(MOTOR_LEFT, 0);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, rightSpeed);
-		}
-		else
-		{
-			 MOTOR_SetSpeed(MOTOR_LEFT, leftSpeed);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, rightSpeed);
-		}
-
-		nbLeftTotal += ENCODER_Read(ENCODER_LEFT);
-		nbRightTotal+= ENCODER_Read(ENCODER_RIGHT);
+			if(nbLeftTotal < nbRightTotal)
+			{
+				MOTOR_SetSpeed(MOTOR_LEFT, leftSpeed);
+				MOTOR_SetSpeed(MOTOR_RIGHT, 0);
+			}
+			else if(nbLeftTotal > nbRightTotal)
+			{
+				MOTOR_SetSpeed(MOTOR_LEFT, 0);
+				MOTOR_SetSpeed(MOTOR_RIGHT, rightSpeed);
+			}
+			else
+			{
+				MOTOR_SetSpeed(MOTOR_LEFT, leftSpeed);
+				MOTOR_SetSpeed(MOTOR_RIGHT, rightSpeed);
+			}
+	
+			nbLeftTotal += ENCODER_Read(ENCODER_LEFT);
+			nbRightTotal+= ENCODER_Read(ENCODER_RIGHT);
+			}
+	
+			stop();
+			setOrientation(m_orientation + angle);
 	}
-
-	stop();
-	setOrientation(m_orientation + angle);
 }
 
 /*
- * A tester
+ * Pas full utile pour la course mais je garde peut-etre pour plus tard
  */
 void Robot::writeInFile(const char* filename, const char* text)
 {
@@ -209,8 +227,25 @@ void Robot::writeInFile(const char* filename, const char* text)
 
 int Robot::lecture_couleur()
 {
-	if(m_isArmu022) return getCurrentColorB();
-	else return getCurrentColorA();
+	int r, b, g, clear;
+	color_Read(r, b, g, clear);
+	float hue = rgbToHue(r,b,g);
+	float red = 0.03;
+	float green = 0.44;
+	float blue = 0.62;
+	float yellow = 0.1;
+	float inc = 0.04;
+
+	if(hue > (red-inc) && hue < (red+inc))
+		return ROUGE;
+	else if(hue > (green-inc) && hue < (green+inc))
+		return VERT;
+	else if(hue > (blue-inc) && hue < (blue+inc))
+		return BLEU;
+	else if(hue > (yellow-inc) && hue < (yellow+inc))
+		return JAUNE;
+	else
+		return BLANC;
 }
 
 int random(int low, int high)
@@ -218,8 +253,9 @@ int random(int low, int high)
 	srand(time(NULL));
 	return rand() % (high - low + 1) + low;
 }
+
 /*
- * Je m<excuse Jesus pour cette longue fonction
+ * Je m'excuse Jesus pour cette longue fonction
  */
 void Robot::endGame()
 {
@@ -480,7 +516,7 @@ float Robot::rayon(int couleur)
 float Robot::maxDistToBestColor(int couleur)
 {
 	float r = rayon(couleur);
-	return sqrt((2*r-FLECHE_CIBLE)*FLECHE_CIBLE);
+	return sqrt((2.f*r-FLECHE_CIBLE)*FLECHE_CIBLE);
 }
 
 Robot::Deplacement Robot::suivreArc(float rayon, bool versDroite, float distance)
@@ -577,18 +613,18 @@ Robot::Deplacement Robot::avancerPrudemment(float distance)
 
 			if(nbLeftTotal < nbRightTotal)
 			{
-			 MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, 0);
+				 MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
+				 MOTOR_SetSpeed(MOTOR_RIGHT, 0);
 			}
 			else if(nbLeftTotal > nbRightTotal)
 			{
-			 MOTOR_SetSpeed(MOTOR_LEFT, 0);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
+				 MOTOR_SetSpeed(MOTOR_LEFT, 0);
+				 MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
 			}
 			else
 			{
-			 MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
+				 MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
+				 MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
 			}
 			nbLeft = ENCODER_Read(ENCODER_LEFT);
 			nbRight = ENCODER_Read(ENCODER_RIGHT);
@@ -606,19 +642,6 @@ Robot::Deplacement Robot::avancerPrudemment(float distance)
 		return resultat;
 }
 
-void Robot::grandeCourse()
-{
-	inputInitialConditions();
-	attendreBruitDepart();
-	if(!m_isFirstRobot) attendreBruitDepart();	//Attendre le deuxieme sifflet de depart
-
-	//THREAD( ecouterBruitFin() )
-
-	//Debut de la course
-	trouverCible();
-	endGame();
-}
-
 void Robot::inputInitialConditions()
  {
  	short rawStartPosX  = 0; // Position par defaut X
@@ -626,28 +649,20 @@ void Robot::inputInitialConditions()
 	bool boutonEnfonce = true;
 
 	while(true)
- 	{
-		if(DIGITALIO_Read(BMP_FRONT))
-		{
-			boutonEnfonce = true;
-			break;
-		}
+	{
+		if(DIGITALIO_Read(BMP_FRONT)) break;
 
 		if(DIGITALIO_Read(BMP_REAR))
- 		{
- 			premierRobot = !premierRobot;
- 			boutonEnfonce = true;
- 		}
+		{
+			premierRobot = !premierRobot;
+			boutonEnfonce = true;
+		}
 
 		if(DIGITALIO_Read(BMP_LEFT))
- 		{
- 			boutonEnfonce = true;
-			rawStartPosX --;
-			if(rawStartPosX < 0)
-			{
-				rawStartPosX = 5;
-			}
- 		}
+		{
+			boutonEnfonce = true;
+			capteurCouleurBlanc = !capteurCouleurBlanc;
+		}
 
 		if(DIGITALIO_Read(BMP_RIGHT))
  		{
@@ -658,8 +673,9 @@ void Robot::inputInitialConditions()
  		if(boutonEnfonce)
  		{
  			LCD_ClearAndPrint("Position de depart:\n");
+
 			for(int i=0; i<2; ++i)
- 			{
+			{
 				for(int j=0; j<6; ++j)
 				{
 					LCD_Printf("|");
@@ -686,40 +702,34 @@ void Robot::inputInitialConditions()
 					LCD_Printf("%c", pos);
 				}
 				LCD_Printf("|\n");
- 			}
- 		}
- 		boutonEnfonce = false;
+			}
+			LCD_Printf("Capteur de couleur: ");
+			if(capteurCouleurBlanc) LCD_Printf("Blanc\n");
+			else LCD_Printf("Autre\n");
+		}
+		boutonEnfonce = false;
 
- 		THREAD_MSleep(100);
- 	}
+		THREAD_MSleep(100);
+	}
 
  	m_startPos = rawStartPosX;
  	m_isFirstRobot = premierRobot;
  	initStartPosition();
  	m_gps->updateWorld();
- }
+
+	return m_isFirstRobot;
+}
+
 
 void Robot::initStartPosition()
 {
-	setOrientation(90.f);
-
-	switch(m_startPos)
-	{
-		case 0: m_posX=POS0+START_SQUARE_WIDTH/2.f; break;
-		case 1: m_posX=POS1+START_SQUARE_WIDTH/2.f; break;
-		case 2: m_posX=POS2+START_SQUARE_WIDTH/2.f; break;
-		case 3: m_posX=POS3+START_SQUARE_WIDTH/2.f; break;
-		case 4: m_posX=POS4+START_SQUARE_WIDTH/2.f; break;
-		case 5: m_posX=POS5+START_SQUARE_WIDTH/2.f; break;
-		default: m_posX=POS0+START_SQUARE_WIDTH/2.f; break;
-	}
-
-	m_posY = (m_isFirstRobot) ? TOP_START_AREA+START_SQUARE_LENGTH/2 : MID_START_AREA+START_SQUARE_LENGTH/2;
+	//Trouver les bonnes valeurs pour  m_posX, m_posY
+	//en fonction de m_startPos  entre 0 et 5 et m_isFirstRobot et des mesures du parcours
 }
 
 void Robot::Attendre5kHz()
 {
-	while(ANALOG_Read(PIN_DETECTEUR_SIFFLET) < THRESHOLD_SIFFLET)
+	while(ANALOG_Read(PIN_DETECTEUR_SIFFLET) == 0)
 	{
 		THREAD_MSleep(100);
 	}
@@ -734,7 +744,8 @@ void Robot::ecouterBruitFin()
 {
 	THREAD_MSleep((60*3 - 10) * 1000); //Attendre un peu moins de 3 minutes (duree de la course)
 	Attendre5kHz();
-	freeze();
+
+	stopAll();
 }
 
 void Robot::trouverCible()
@@ -817,17 +828,17 @@ void Robot::trouverCible()
 	}
 }
 
-void Robot::freeze()
+void Robot::stopAll()
 {
+	m_stopAll = true;
 	stop();
-	//FPGA_StopAll();
 }
 
 void Robot::setOrientation(float orientation)
 {
 	//Amener entre -180 et 180
 	orientation = fmod(orientation, 360);
-	if(orientation > 180) orientation = -(orientation-180);
+	if(orientation > 180) orientation = orientation-360;
 
 	m_orientation = orientation;
 }

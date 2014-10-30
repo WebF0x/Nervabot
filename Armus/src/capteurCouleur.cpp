@@ -192,8 +192,6 @@ float rgbToHue(float r, float b, float g)
     float rgb_min = fmin(r, g, b);
     float delta = rgb_max - rgb_min;
 
-
-
     float hue;
     if (r == rgb_max)
         hue = (g - b) / (delta + 1e-20f);
@@ -216,6 +214,10 @@ float rgbToSaturation(float r, float b, float g)
 }
 
 
+float rgbToValue(float r, float b, float g)
+{
+    return fmax(r,g, b);
+}
 
 int getCurrentColorA()
 {
@@ -247,6 +249,8 @@ int getCurrentColorA()
 		couleur= 3;
 
 	return couleur;
+
+	}
 }
 
 int getCurrentColorB()
@@ -255,29 +259,30 @@ int getCurrentColorB()
 	color_Read(r, b, g, clear);
 	float hue = rgbToHue(r,b,g);
 	float saturation = rgbToSaturation(r,b,g);
+	float value = rgbToValue(r,b,g);
 	float red = 0.995;
 	float green = 0.5;
 	float blue = 0.68;
 	float yellow = 0.15;
 	float inc = 0.07;
 
-	if(saturation < 0.3)
-		couleur= 3;
-	else if((hue > 0.8 && hue > (red-inc)) || (hue < 0.2 && hue < (red-1+inc))){
-		couleur= 4;
+	if(saturation < 0.1)
+	{
+		if(value < 160) couleur = 1;
+		else couleur = 3;
 	}
-	else if(hue > (green-inc) && hue < (green+inc)){
-		couleur= 1;
+	else if((hue > 0.8 && hue > (red-inc)) || (hue < 0.2 && hue < (red-1+inc))){
+		couleur = 4;
 	}
 	else if(hue > (blue-inc) && hue < (blue+inc)){
-		couleur= 0;
+		couleur =  0;
 	}
-	else if(hue > (yellow-inc) && hue < (yellow+0.02)){
-		couleur= 2;
+	else if(hue > (yellow-inc) && hue < (yellow+inc)){
+		couleur =  2;
 	}
-	else
-		couleur= 3;
-
+	else{
+		couleur =  3;
+	}
 	return couleur;
 }
 
@@ -287,7 +292,8 @@ void showRGB()
 	color_Read(r, b, g, clear);
 	float hue = rgbToHue(r, b,g);
 	float saturation = rgbToSaturation(r, b,g);
-	LCD_ClearAndPrint("%i  %i %i %5f %5f", r, b, g, hue, saturation);
+	float value = rgbToValue(r, b,g);
+	LCD_ClearAndPrint("%i  %i %i \n %3f %3f %3f", r, b, g, hue, saturation, value);
 }
 
 void initA()

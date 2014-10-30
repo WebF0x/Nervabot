@@ -64,15 +64,14 @@ public:
 	void writeInFile(const char* filename, const char* text);
 	void Attendre5kHz();
 
-	void grandeCourse();
-	void inputInitialConditions();
+	bool inputInitialConditions();
 	void initStartPosition();
 	void attendreBruitDepart();
 	bool isSecondRobot();
 	void ecouterBruitFin();
 	void trouverCible();
 	void endgame();
-	void freeze();
+	void stopAll();
 	void initGPS();
 
 	void setOrientation(float orientation);
@@ -104,6 +103,7 @@ private:
 	float m_orientation;
 	short m_startPos;
 	bool m_isFirstRobot;
+	bool m_stopAll;
 
 	static const int GPS_RESOLUTION_X = 50;
 	static const int GPS_RESOLUTION_Y = 125;
