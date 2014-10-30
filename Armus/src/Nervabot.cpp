@@ -14,6 +14,7 @@ int main()
 {
 	Robot robot(true);
 
+	/*
 	Robot::Deplacement d = robot.avancerPrudemment(100);
 	switch(d.raison)
 	{
@@ -39,6 +40,7 @@ int main()
 		}
 	}
 	return 0;
+	//*/
 
 	robot.inputInitialConditions();
 	robot.trouverCible();
