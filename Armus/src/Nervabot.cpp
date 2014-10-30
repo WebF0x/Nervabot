@@ -17,7 +17,7 @@ int main()
 	bool isFirstRobot;
 
 	isFirstRobot = robot.inputInitialConditions();
-	LCD_Printf("Position choisi\n");
+	LCD_Printf("Position choisie\n");
 	LCD_Printf("En attente du signal de depart\n");
 	robot.attendreBruitDepart();
 
@@ -28,40 +28,11 @@ int main()
 	}
 
 	THREAD_Create(&bruitFin, attendreSignal, &robot);
-/*
-	Robot::Deplacement d = robot.avancerPrudemment(100);
-	switch(d.raison)
-	{
-		case Robot::DistanceParcourue:
-		{
-			LCD_Printf("DistanceParcourue");
-			break;
-		}
-		case Robot::PireCouleur:
-		{
-			LCD_Printf("PireCouleur");
-			break;
-		}
-		case Robot::MeilleureCouleur:
-		{
-			LCD_Printf("MeilleureCouleur");
-			break;
-		}
-		case Robot::Bumper:
-		{
-			LCD_Printf("Bumper");
-			break;
-		}
-	}
-	return 0;
-	//*/
-
-	robot.inputInitialConditions();
-
 
 	//Debut de la course
 	robot.trouverCible();
 	robot.endGame();
+
 	THREAD_Destroy(&bruitFin);
 
 	return 0;
