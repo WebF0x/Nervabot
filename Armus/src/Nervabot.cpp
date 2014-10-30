@@ -8,12 +8,41 @@
 
 #include "Robot.h"
 
+void* attendreSignal(void* arg);
+
 int main()
 {
 	Robot robot;
-	robot.grandeCourse();
+	THREAD bruitFin;
+	bool isFirstRobot;
 
+	isFirstRobot = robot.inputInitialConditions();
+	LCD_Printf("Position choisi\n");
+	LCD_Printf("En attente du signal de depart\n");
+	robot.attendreBruitDepart();
+
+	if(!isFirstRobot)
+	{
+		THREAD_MSleep(3000);
+		robot.attendreBruitDepart();	//Attendre le deuxieme sifflet de depart
+	}
+
+	THREAD_Create(&bruitFin, attendreSignal, &robot);
+
+	//Debut de la course
+	robot.trouverCible();
+	robot.endGame();
+	THREAD_Destroy(&bruitFin);
 	return 0;
+}
+
+void* attendreSignal(void* arg)
+{
+	Robot* r;
+	r = (Robot*) arg;
+
+	r->ecouterBruitFin();
+	LCD_Printf("******* Son entendu *******\n");
 }
 
 
@@ -44,7 +73,7 @@ int main()
 	Robot_event_t RobotEvent;
 
 	LCD_ClearAndPrint("Demarage\n");
-	THREAD_Create(&thread_bumpers, bumper_watch(RobotEvent), );
+	thread_robot = THREAD_CreateSimple(robot_move);
 	thread_robot = THREAD_CreateSimple(robot_move);
 
 	for(bool fin = false;;)
@@ -88,9 +117,5 @@ void bumper_watch(Robot_event_t R_Event)
 		THREAD_MSleep(100);
 	}
 }
-void robot_move()
-{
-	Robot robot;
-	robot.avancer(10,50);
-}
+
 //*/

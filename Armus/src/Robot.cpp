@@ -11,7 +11,7 @@ using namespace std;
 
 Robot::Robot()
 {
-	initGPS();
+	//initGPS();
 }
 
 Robot::~Robot()
@@ -91,41 +91,44 @@ void Robot::stop()
  */
 void Robot::avancer(float distance)
 {
-		int nbTarget = (float)distance/(WHEEL_DIAMETER*PI) * WHEEL_NB_COCHES;;
+	int nbTarget = (float)distance/(WHEEL_DIAMETER*PI) * WHEEL_NB_COCHES;;
 
-		int nbLeftTotal = 0;
-		int nbRightTotal = 0;
-		double nbLeft = 0 ;
-		double nbRight = 0;
+	int nbLeftTotal = 0;
+	int nbRightTotal = 0;
+	double nbLeft = 0 ;
+	double nbRight = 0;
 
-		int speedLeft = SPEEDTARGET;
-		int speedRight = SPEEDTARGET;
+	int speedLeft = SPEEDTARGET;
+	int speedRight = SPEEDTARGET;
 
-		ENCODER_Read(ENCODER_LEFT);
-		ENCODER_Read(ENCODER_RIGHT);
-		while(nbLeftTotal < nbTarget || nbRightTotal < nbTarget)
+	ENCODER_Read(ENCODER_LEFT);
+	ENCODER_Read(ENCODER_RIGHT);
+	while(nbLeftTotal < nbTarget || nbRightTotal < nbTarget)
+	{
+		if (m_stopAll == false)
 		{
 			if(nbLeftTotal < nbRightTotal)
 			{
-			 MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, 0);
+				MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
+				MOTOR_SetSpeed(MOTOR_RIGHT, 0);
 			}
 			else if(nbLeftTotal > nbRightTotal)
 			{
-			 MOTOR_SetSpeed(MOTOR_LEFT, 0);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
+				MOTOR_SetSpeed(MOTOR_LEFT, 0);
+				MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
 			}
 			else
 			{
-			 MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
+				MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
+				MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
 			}
-			nbLeft = ENCODER_Read(ENCODER_LEFT);
-			nbRight = ENCODER_Read(ENCODER_RIGHT);
-
-			nbLeftTotal += nbLeft;
-			nbRightTotal+= nbRight;
+				nbLeft = ENCODER_Read(ENCODER_LEFT);
+				nbRight = ENCODER_Read(ENCODER_RIGHT);
+	
+				nbLeftTotal += nbLeft;
+				nbRightTotal+= nbRight;
 		}
+	}
 }
 
 /*
@@ -133,11 +136,13 @@ void Robot::avancer(float distance)
  */
 void Robot::tourner(float angle)
 {
-	int nbTotal = 0;
+	if (m_stopAll == false)
+	{
+		int nbTotal = 0;
 
-	int nbTarget = (float)DISTANCE_ROUES*fabs(angle)/360/(WHEEL_DIAMETER) * WHEEL_NB_COCHES;
+		int nbTarget = (float)DISTANCE_ROUES*fabs(angle)/360/(WHEEL_DIAMETER) * WHEEL_NB_COCHES;
 
-	if(angle < 0.f)
+		if(angle < 0.f)
 		{
 			MOTOR_SetSpeed(MOTOR_LEFT, SPEEDTARGET);
 			MOTOR_SetSpeed(MOTOR_RIGHT, 0);
@@ -157,46 +162,50 @@ void Robot::tourner(float angle)
 				nbTotal += ENCODER_Read(ENCODER_RIGHT);
 			}
 		}
+	}
 }
 
 //Angle entre -180 et 180
 void Robot::tournerSurPlace(float angle)
 {
-	float distance = (PI*DISTANCE_ROUES)*fabs(angle)/360;
-	int nbTarget = distance * WHEEL_NB_COCHES/PI/WHEEL_DIAMETER;
-
-	int leftSpeed = (angle > 0.f) ? -SPEEDTARGETPRUDENT : SPEEDTARGETPRUDENT;
-	int rightSpeed = (angle > 0.f) ? SPEEDTARGETPRUDENT : -SPEEDTARGETPRUDENT;
-
-	int nbLeftTotal = 0;
-	int nbRightTotal = 0;
-	ENCODER_Read(ENCODER_LEFT);
-	ENCODER_Read(ENCODER_RIGHT);
-
-	while(nbLeftTotal < nbTarget || nbRightTotal < nbTarget)
+	if (m_stopAll == false)
 	{
-		if(nbLeftTotal < nbRightTotal)
+		float distance = (PI*DISTANCE_ROUES)*fabs(angle)/360;
+		int nbTarget = distance * WHEEL_NB_COCHES/PI/WHEEL_DIAMETER;
+	
+		int leftSpeed = (angle > 0.f) ? -SPEEDTARGETPRUDENT : SPEEDTARGETPRUDENT;
+		int rightSpeed = (angle > 0.f) ? SPEEDTARGETPRUDENT : -SPEEDTARGETPRUDENT;
+	
+		int nbLeftTotal = 0;
+		int nbRightTotal = 0;
+		ENCODER_Read(ENCODER_LEFT);
+		ENCODER_Read(ENCODER_RIGHT);
+	
+		while(nbLeftTotal < nbTarget || nbRightTotal < nbTarget)
 		{
-			 MOTOR_SetSpeed(MOTOR_LEFT, leftSpeed);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, 0);
-		}
-		else if(nbLeftTotal > nbRightTotal)
-		{
-			 MOTOR_SetSpeed(MOTOR_LEFT, 0);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, rightSpeed);
-		}
-		else
-		{
-			 MOTOR_SetSpeed(MOTOR_LEFT, leftSpeed);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, rightSpeed);
-		}
-
-		nbLeftTotal += ENCODER_Read(ENCODER_LEFT);
-		nbRightTotal+= ENCODER_Read(ENCODER_RIGHT);
+			if(nbLeftTotal < nbRightTotal)
+			{
+				MOTOR_SetSpeed(MOTOR_LEFT, leftSpeed);
+				MOTOR_SetSpeed(MOTOR_RIGHT, 0);
+			}
+			else if(nbLeftTotal > nbRightTotal)
+			{
+				MOTOR_SetSpeed(MOTOR_LEFT, 0);
+				MOTOR_SetSpeed(MOTOR_RIGHT, rightSpeed);
+			}
+			else
+			{
+				MOTOR_SetSpeed(MOTOR_LEFT, leftSpeed);
+				MOTOR_SetSpeed(MOTOR_RIGHT, rightSpeed);
+			}
+	
+			nbLeftTotal += ENCODER_Read(ENCODER_LEFT);
+			nbRightTotal+= ENCODER_Read(ENCODER_RIGHT);
+			}
+	
+			stop();
+			setOrientation(m_orientation + angle);
 	}
-
-	stop();
-	setOrientation(m_orientation + angle);
 }
 
 /*
@@ -605,18 +614,18 @@ Robot::Deplacement Robot::avancerPrudemment(float distance)
 
 			if(nbLeftTotal < nbRightTotal)
 			{
-			 MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, 0);
+				 MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
+				 MOTOR_SetSpeed(MOTOR_RIGHT, 0);
 			}
 			else if(nbLeftTotal > nbRightTotal)
 			{
-			 MOTOR_SetSpeed(MOTOR_LEFT, 0);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
+				 MOTOR_SetSpeed(MOTOR_LEFT, 0);
+				 MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
 			}
 			else
 			{
-			 MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
-			 MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
+				 MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
+				 MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
 			}
 			nbLeft = ENCODER_Read(ENCODER_LEFT);
 			nbRight = ENCODER_Read(ENCODER_RIGHT);
@@ -634,20 +643,7 @@ Robot::Deplacement Robot::avancerPrudemment(float distance)
 		return resultat;
 }
 
-void Robot::grandeCourse()
-{
-	inputInitialConditions();
-	attendreBruitDepart();
-	if(!m_isFirstRobot) attendreBruitDepart();	//Attendre le deuxieme sifflet de depart
-
-	//THREAD( ecouterBruitFin() )
-
-	//Debut de la course
-	trouverCible();
-	endGame();
-}
-
-void Robot::inputInitialConditions()
+bool Robot::inputInitialConditions()
 {
 	short rawStartPosX  = 0; // Position par défaut X
 	bool premierRobot  = true; //Premier robot par défaut
@@ -678,7 +674,7 @@ void Robot::inputInitialConditions()
 
 		if(boutonEnfonce)
 		{
-			LCD_Printf("Position de depart:\n");
+			LCD_ClearAndPrint("Position de depart:\n");
 			for(int i=0; i<2; ++i)
 			{
 				for(int j=0; j<6; ++j)
@@ -719,11 +715,12 @@ void Robot::inputInitialConditions()
 
 	m_startPos = rawStartPosX;
 	m_isFirstRobot = premierRobot;
-	initStartPosition();
-	m_gps->updateWorld();
+	//initStartPosition();
+	//m_gps->updateWorld();
 
 	if(capteurCouleurBlanc) initCapteurCouleurBlanc();
 	else initCapteurCouleurAutre();
+	return m_isFirstRobot;
 }
 
 void Robot::initStartPosition()
@@ -734,7 +731,7 @@ void Robot::initStartPosition()
 
 void Robot::Attendre5kHz()
 {
-	while(ANALOG_Read(PIN_DETECTEUR_SIFFLET) < THRESHOLD_SIFFLET)
+	while(ANALOG_Read(PIN_DETECTEUR_SIFFLET) == 0)
 	{
 		THREAD_MSleep(100);
 	}
@@ -749,7 +746,8 @@ void Robot::ecouterBruitFin()
 {
 	THREAD_MSleep((60*3 - 10) * 1000); //Attendre un peu moins de 3 minutes (duree de la course)
 	Attendre5kHz();
-	freeze();
+
+	stopAll();
 }
 
 void Robot::trouverCible()
@@ -823,8 +821,9 @@ void Robot::trouverCible()
 	}
 }
 
-void Robot::freeze()
+void Robot::stopAll()
 {
+	m_stopAll = true;
 	stop();
 	//FPGA_StopAll(); 	//Couper les peripheriques de robos ?
 }
