@@ -12,7 +12,7 @@ using namespace std;
 
 int main()
 {
-	Robot robot;
+	Robot robot(true);
 
 	Robot::Deplacement d = robot.avancerPrudemment(100);
 	switch(d.raison)

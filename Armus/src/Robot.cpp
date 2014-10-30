@@ -9,9 +9,12 @@
 
 using namespace std;
 
-Robot::Robot()
+Robot::Robot(bool isArmu022) : m_isArmu022(isArmu022)
 {
 	initGPS();
+
+	if(isArmu022) initB();
+	else initA();
 }
 
 Robot::~Robot()
@@ -206,7 +209,8 @@ void Robot::writeInFile(const char* filename, const char* text)
 
 int Robot::lecture_couleur()
 {
-	return 0;
+	if(m_isArmu022) return getCurrentColorB();
+	else return getCurrentColorA();
 }
 
 int random(int low, int high)

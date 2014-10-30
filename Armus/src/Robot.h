@@ -49,7 +49,7 @@
 class Robot
 {
 public:
-	Robot();
+	Robot(bool isArmu022);
 	virtual ~Robot();
 
 	void dispSpeedDifferences();
@@ -119,11 +119,14 @@ private:
 	static const float DISTANCE_ROUES = 14;
 	static const float PI = 3.1415926535897932384626433832795;
 
+	static const int ROUGE = 4;
 	static 	const int BLANC = 3;
 	static const int JAUNE = 2;
 	static const int VERT = 1;
 	static const int BLEU = 0;
 	static const float FLECHE_CIBLE = 30.f;
+
+	bool m_isArmu022;
 };
 
 #endif /* ROBOT_H_ */
