@@ -84,7 +84,10 @@ void PathFinder::addGoal(int x, int y)
 
 void PathFinder::debug()
 {
-	LCD_Printf("NbDeath: %d\n", m_deaths.size() );
+	for(set<pair<int,int> >::iterator death=m_deaths.begin(); death!=m_deaths.end(); ++death)
+	{
+		LCD_Printf("D: %d , %d\n", death->first, death->second);
+	}
 }
 
 /*
@@ -118,12 +121,13 @@ pair<float,float> PathFinder::nextWaypoint(float x, float y)
 	int boxX = currentBox.first;
 	int boxY = currentBox.second;
 	int currentHeight = getHeight(boxX, boxY);
+	LCD_Printf("\nCurrent: %d\n", currentHeight);
 
 	set<pair<int,int> > boxesToCheck;
-	boxesToCheck.insert(make_pair(boxX-1,boxY));
-	boxesToCheck.insert(make_pair(boxX+1,boxY));
 	boxesToCheck.insert(make_pair(boxX,boxY-1));
 	boxesToCheck.insert(make_pair(boxX,boxY+1));
+	boxesToCheck.insert(make_pair(boxX-1,boxY));
+	boxesToCheck.insert(make_pair(boxX+1,boxY));
 
 	pair<int,int> bestBox = currentBox;
 	int bestHeight = currentHeight;
@@ -134,12 +138,15 @@ pair<float,float> PathFinder::nextWaypoint(float x, float y)
 		int neighborY = neighborBox->second;
 		int neighborHeight = getHeight(neighborX, neighborY);
 
+		LCD_Printf("neighbor: %d\n", neighborHeight);
+
 		bool neighborIsBetter;
 
 		switch(bestHeight)
 		{
 			case UNKNOWN:
 			{
+				//Shouldn't happen
 				neighborIsBetter = (neighborHeight!=UNKNOWN);
 				break;
 			}

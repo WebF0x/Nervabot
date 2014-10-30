@@ -26,7 +26,8 @@ void Robot::initGPS()
 {
 	m_gps = new PathFinder(GPS_RESOLUTION_X, GPS_RESOLUTION_Y, REAL_WORLD_WIDTH, REAL_WORLD_LENGTH);
 
-	m_gps->addGoal(CIBLE_X,CIBLE_Y);
+	pair<int,int> goalBox = m_gps->pointToBox(CIBLE_X,CIBLE_Y);
+	m_gps->addGoal(goalBox.first,goalBox.second);
 
 	/// If the center of a box is inside an obstacle, this box is a death
 	set<pair<float,float> > obstacles;
@@ -191,7 +192,7 @@ void Robot::tournerSurPlace(float angle)
 	
 			nbLeftTotal += ENCODER_Read(ENCODER_LEFT);
 			nbRightTotal+= ENCODER_Read(ENCODER_RIGHT);
-			}
+		 }
 	
 			stop();
 			setOrientation(m_orientation + angle);
@@ -624,10 +625,10 @@ Robot::Deplacement Robot::avancerPrudemment(float distance)
 		}
 		stop();
 
-		resultat.distance = nbLeftTotal*PI*WHEEL_DIAMETER/WHEEL_NB_COCHES;
+		resultat.distance = (float)nbLeftTotal*PI*WHEEL_DIAMETER/WHEEL_NB_COCHES;
 
-		m_posX += resultat.distance * cos(m_orientation*2*PI/360.f);
-		m_posY += -resultat.distance * sin(m_orientation*2*PI/360.f);
+		m_posX += resultat.distance * cos(m_orientation*180*PI);
+		m_posY += -resultat.distance * sin(m_orientation*180*PI);
 
 		return resultat;
 }
@@ -706,11 +707,21 @@ bool Robot::inputInitialConditions()
 	return m_isFirstRobot;
 }
 
-
 void Robot::initStartPosition()
 {
-	//Trouver les bonnes valeurs pour  m_posX, m_posY
-	//en fonction de m_startPos  entre 0 et 5 et m_isFirstRobot et des mesures du parcours
+	switch(m_startPos)
+	{
+		case 0: m_posX=POS0+START_SQUARE_WIDTH/2; break;
+		case 1: m_posX=POS1+START_SQUARE_WIDTH/2; break;
+		case 2: m_posX=POS2+START_SQUARE_WIDTH/2; break;
+		case 3: m_posX=POS3+START_SQUARE_WIDTH/2; break;
+		case 4: m_posX=POS4+START_SQUARE_WIDTH/2; break;
+		case 5: m_posX=POS5+START_SQUARE_WIDTH/2; break;
+		default: m_posX=POS0+START_SQUARE_WIDTH/2; break;
+	}
+
+	m_posY = (m_isFirstRobot) ? TOP_START_AREA+START_SQUARE_LENGTH/2 : MID_START_AREA+START_SQUARE_LENGTH/2;
+	m_orientation = 90;
 }
 
 void Robot::Attendre5kHz()
@@ -742,18 +753,15 @@ void Robot::trouverCible()
 		float x2 = destination.first;
 		float y2 = destination.second;
 		float a = x2-m_posX;
-		float b = y2-m_posY;
+		float b = m_posY-y2;
 
-		//*
-		//LCD_Printf("Position: %f , %f\n",m_posX,m_posY );
-		//LCD_Printf("Destination: %f , %f\n",x2,y2 );
-		m_gps->debug();
+		printPosition();
 
 		float distanceVoulue = sqrt(a*a + b*b);
 
 		float orientationVoulue = atan(b/a) * 180 / PI;	//http://bv.alloprof.qc.ca/mathematique/geometrie/les-vecteurs/le-vecteur-dans-un-plan-cartesien-et-ses-composantes.aspx#orientationcompo
 		if(a<0) orientationVoulue+=180;
-		else if(b>0) orientationVoulue+=360;
+		else if(b<0) orientationVoulue+=360;
 
 		float angleVirage = orientationVoulue-m_orientation;
 		//Ramener entre -180 et 180

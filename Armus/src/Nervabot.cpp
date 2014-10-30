@@ -8,10 +8,25 @@
 
 #include "Robot.h"
 
+using namespace std;
+
 void* attendreSignal(void* arg);
 
 int main()
 {
+	Robot robot(true);
+	robot.inputInitialConditions();
+	robot.trouverCible();
+
+
+
+
+
+
+
+
+
+/*
 	Robot robot(true);
 	THREAD bruitFin;
 	bool isFirstRobot;
@@ -35,7 +50,10 @@ int main()
 
 	THREAD_Destroy(&bruitFin);
 
+//*/
+
 	return 0;
+
 }
 
 void* attendreSignal(void* arg)

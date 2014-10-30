@@ -79,6 +79,9 @@ public:
 	float rayon(int couleur);
 	float maxDistToBestColor(int couleur);
 
+	float getX(){return m_posX;}
+	float getY(){return m_posY;}
+
 	enum Raison
 	{
 		PireCouleur,
@@ -90,7 +93,7 @@ public:
 	struct Deplacement
 	{
 		Raison raison;
-		int distance;
+		float distance;
 	};
 
 	Deplacement avancerPrudemment(float distance);
@@ -105,8 +108,8 @@ private:
 	bool m_isFirstRobot;
 	bool m_stopAll;
 
-	static const int GPS_RESOLUTION_X = 50;
-	static const int GPS_RESOLUTION_Y = 125;
+	static const int GPS_RESOLUTION_X = 25;
+	static const int GPS_RESOLUTION_Y = 75;
 
 	static const int PIN_DETECTEUR_SIFFLET = 1;
 	static const int THRESHOLD_SIFFLET = 600;
