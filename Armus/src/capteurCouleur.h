@@ -54,5 +54,6 @@ int getCurrentColorB();
 void showRGB();
 void initA();
 void initB();
+int couleur;
 
 #endif /* CAPTEURCOULEUR_H_ */

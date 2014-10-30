@@ -84,13 +84,7 @@ void PathFinder::addGoal(int x, int y)
 
 void PathFinder::debug()
 {
-	//*
-	LCD_Printf("size: %d\n", m_deaths.size());
-	for(set<pair<int,int> >::iterator death=m_deaths.begin(); death!=m_deaths.end(); ++death)
-	{
-		LCD_Printf("Death: %d, %d\n",death->first,death->second);
-	}
-	//*/
+	LCD_Printf("NbDeath: %d\n", m_deaths.size() );
 }
 
 /*
@@ -123,12 +117,67 @@ pair<float,float> PathFinder::nextWaypoint(float x, float y)
 	pair<int,int> currentBox = pointToBox(x,y);
 	int boxX = currentBox.first;
 	int boxY = currentBox.second;
-
 	int currentHeight = getHeight(boxX, boxY);
-	int height;
+
+	set<pair<int,int> > boxesToCheck;
+	boxesToCheck.insert(make_pair(boxX-1,boxY));
+	boxesToCheck.insert(make_pair(boxX+1,boxY));
+	boxesToCheck.insert(make_pair(boxX,boxY-1));
+	boxesToCheck.insert(make_pair(boxX,boxY+1));
+
+	pair<int,int> bestBox = currentBox;
+	int bestHeight = currentHeight;
+
+	for(set<pair<int,int> >::iterator neighborBox=boxesToCheck.begin(); neighborBox!=boxesToCheck.end(); ++neighborBox)
+	{
+		int neighborX = neighborBox->first;
+		int neighborY = neighborBox->second;
+		int neighborHeight = getHeight(neighborX, neighborY);
+
+		bool neighborIsBetter;
+
+		switch(bestHeight)
+		{
+			case UNKNOWN:
+			{
+				neighborIsBetter = (neighborHeight!=UNKNOWN);
+				break;
+			}
+			case DEATH:
+			{
+				neighborIsBetter = (neighborHeight!=UNKNOWN && neighborHeight!=DEATH);
+				break;
+			}
+			default:
+			{
+				neighborIsBetter = (neighborHeight < bestHeight && neighborHeight!=UNKNOWN && neighborHeight!=DEATH);
+				break;
+			}
+		}
+
+		if(neighborIsBetter)
+		{
+			bestBox = make_pair(neighborX, neighborY);
+			bestHeight = neighborHeight;
+		}
+	}
+
+	return boxToPoint(bestBox.first,bestBox.second);
+
+/*
+
+	//int height;
+
+
+
+	if(currentHeight == DEATH || currentHeight == UNKNOWN)
+	{
+		pair<int,int> bestBox = make_pair(boxX, boxY);
+		height = getHeight(boxX-1,boxY);LCD_Printf("height: %d\n", height);
+		if(height < currentHeight && height!=UNKNOWN && height!=DEATH) return boxToPoint(boxX-1,boxY);
+	}
 
 	LCD_Printf("currentHeight: %d\n", currentHeight);
-
 
 	height = getHeight(boxX-1,boxY);LCD_Printf("height: %d\n", height);
 	if(height < currentHeight && height!=UNKNOWN && height!=DEATH) return boxToPoint(boxX-1,boxY);
@@ -143,5 +192,6 @@ pair<float,float> PathFinder::nextWaypoint(float x, float y)
 	if(height < currentHeight && height!=UNKNOWN && height!=DEATH) return boxToPoint(boxX,boxY-1);
 
 	return boxToPoint(boxX,boxY);
+	*/
 }
 

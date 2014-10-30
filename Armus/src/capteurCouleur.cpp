@@ -215,6 +215,8 @@ float rgbToSaturation(float r, float b, float g)
     return delta / (rgb_max + 1e-20f);
 }
 
+
+
 int getCurrentColorA()
 {
 	int r, b, g, clear;
@@ -228,21 +230,23 @@ int getCurrentColorA()
 	float inc = 0.045;
 
 	if(saturation < 0.3)
-		return 3;
+		couleur= 3;
 	else if(hue > (red-inc) && hue < (red+inc)){
-		return 4;
+		couleur= 4;
 	}
 	else if(hue > (green-inc) && hue < (green+inc)){
-		return 1;
+		couleur= 1;
 	}
 	else if(hue > (blue-inc) && hue < (blue+inc)){
-		return 0;
+		couleur= 0;
 	}
 	else if(hue > (yellow-inc) && hue < (yellow+inc)){
-		return 2;
+		couleur= 2;
 	}
 	else
-		return 3;
+		couleur= 3;
+
+	return couleur;
 }
 
 int getCurrentColorB()
@@ -258,21 +262,23 @@ int getCurrentColorB()
 	float inc = 0.07;
 
 	if(saturation < 0.3)
-			return 3;
+		couleur= 3;
 	else if((hue > 0.8 && hue > (red-inc)) || (hue < 0.2 && hue < (red-1+inc))){
-		return 4;
+		couleur= 4;
 	}
 	else if(hue > (green-inc) && hue < (green+inc)){
-		return 1;
+		couleur= 1;
 	}
 	else if(hue > (blue-inc) && hue < (blue+inc)){
-		return 0;
+		couleur= 0;
 	}
 	else if(hue > (yellow-inc) && hue < (yellow+0.02)){
-		return 2;
+		couleur= 2;
 	}
 	else
-		return 3;
+		couleur= 3;
+
+	return couleur;
 }
 
 void showRGB()

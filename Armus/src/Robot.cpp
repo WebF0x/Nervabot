@@ -558,7 +558,6 @@ Robot::Deplacement Robot::avancerPrudemment(float distance)
 		ENCODER_Read(ENCODER_RIGHT);
 		while(nbLeftTotal < nbTarget || nbRightTotal < nbTarget)
 		{
-
 			if(currentColor < startColor)
 			{
 				resultat.raison = MeilleureCouleur;
@@ -601,8 +600,8 @@ Robot::Deplacement Robot::avancerPrudemment(float distance)
 
 		resultat.distance = nbLeftTotal*PI*WHEEL_DIAMETER/WHEEL_NB_COCHES;
 
-		m_posX += resultat.distance * cos(m_orientation);
-		m_posY += resultat.distance * sin(m_orientation);
+		m_posX += resultat.distance * cos(m_orientation*2*PI/360.f);
+		m_posY += -resultat.distance * sin(m_orientation*2*PI/360.f);
 
 		return resultat;
 }
@@ -610,7 +609,6 @@ Robot::Deplacement Robot::avancerPrudemment(float distance)
 void Robot::grandeCourse()
 {
 	inputInitialConditions();
-	m_gps->updateWorld();
 	attendreBruitDepart();
 	if(!m_isFirstRobot) attendreBruitDepart();	//Attendre le deuxieme sifflet de depart
 
@@ -659,7 +657,7 @@ void Robot::inputInitialConditions()
 
  		if(boutonEnfonce)
  		{
-			LCD_Printf("Position de depart:\n");
+ 			LCD_ClearAndPrint("Position de depart:\n");
 			for(int i=0; i<2; ++i)
  			{
 				for(int j=0; j<6; ++j)
@@ -699,7 +697,6 @@ void Robot::inputInitialConditions()
  	m_isFirstRobot = premierRobot;
  	initStartPosition();
  	m_gps->updateWorld();
-
  }
 
 void Robot::initStartPosition()
@@ -750,17 +747,16 @@ void Robot::trouverCible()
 		float a = x2-m_posX;
 		float b = y2-m_posY;
 
-		/*
-		LCD_Printf("Position: %f , %f\n",m_posX,m_posY );
-		LCD_Printf("Destination: %f , %f\n",x2,y2 );
+		//*
+		//LCD_Printf("Position: %f , %f\n",m_posX,m_posY );
+		//LCD_Printf("Destination: %f , %f\n",x2,y2 );
 		m_gps->debug();
-		//*/
 
 		float distanceVoulue = sqrt(a*a + b*b);
 
-		float orientationVoulue = atan(b/a);	//http://bv.alloprof.qc.ca/mathematique/geometrie/les-vecteurs/le-vecteur-dans-un-plan-cartesien-et-ses-composantes.aspx#orientationcompo
+		float orientationVoulue = atan(b/a) * 180 / PI;	//http://bv.alloprof.qc.ca/mathematique/geometrie/les-vecteurs/le-vecteur-dans-un-plan-cartesien-et-ses-composantes.aspx#orientationcompo
 		if(a<0) orientationVoulue+=180;
-		else if(b<0) orientationVoulue+=360;
+		else if(b>0) orientationVoulue+=360;
 
 		float angleVirage = orientationVoulue-m_orientation;
 		//Ramener entre -180 et 180
@@ -773,21 +769,25 @@ void Robot::trouverCible()
 		{
 			case DistanceParcourue:
 			{
+				LCD_Printf("DistanceParcourue\n");
 				//Parfait, passer au prochain waypoint
 				break;
 			}
 			case PireCouleur:
 			{
+				LCD_Printf("PireCouleur\n");
 				//On touche la bande rouge, quoi faire? C'est pas sense arriver...Peut-etre ajuster notre m_posX...
 				break;
 			}
 			case MeilleureCouleur:
 			{
+				LCD_Printf("MeilleureCouleur\n");
 				//Cible trouvee! La seule raison de quitter la fonction
 				return;
 			}
 			case Bumper:
 			{
+				LCD_Printf("Bumper\n");
 				pair<int,int> box = m_gps->pointToBox(m_posX, m_posY);
 				int boxX = box.first;
 				int boxY = box.second;
@@ -834,7 +834,7 @@ void Robot::setOrientation(float orientation)
 
 void Robot::printPosition()
 {
-	LCD_Printf("Position: %f , %f\nOrientation: %f", m_posX, m_posY, m_orientation);
+	LCD_Printf("Position: %f , %f\nOrientation: %f\n", m_posX, m_posY, m_orientation);
 }
 
 
