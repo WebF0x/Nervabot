@@ -7,24 +7,19 @@
 */
 
 #include "Robot.h"
+#include "Servomoteur.h"
 
 using namespace std;
 
-void* attendreSignal(void* arg);
+//void* attendreSignal(void* arg);
 
 int main()
 {
-	Robot robot(true);
+	/*Robot robot(true);
 	robot.inputInitialConditions();
-	robot.trouverCible();
-
-
-
-
-
-
-
-
+	robot.trouverCible();*/
+	choixMenu(SERVO_325);
+	choixMenu(SERVO_605);
 
 /*
 	Robot robot(true);
@@ -56,11 +51,11 @@ int main()
 
 }
 
-void* attendreSignal(void* arg)
+/*void* attendreSignal(void* arg)
 {
 	Robot* r;
 	r = (Robot*) arg;
 
 	r->ecouterBruitFin();
 	LCD_Printf("******* Son entendu *******\n");
-}
+}*/
