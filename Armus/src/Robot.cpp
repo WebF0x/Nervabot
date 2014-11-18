@@ -14,7 +14,7 @@ Robot::Robot(bool isArmu022)
 	if(isArmu022) initB();
 	else initA();
 
-	initGPS();
+	//initGPS();
 }
 
 Robot::~Robot()
@@ -22,7 +22,7 @@ Robot::~Robot()
 	delete m_gps;
 }
 
-void Robot::initGPS()
+/*void Robot::initGPS()
 {
 	m_gps = new PathFinder(GPS_RESOLUTION_X, GPS_RESOLUTION_Y, REAL_WORLD_WIDTH, REAL_WORLD_LENGTH);
 
@@ -67,7 +67,7 @@ void Robot::initGPS()
 			boxesToCheck = nextBoxes;
 		}
 	}
-}
+}*/
 
 void Robot::stop()
 {
@@ -745,7 +745,7 @@ void Robot::ecouterBruitFin()
 	stopAll();
 }
 
-void Robot::trouverCible()
+/*void Robot::trouverCible()
 {
 	while(true)
 	{
@@ -820,7 +820,7 @@ void Robot::trouverCible()
 			}
 		}
 	}
-}
+}*/
 
 void Robot::stopAll()
 {

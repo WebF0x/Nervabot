@@ -15,12 +15,21 @@ using namespace std;
 
 int main()
 {
-	/*Robot robot(true);
-	robot.inputInitialConditions();
+	Robot robot(true);
+	/*robot.inputInitialConditions();
 	robot.trouverCible();*/
 	choixMenu(SERVO_325);
 	choixMenu(SERVO_605);
-
+	THREAD_MSleep(5000);
+	robot.tournerSurPlace(180);
+	robot.stop();
+	robot.avancer(100);
+	robot.stop();
+	THREAD_MSleep(5000);
+	robot.tournerSurPlace(180);
+	robot.stop();
+	robot.avancer(100);
+	robot.stop();
 /*
 	Robot robot(true);
 	THREAD bruitFin;
