@@ -15,11 +15,14 @@ using namespace std;
 
 int main()
 {
+	int choixGroupe = 0;
+	int choixAliment = 0;
 	Robot robot(true);
+
 	/*robot.inputInitialConditions();
 	robot.trouverCible();*/
-	choixMenu(SERVO_325);
-	choixMenu(SERVO_605);
+	choixMenu(SERVO_325, choixGroupe);
+	choixMenu(SERVO_605, choixAliment);
 	THREAD_MSleep(5000);
 	robot.tournerSurPlace(180);
 	robot.stop();

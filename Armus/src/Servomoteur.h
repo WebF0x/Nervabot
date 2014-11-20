@@ -32,14 +32,22 @@ void setAngleServo605(int angle)
 	SERVO_SetAngle(SERVO_605,adjustedAngle);
 
 }
-int choixMenu(int servomoteur)
+
+void setAngleAjuste(int servo, int angle)
 {
-	int angle = -43;
-	int choix = 1;
+	if(servo == 9)
+		setAngleServo325(angle);
+	else if(servo == 10)
+		setAngleServo605(angle);
+}
+int choixMenu(int servomoteur, int choix)
+{
+	int angle = 0;
+	choix = 1;
 	bool validation = true;
 
 	SERVO_Enable(servomoteur);
-	SERVO_SetAngle(servomoteur, angle);
+	setAngleAjuste(servomoteur, angle);
 	THREAD_MSleep(1000);
 	LCD_Printf("CHOIX #%d\n", choix);
 	while(validation)
@@ -49,16 +57,16 @@ int choixMenu(int servomoteur)
 		if(ANALOG_Read(2) != 0) // Si on appuie sur le bouton choix
 		{
 			angle = angle + 60; //Le servo tourne de 60° pour montrer le choix suivant
-			if(angle > 137) // Si on est rendu au 4e choix et qu'on appuie encore, on retourne au choix #1
+			if(angle > 180) // Si on est rendu au 4e choix et qu'on appuie encore, on retourne au choix #1
 			{
-				angle = -43;
-				SERVO_SetAngle(servomoteur, angle);
+				angle = 0;
+				setAngleAjuste(servomoteur, angle);
 				THREAD_MSleep(500);
 				choix = 1;
 			}
 			else
 			{
-				SERVO_SetAngle(servomoteur, angle);
+				setAngleAjuste(servomoteur, angle);
 				THREAD_MSleep(500);
 				choix++;
 			}
