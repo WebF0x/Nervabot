@@ -842,4 +842,78 @@ void Robot::printPosition()
 	LCD_Printf("Position: %f , %f\nOrientation: %f\n", m_posX, m_posY, m_orientation);
 }
 
+bool Robot::demanderGroupeAlimentaire(GroupeAlimentaire groupe)
+{
+	/*
+    LCD_Printf(VIANDE<<": "<<toString(VIANDE)<<endl;
+    LCD_Printf(LEGUME_FRUIT<<": "<<toString(LEGUME_FRUIT)<<endl;
+    LCD_Printf(LAITIER<<": "<<toString(LAITIER)<<endl;
+    LCD_Printf(CEREALIER<<": "<<toString(CEREALIER)<<endl;
+
+    int choix;
+    cin>>choix;
+
+    return (choix==groupe);
+    */
+	return true;
+}
+
+bool Robot::demanderAliment(GroupeAlimentaire groupe)
+{
+	/*
+    LCD_Printf(VIANDE<<": "<<exempleAliment(VIANDE)<<endl;
+    LCD_Printf(LEGUME_FRUIT<<": "<<exempleAliment(LEGUME_FRUIT)<<endl;
+    LCD_Printf(LAITIER<<": "<<exempleAliment(LAITIER)<<endl;
+    LCD_Printf(CEREALIER<<": "<<exempleAliment(CEREALIER)<<endl;
+
+    int choix;
+    cin>>choix;
+
+    return (choix==groupe);
+    */
+	return true;
+}
+
+void Robot::jeuRecette()
+{
+    //Definir les recettes
+    vector<Recette> recettes;
+    recettes.push_back(Recette("Hamburger", POULET, LAITUE, FROMAGE, PAIN, VIANDE));
+    recettes.push_back(Recette("Hamburger", POULET, LAITUE, FROMAGE, PAIN, CEREALIER));
+
+    recettes.push_back(Recette("Hamburger", POULET, TOMATE, FROMAGE, PAIN, VIANDE));
+	recettes.push_back(Recette("Hamburger", POULET, TOMATE, FROMAGE, PAIN, LEGUME_FRUIT));
+	recettes.push_back(Recette("Hamburger", POULET, TOMATE, FROMAGE, PAIN, CEREALIER));
+
+	recettes.push_back(Recette("Hamburger", BOEUF, LAITUE, FROMAGE, PAIN, CEREALIER));
+
+	recettes.push_back(Recette("Hamburger", BOEUF, TOMATE, FROMAGE, PAIN, LEGUME_FRUIT));
+	recettes.push_back(Recette("Hamburger", BOEUF, TOMATE, FROMAGE, PAIN, CEREALIER));
+
+    //Selectionner une recette au hasard
+    int numeroDeRecette = random(0, recettes.size()-1);
+    Recette& recette = recettes.at(numeroDeRecette);
+
+    //Afficher la recette
+    afficherRecette(recette);
+
+    //Demander groupe alimentaire manquant
+    LCD_Printf("Il manque un groupe alimentaire. Lequel?\n");
+    bool bonneReponse = demanderGroupeAlimentaire(recette.groupeManquant);
+
+    if(bonneReponse)    LCD_Printf("Bravo!");
+    else                LCD_Printf("Faux!");
+
+    LCD_Printf("Le groupe manquant est: %s", toString(recette.groupeManquant).data());
+
+    //Demander un aliment de ce groupe
+    LCD_Printf("Quel aliment fait partie des %s",toString(recette.groupeManquant).data());
+    bonneReponse = demanderAliment(recette.groupeManquant);
+
+    if(bonneReponse)    LCD_Printf("Bravo!");
+    else                LCD_Printf("Faux!");
+
+    LCD_Printf("La bonne reponse est %s", exempleAliment(recette.groupeManquant).data());
+}
+
 

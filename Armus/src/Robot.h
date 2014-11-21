@@ -15,6 +15,8 @@
 #include <time.h>
 #include "capteurCouleur.h"
 #include <set>
+#include <vector>
+#include "Recette.h"
 
 //Prise de mesures du parcours (A FAIRE)
 //Origine en haut a gauche du parcours
@@ -81,6 +83,10 @@ public:
 
 	float getX(){return m_posX;}
 	float getY(){return m_posY;}
+
+	bool demanderGroupeAlimentaire(GroupeAlimentaire groupe);
+	bool demanderAliment(GroupeAlimentaire groupe);
+	void jeuRecette();
 
 	enum Raison
 	{
