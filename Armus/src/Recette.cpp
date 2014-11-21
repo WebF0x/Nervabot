@@ -104,15 +104,13 @@ string exempleAliment(GroupeAlimentaire aliment)
 
 void afficherRecette(const Recette& recette)
 {
-	/*
-    cout<<recette.nom<<":\t";
-    if(recette.groupeManquant != VIANDE)        cout<<toString(recette.viande)<<'\t';
-    if(recette.groupeManquant != LEGUME_FRUIT)  cout<<toString(recette.legumeFruit)<<'\t';
-    if(recette.groupeManquant != LAITIER)       cout<<toString(recette.laitier)<<'\t';
-    if(recette.groupeManquant != CEREALIER)     cout<<toString(recette.cerealier)<<'\t';
+    LCD_Printf("%s", recette.nom.data());
+    if(recette.groupeManquant != VIANDE)        LCD_Printf("%s\t", toString(recette.viande).data());
+    if(recette.groupeManquant != LEGUME_FRUIT)  LCD_Printf("%s\t", toString(recette.legumeFruit).data());
+    if(recette.groupeManquant != LAITIER)       LCD_Printf("%s\t", toString(recette.laitier).data());
+    if(recette.groupeManquant != CEREALIER)     LCD_Printf("%s\t", toString(recette.cerealier).data());
 
-    cout<<endl;
-    */
+    LCD_Printf("\n");
 }
 
 

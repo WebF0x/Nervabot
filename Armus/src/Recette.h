@@ -8,12 +8,10 @@
 #ifndef RECETTE_H_
 #define RECETTE_H_
 
-#include <iostream>	//cout, cin
 #include <string>
 #include <vector>
 
-#include <stdlib.h>     /* srand, rand */
-#include <time.h>       /* time */
+#include <libarmus.h> 	//LCD_Printf
 
 enum Viande
 {
