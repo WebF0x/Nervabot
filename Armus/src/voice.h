@@ -6,18 +6,27 @@
 //  Copyright (c) 2014 JeremieBonsant. All rights reserved.
 //
 
-#ifndef voiceClass_voiceClass_h
-#define voiceClass_voiceClass_h
+#ifndef VOICE_H_
+#define VOICE_H_
 
 #include <iostream>
 #include <string>
 
 using namespace std;
 
-private:
-        string audioFileFormat;
-public:
-        voiceClass();
-        void playAudioFile(string)
-        playNumber(int);
+class Voice
+{
+    private:
+    string audioFileFormat;
+    
+    public:
+    Voice();
+    void playAudioFile(string filePath);
+    void playNumber(int);
+    void playTitle(string title);
+    void play(int, string);
+    void play(int, string, int);
+    void play(string, int);
+    void play(string, int, string);
+};
 #endif
