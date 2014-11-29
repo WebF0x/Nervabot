@@ -28,19 +28,6 @@ class Voice
     Voice();
     int play(string fileName);
     int play(int);
-    int play(int, string);
-    int play(string, int);
-    int play(string, string, string);
-    int play(int, string, string);
-    int play(string, int, string);
-    int play(string, string, int);
-    int play(int, int, int);
-    int play(string, int, int);
-    int play(int, string, int);
-    int play(int, int, string);
-    
-
-    
     //Return duration of file in ms or -1 if fine ddint exist
     int getFileDuration(string fileName);
 };

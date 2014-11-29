@@ -38,76 +38,8 @@ int Voice::play(int number)
 
 int Voice::getFileDuration(string fileName)
 {
+    
     return 3;
-}
-
-int Voice::play(int A, string B)
-{
-    play(A);
-    play(B);
-    return 0;
-}
-int Voice::play(string A, int B)
-{
-    play(A);
-    play(B);
-    return 0;
-}
-int Voice::play(string A, string B, string C)
-{
-    play(A);
-    play(B);
-    play(C);
-    return 0;
-}
-int Voice::play(int A, string B, string C)
-{
-    play(A);
-    play(B);
-    play(C);
-    return 0;
-}
-int Voice::play(string A, int B, string C)
-{
-    play(A);
-    play(B);
-    play(C);
-    return 0;
-}
-int Voice::play(string A, string B, int C)
-{
-    play(A);
-    play(B);
-    play(C);
-    return 0;
-}
-int Voice::play(int A, int B, int C)
-{
-    play(A);
-    play(B);
-    play(C);
-    return 0;
-}
-int Voice::play(string A, int B, int C)
-{
-    play(A);
-    play(B);
-    play(C);
-    return 0;
-}
-int Voice::play(int A, string B, int C)
-{
-    play(A);
-    play(B);
-    play(C);
-    return 0;
-}
-int Voice::play(int A, int B, string C)
-{
-    play(A);
-    play(B);
-    play(C);
-    return 0;
 }
 
 
