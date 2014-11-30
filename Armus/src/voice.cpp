@@ -16,7 +16,8 @@ Voice::Voice()
 int Voice::play(string fileName)
 {
     fileName = fileName + audioFileFormat;
-    AUDIO_Play(fileName);
+    //AUDIO_Play(fileName);
+    cout << "ss";
     sleep(info.duration[fileName]);
     return 0;
 }
