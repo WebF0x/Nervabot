@@ -12,9 +12,15 @@ using namespace std;
 
 int main()
 {
-	Robot robot(true);
+	Robot bob(true);
 
-	robot.jeuRecette();
+	THREAD t1,t2;
+
+	bob.threadedSay(&t1, 6);	//Create and start threads
+	bob.threadedSay(&t2, "Allo");
+
+	pthread_join(t1, NULL);	//Wait until threads ends
+	pthread_join(t2, NULL);
 
 	return 0;
 }

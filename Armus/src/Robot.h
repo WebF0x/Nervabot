@@ -17,6 +17,7 @@
 #include <vector>
 #include "Recette.h"
 #include "Servomoteur.h"
+#include <string>
 
 class Robot
 {
@@ -47,6 +48,17 @@ public:
 	bool demanderGroupeAlimentaire(GroupeAlimentaire groupe);
 	bool demanderAliment(GroupeAlimentaire groupe);
 	void jeuRecette();
+
+	/** Returns true if the thread was successfully started, false if there was an error starting the thread */
+	template<typename T>
+	bool threadedSay(THREAD* thread, T valeur)
+	{
+		ThreadArg<T>* arg = new ThreadArg<T>();
+		arg->robotPtr = this;
+		arg->var = valeur;
+
+		return (pthread_create(thread, NULL, InternalThreadEntryPassArg<T>, arg) == 0);
+	}
 
 	/*
 	enum Raison
@@ -91,6 +103,60 @@ private:
 	static const float FLECHE_CIBLE = 30.f;
 
 	bool m_isArmu022;
+
+	/* To use a thread we must pass as parameteres a pointer to itself and our parameters */
+	template <typename T>
+	struct ThreadArg
+	{
+		Robot * robotPtr;
+		T var;
+	};
+
+	/* Si on utilise pas LCD_Printf(),
+	 * on va pouvoir utiliser:
+	 *
+	 * template<typename T>
+	 * say(T var)
+	 * {
+	 * 		//Do something with var, independently of its type
+	 * }
+	 */
+	void say(int valeur)
+	{
+		//*CODE A JÉ//
+		//Currently placeholder code//
+		LCD_Printf("Debut Say\n");
+		for(int i=0; i<3; ++i)
+		{
+			LCD_Printf("%d: %d\n", i, valeur);
+		}
+		LCD_Printf("Fin Say\n");
+	}
+	void say(std::string str)
+	{
+		//*CODE A JÉ//
+		//Currently placeholder code//
+		LCD_Printf("Debut Say\n");
+		for(int i=0; i<3; ++i)
+		{
+			LCD_Printf("%d: %s\n", i, str.data());
+		}
+		LCD_Printf("Fin Say\n");
+	}
+
+	//This method takes care of freeing up "arg"
+	template<typename T>
+	static void * InternalThreadEntryPassArg(void * arg)
+	{
+		ThreadArg<T> arguments;
+		arguments.robotPtr = ((ThreadArg<T> *)arg)->robotPtr;
+		arguments.var = ((ThreadArg<T> *)arg)->var;
+
+		arguments.robotPtr->say(arguments.var);
+
+		delete ((ThreadArg<T> *)arg);
+		return NULL;
+	}
 };
 
 #endif /* ROBOT_H_ */

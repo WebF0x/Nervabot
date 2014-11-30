@@ -484,5 +484,3 @@ void Robot::jeuRecette()
 
     LCD_Printf("La bonne reponse est %s", exempleAliment(recette.groupeManquant).data());
 }
-
-
