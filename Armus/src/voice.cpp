@@ -9,14 +9,15 @@
 #include "voice.h"
 
 
+
 Voice::Voice()
 {}
 
 int Voice::play(string fileName)
 {
-    fileName = andioFileDirectory + fileName + audioFileFormat;
-    cout << "PLAY : " + fileName << endl;
-    sleep(getFileDuration(fileName));
+    fileName = fileName + audioFileFormat;
+    AUDIO_Play(fileName);
+    sleep(info.duration[fileName]);
     return 0;
 }
 
@@ -36,11 +37,6 @@ int Voice::play(int number)
     return 0;
 }
 
-int Voice::getFileDuration(string fileName)
-{
-    
-    return 3;
-}
 
 
 

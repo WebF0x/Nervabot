@@ -13,6 +13,8 @@
 #include <string>
 #include <unistd.h>
 
+#include "audioFileInfo.h"
+
 using namespace std;
 
 
@@ -20,7 +22,8 @@ using namespace std;
 class Voice
 {
     private:
-    string audioFileFormat = ".mp3";
+    audioFileInfo info;
+    string audioFileFormat = ".wav";
     string andioFileDirectory = "/audifile/";
     void playNumber(int cent, int number);
     
