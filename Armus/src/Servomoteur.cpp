@@ -28,6 +28,7 @@ void setAngleAjuste(int servo, int angle)
 	else if(servo == 10)
 		setAngleServo605(angle);
 }
+
 int choixMenu(int servomoteur)
 {
 	int angle = 0;

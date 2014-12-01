@@ -569,3 +569,14 @@ void Robot::initRecettes(Recette& recettes)
 
 		recettes.push_back(Recette("Sandwich", BACON, LAITUE, FROMAGE, PAIN, CEREALIER));
 }
+
+void Robot::exempleThread()
+{
+	THREAD t1,t2;
+
+	threadedSay(&t1, 6);	//Create and start threads
+	threadedSay(&t2, "Allo");
+
+	pthread_join(t1, NULL);	//Wait until threads ends
+	pthread_join(t2, NULL);
+}
