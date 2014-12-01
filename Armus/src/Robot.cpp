@@ -448,15 +448,6 @@ void Robot::jeuRecette()
 {
 	_parcours.initRobot(this);
 
-	/*_parcours.deplacer(false);
-	_parcours.deplacer(false);
-	_parcours.deplacer(true);
-	_parcours.deplacer(true);
-	_parcours.deplacer(true);
-	_parcours.deplacer(true);
-	_parcours.deplacer(true);
-	_parcours.deplacer(true);*/
-
     //Definir les recettes
     vector<Recette> recettes;
     initRecettes(recettes);

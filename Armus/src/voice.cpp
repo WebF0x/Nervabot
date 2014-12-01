@@ -26,7 +26,7 @@ int Voice::play(string fileName)
 {
     fileName = fileName+audioFileFormat;
     AUDIO_PlayFile(fileName.data());
-    THREAD_MSleep(int(info.duration[fileName]*1000-200));
+    THREAD_MSleep(getFileDuration(fileName));
     return 0;
 }
 
@@ -50,18 +50,26 @@ int Voice::play(int number)
     }
     else
         return 1;
-    return 0;
+    return 1000;
 }
 
 int Voice::playQuestionRecette(int numeroRecette)
 {
-    char buffer[4];
-    snprintf(buffer, 10, "%d", numeroRecette);
-    string temp;
-    temp = "recette";
-    temp = temp+buffer;
-    play(temp);
-    return 0;
+    char buffer1[4];
+    int i = random2(1,3);
+    snprintf(buffer1, 10, "%d", i);
+    string temp1;
+    temp1 = "questionRecette";
+    temp1 = temp1+buffer1;
+    play(temp1);
+    
+    char buffer2[4];
+    snprintf(buffer2, 10, "%d", numeroRecette);
+    string temp2;
+    temp2 = "recette";
+    temp2 = temp2+buffer2;
+    play(temp2);
+    return getFileDuration(temp1+temp2);
 }
 int Voice::playReponseRecette(int numeroRecette)
 {
@@ -72,7 +80,7 @@ int Voice::playReponseRecette(int numeroRecette)
     temp2 = "reponse";
     temp = temp+buffer+temp2;
     play(temp);
-    return 0;
+    return getFileDuration(temp);
 }
 int Voice::playPerdre()
 {
@@ -83,7 +91,7 @@ int Voice::playPerdre()
     temp = "perdre";
     temp = temp+buffer;
     play(temp);
-    return 0;
+    return getFileDuration(temp);
 }
 int Voice::playGagne()
 {
@@ -94,7 +102,7 @@ int Voice::playGagne()
     temp = "gagne";
     temp = temp+buffer;
     play(temp);
-    return 0;
+    return getFileDuration(temp);
 }
 int Voice::playFact()
 {
@@ -105,7 +113,12 @@ int Voice::playFact()
     temp = "fact";
     temp = temp+buffer;
     play(temp);
-    return 0;
+    return getFileDuration(temp);
+}
+
+int Voice::getFileDuration(string fileName)
+{
+    return int(info.duration[fileName]*1000-200);
 }
 
 
