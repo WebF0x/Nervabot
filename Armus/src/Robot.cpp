@@ -475,7 +475,6 @@ void Robot::jeuRecette()
 
     if(bonneReponse)    LCD_Printf("Bravo!");
     else                LCD_Printf("Faux!");
-    _parcours.deplacer(bonneReponse);
 
     LCD_Printf("Le groupe manquant est: %s", toString(recette.groupeManquant).data());
 
