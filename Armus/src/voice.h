@@ -22,7 +22,10 @@ using namespace std;
 class Voice
 {
     private:
+ 
     audioFileInfo info;
+
+    
     string audioFileFormat = ".wav";
     string andioFileDirectory = "/audifile/";
     void playNumber(int cent, int number);
