@@ -1,7 +1,7 @@
 //#include "Parcours.h"
 #include "Robot.h"
 
-Parcours::Parcours():_pos(1), _r(NULL), _derniereReponse(true)
+Parcours::Parcours():_pos(3), _r(NULL), _derniereReponse(true)
 {
 }
 
@@ -21,18 +21,22 @@ void Parcours::initRobot(Robot* r)
 
 void Parcours::deplacer(bool reponsecourrante)
 {
-	LCD_Printf("position:%i\n", _pos);
-	//LCD_Printf("reponse courante:%i\n", reponsecourrante);
-	//LCD_Printf("derniere reponse:%i\n", _derniereReponse);
-	if (reponsecourrante)
+	if(_pos > 1 && _pos <=7)
 	{
-		avancerRobot();
+		if (reponsecourrante)
+		{
+			avancerRobot();
+		}
+		else
+		{
+			reculerRobot();
+		}
+		_derniereReponse = reponsecourrante;
 	}
 	else
 	{
-		reculerRobot();
+		LCD_Printf("Hors position\n");
 	}
-	_derniereReponse = reponsecourrante;
 }
 
 void Parcours::avancerRobot()
@@ -41,7 +45,7 @@ void Parcours::avancerRobot()
 	{
 		if(_derniereReponse == false)
 		{
-			_r->tournerSurPlace(180);
+			_r->tournerSurPlace(184);
 		}
 		_r->avancer(50);
 	}
@@ -49,11 +53,11 @@ void Parcours::avancerRobot()
 	{
 		if(_derniereReponse == true)
 		{
-			_r->tournerSurPlace(90);
+			_r->tournerSurPlace(91);
 		}
 		else
 		{
-			_r->tournerSurPlace(180);
+			_r->tournerSurPlace(184);
 		}
 		_r->avancer(50);
 	}
@@ -68,7 +72,7 @@ void Parcours::reculerRobot()
 	{
 		if(_derniereReponse == true)
 		{
-			_r->tournerSurPlace(180);
+			_r->tournerSurPlace(184);
 		}
 		_r->avancer(50);
 	}
@@ -80,7 +84,7 @@ void Parcours::reculerRobot()
 		}
 		else
 		{
-			_r->tournerSurPlace(180);
+			_r->tournerSurPlace(184);
 		}
 		_r->avancer(50);
 	}
