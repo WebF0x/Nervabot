@@ -11,10 +11,10 @@
 #include <libarmus.h>
 
 //Trouver experimentalement
-const int DEBUT_325 = (-43);
-const int FIN_325 = (134);
-const int DEBUT_605 = (-23);
-const int FIN_605 = (143);
+const int DEBUT_325 = (-43);//Tested for 180 degrees
+const int FIN_325 = (110);	//Tested for 180 degrees
+const int DEBUT_605 = (-5);	//Tested for 180 degrees
+const int FIN_605 = (135);	//Tested for 180 degrees
 
 
 //Branchement du fil jaune du servomoteur

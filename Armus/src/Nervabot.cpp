@@ -12,7 +12,11 @@ using namespace std;
 
 int main()
 {
-	choixMenu(9);
+	while(true)
+	{
+		LCD_Printf("%d\n",choixMenu(10));
+	}
+
 
 	return 0;
 }
