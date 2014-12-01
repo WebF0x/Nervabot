@@ -17,7 +17,27 @@
 #include <vector>
 #include "Recette.h"
 #include "Servomoteur.h"
+//#include "Parcours.h"
 #include <string>
+
+class Robot;
+
+class Parcours
+{
+	unsigned char _pos;
+	Robot* _r;
+	// Avec ca on peut savoir l'orientation du robot
+	bool _derniereReponse;
+
+	void updatePos();
+	void avancerRobot();
+	void reculerRobot();
+public:
+	Parcours();
+	Parcours(unsigned char pos);
+	void initRobot(Robot* r);
+	void deplacer(bool bonnereponse);
+};
 
 class Robot
 {
@@ -83,6 +103,7 @@ public:
 
 private:
 
+	Parcours _parcours;
 	float m_posX,m_posY;
 	float m_orientation;
 	short m_startPos;

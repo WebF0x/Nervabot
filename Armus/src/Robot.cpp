@@ -66,6 +66,7 @@ void Robot::avancer(float distance)
 				nbRightTotal+= nbRight;
 		}
 	}
+	stop();
 }
 
 /*
@@ -445,6 +446,17 @@ bool Robot::demanderAliment(GroupeAlimentaire groupe)
 
 void Robot::jeuRecette()
 {
+	_parcours.initRobot(this);
+
+	/*_parcours.deplacer(false);
+	_parcours.deplacer(false);
+	_parcours.deplacer(true);
+	_parcours.deplacer(true);
+	_parcours.deplacer(true);
+	_parcours.deplacer(true);
+	_parcours.deplacer(true);
+	_parcours.deplacer(true);*/
+
     //Definir les recettes
     vector<Recette> recettes;
     initRecettes(recettes);
@@ -463,6 +475,7 @@ void Robot::jeuRecette()
 
     if(bonneReponse)    LCD_Printf("Bravo!");
     else                LCD_Printf("Faux!");
+    _parcours.deplacer(bonneReponse);
 
     LCD_Printf("Le groupe manquant est: %s", toString(recette.groupeManquant).data());
 
