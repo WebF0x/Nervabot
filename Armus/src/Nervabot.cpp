@@ -12,10 +12,11 @@ using namespace std;
 
 int main()
 {
-	while(true)
-	{
-		LCD_Printf("%d\n",choixMenu(10));
-	}
+    
+    Voice voix;
+    
+    voix.play("intro");
+    
 
 
 	return 0;
