@@ -12,12 +12,15 @@ using namespace std;
 
 int main()
 {
-    
-    Voice voix;
-    
-    voix.play("intro");
-    
+	Robot robot(true);
+	/*
+	AUDIO_SetVolume(100);
+	AUDIO_PlayFile("audio.wav");
+	THREAD_MSleep(10000);
+	*/
 
+	robot.jeuRecette();
+	//choixMenu(SERVO_325);
 
 	return 0;
 }

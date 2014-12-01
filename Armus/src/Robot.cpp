@@ -66,6 +66,7 @@ void Robot::avancer(float distance)
 				nbRightTotal+= nbRight;
 		}
 	}
+	stop();
 }
 
 /*
@@ -445,6 +446,17 @@ bool Robot::demanderAliment(GroupeAlimentaire groupe)
 
 void Robot::jeuRecette()
 {
+	_parcours.initRobot(this);
+
+	/*_parcours.deplacer(false);
+	_parcours.deplacer(false);
+	_parcours.deplacer(true);
+	_parcours.deplacer(true);
+	_parcours.deplacer(true);
+	_parcours.deplacer(true);
+	_parcours.deplacer(true);
+	_parcours.deplacer(true);*/
+
     //Definir les recettes
     vector<Recette> recettes;
     initRecettes(recettes);
