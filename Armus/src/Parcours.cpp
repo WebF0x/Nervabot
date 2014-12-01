@@ -21,7 +21,7 @@ void Parcours::initRobot(Robot* r)
 
 void Parcours::deplacer(bool reponsecourrante)
 {
-	if(_pos > 1 && _pos <=7)
+	if(_pos > 1 && _pos < 7)
 	{
 		if (reponsecourrante)
 		{
@@ -37,6 +37,7 @@ void Parcours::deplacer(bool reponsecourrante)
 	{
 		LCD_Printf("Hors position\n");
 	}
+	LCD_Printf("position:%i\n", _pos);
 }
 
 void Parcours::avancerRobot()
@@ -53,7 +54,7 @@ void Parcours::avancerRobot()
 	{
 		if(_derniereReponse == true)
 		{
-			_r->tournerSurPlace(91);
+			_r->tournerSurPlace(92);
 		}
 		else
 		{

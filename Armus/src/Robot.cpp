@@ -448,24 +448,6 @@ void Robot::jeuRecette()
 {
 	_parcours.initRobot(this);
 
-	/*LCD_Printf("position:%i\n", _parcours.getPosition());
-	_parcours.deplacer(true);
-	LCD_Printf("position:%i\n", _parcours.getPosition());
-	_parcours.deplacer(true);
-	LCD_Printf("position:%i\n", _parcours.getPosition());
-	_parcours.deplacer(false);
-	LCD_Printf("position:%i\n", _parcours.getPosition());
-	_parcours.deplacer(false);
-	LCD_Printf("position:%i\n", _parcours.getPosition());
-	_parcours.deplacer(false);
-	LCD_Printf("position:%i\n", _parcours.getPosition());
-	_parcours.deplacer(false);
-	LCD_Printf("position:%i\n", _parcours.getPosition());
-	_parcours.deplacer(false);
-	LCD_Printf("position:%i\n", _parcours.getPosition());
-	_parcours.deplacer(false);
-	LCD_Printf("position:%i\n", _parcours.getPosition());*/
-
     //Definir les recettes
     vector<Recette> recettes;
     initRecettes(recettes);

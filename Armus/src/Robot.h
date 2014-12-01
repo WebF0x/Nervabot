@@ -18,6 +18,8 @@
 #include "Recette.h"
 #include "Servomoteur.h"
 #include "voice.h"
+#include "Del.h"
+#include "CapteurInfrarouge.h"
 #include <string>
 
 class Robot;
