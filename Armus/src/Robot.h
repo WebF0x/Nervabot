@@ -24,7 +24,7 @@ class Robot;
 
 class Parcours
 {
-	unsigned char _pos;
+	unsigned int _pos;
 	Robot* _r;
 	// Avec ca on peut savoir l'orientation du robot
 	bool _derniereReponse;
@@ -34,9 +34,10 @@ class Parcours
 	void reculerRobot();
 public:
 	Parcours();
-	Parcours(unsigned char pos);
+	Parcours(unsigned int pos);
 	void initRobot(Robot* r);
-	void deplacer(bool bonnereponse);
+	void deplacer(bool reponsecourrante);
+	unsigned int getPosition();
 };
 
 class Robot
