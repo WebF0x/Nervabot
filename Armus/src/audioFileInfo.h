@@ -23,6 +23,7 @@ public:
     audioFileInfo();
     
     map <const string, float> duration;
+    int nbFact;
 
     
 private:

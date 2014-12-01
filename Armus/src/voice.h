@@ -15,6 +15,7 @@
 
 #include <libarmus.h>
 #include "audioFileInfo.h"
+#include "Robot.h"
 
 using namespace std;
 
@@ -27,15 +28,18 @@ class Voice
     string andioFileDirectory;
  
     audioFileInfo info;
-    
-    
-    
+
     void playNumber(int cent, int number);
     
     public:
     Voice();
     int play(string fileName);
     int play(int);
+    int playQuestionRecette(int numeroRecette);
+    int playReponseRecette(int numeroRecette);
+    int playPerdre();
+    int playGagne();
+    int playFact();
     //Return duration of file in ms or -1 if fine ddint exist
     int getFileDuration(string fileName);
 };

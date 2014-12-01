@@ -448,6 +448,15 @@ void Robot::jeuRecette()
 {
 	_parcours.initRobot(this);
 
+	/*_parcours.deplacer(false);
+	_parcours.deplacer(false);
+	_parcours.deplacer(true);
+	_parcours.deplacer(true);
+	_parcours.deplacer(true);
+	_parcours.deplacer(true);
+	_parcours.deplacer(true);
+	_parcours.deplacer(true);*/
+
     //Definir les recettes
     vector<Recette> recettes;
     initRecettes(recettes);
@@ -459,7 +468,8 @@ void Robot::jeuRecette()
 
     //Afficher la recette
     afficherRecette(recette);
-
+    
+    
     //Demander groupe alimentaire manquant
     LCD_Printf("Il manque un groupe alimentaire. Lequel?\n");
     bool bonneReponse = demanderGroupeAlimentaire(recette.groupeManquant);
@@ -481,96 +491,45 @@ void Robot::jeuRecette()
 
 void Robot::initRecettes(vector<Recette>& recettes)
 {
-	/// Hamburger
-	    recettes.push_back(Recette("Hamburger", POULET, LAITUE, FROMAGE, PAIN, VIANDE));
-	    recettes.push_back(Recette("Hamburger", POULET, LAITUE, FROMAGE, PAIN, CEREALIER));
+    recettes.push_back(Recette("Hamburger", POULET, LAITUE, FROMAGE, PAIN, VIANDE));
+    recettes.push_back(Recette("Hamburger", POULET, LAITUE, FROMAGE, PAIN, CEREALIER));
+    recettes.push_back(Recette("Hamburger", POULET, TOMATE, FROMAGE, PAIN, VIANDE));
+    recettes.push_back(Recette("Hamburger", POULET, TOMATE, FROMAGE, PAIN, LEGUME_FRUIT));
+    recettes.push_back(Recette("Hamburger", POULET, TOMATE, FROMAGE, PAIN, CEREALIER));
+    recettes.push_back(Recette("Hamburger", BOEUF, LAITUE, FROMAGE, PAIN, CEREALIER));
+    recettes.push_back(Recette("Hamburger", BOEUF, TOMATE, FROMAGE, PAIN, LEGUME_FRUIT));
+    recettes.push_back(Recette("Hamburger", BOEUF, TOMATE, FROMAGE, PAIN, CEREALIER));
+    recettes.push_back(Recette("Gateau", OEUF, FRAISE, LAIT, FARINE, LAITIER));
+    recettes.push_back(Recette("Gateau", OEUF, CAROTTE, LAIT, FARINE, LAITIER));
+    recettes.push_back(Recette("Dejeuner", SAUCISSE, TOMATE, LAIT, CREPE, LAITIER));
+    recettes.push_back(Recette("Dejeuner", SAUCISSE, TOMATE, LAIT, CREPE, LEGUME_FRUIT));
+    recettes.push_back(Recette("Dejeuner", SAUCISSE, TOMATE, LAIT, PAIN, CEREALIER));
+    recettes.push_back(Recette("Dejeuner", SAUCISSE, ORANGE, LAIT, PAIN, LAITIER));
+    recettes.push_back(Recette("Dejeuner", SAUCISSE, ORANGE, LAIT, PAIN, CEREALIER));
+    recettes.push_back(Recette("Dejeuner", SAUCISSE, TOMATE, YOGOURT, PAIN, LEGUME_FRUIT));
+    recettes.push_back(Recette("Dejeuner", SAUCISSE, TOMATE, YOGOURT, PAIN, CEREALIER));
+    recettes.push_back(Recette("Dejeuner", OEUF, TOMATE, LAIT, CREPE, LAITIER));
+    recettes.push_back(Recette("Dejeuner", OEUF, TOMATE, LAIT, CREPE, LEGUME_FRUIT));
+    recettes.push_back(Recette("Dejeuner", OEUF, ORANGE, LAIT, CREPE, LAITIER));
+    recettes.push_back(Recette("Dejeuner", OEUF, TOMATE, YOGOURT, CREPE, LEGUME_FRUIT));
+    recettes.push_back(Recette("Dejeuner", OEUF, TOMATE, LAIT, PAIN, LAITIER));
+    recettes.push_back(Recette("Dejeuner", OEUF, TOMATE, LAIT, PAIN, LEGUME_FRUIT));
+    recettes.push_back(Recette("Dejeuner", OEUF, TOMATE, LAIT, PAIN, CEREALIER));
+    recettes.push_back(Recette("Dejeuner", OEUF, ORANGE, LAIT, PAIN, LAITIER));
+    recettes.push_back(Recette("Dejeuner", OEUF, ORANGE, LAIT, PAIN, CEREALIER));
+    recettes.push_back(Recette("Dejeuner", JAMBON, TOMATE, LAIT, CREPE, LAITIER));
+    recettes.push_back(Recette("Dejeuner", JAMBON, TOMATE, LAIT, CREPE, LEGUME_FRUIT));
+    recettes.push_back(Recette("Dejeuner", JAMBON, TOMATE, YOGOURT, PAIN, CEREALIER));
+    recettes.push_back(Recette("Spaghetti", BOEUF, TOMATE, FROMAGE, PATES, LEGUME_FRUIT));
+    recettes.push_back(Recette("Sandwich", POULET, TOMATE, FROMAGE, PAIN, VIANDE));
+    recettes.push_back(Recette("Sandwich", POULET, TOMATE, FROMAGE, PAIN, CEREALIER));
+    recettes.push_back(Recette("Sandwich", POULET, LAITUE, FROMAGE, PAIN, VIANDE));
+    recettes.push_back(Recette("Sandwich", JAMBON, TOMATE, FROMAGE, PAIN, LEGUME_FRUIT));
+    recettes.push_back(Recette("Sandwich", JAMBON, TOMATE, FROMAGE, PAIN, CEREALIER));
+    recettes.push_back(Recette("Sandwich", BACON, TOMATE, FROMAGE, PAIN, LEGUME_FRUIT));
+    recettes.push_back(Recette("Sandwich", BACON, TOMATE, FROMAGE, PAIN, CEREALIER));
+    recettes.push_back(Recette("Sandwich", BACON, LAITUE, FROMAGE, PAIN, CEREALIER));
 
-	    recettes.push_back(Recette("Hamburger", POULET, TOMATE, FROMAGE, PAIN, VIANDE));
-		recettes.push_back(Recette("Hamburger", POULET, TOMATE, FROMAGE, PAIN, LEGUME_FRUIT));
-		recettes.push_back(Recette("Hamburger", POULET, TOMATE, FROMAGE, PAIN, CEREALIER));
-
-		recettes.push_back(Recette("Hamburger", BOEUF, LAITUE, FROMAGE, PAIN, CEREALIER));
-
-		recettes.push_back(Recette("Hamburger", BOEUF, TOMATE, FROMAGE, PAIN, LEGUME_FRUIT));
-		recettes.push_back(Recette("Hamburger", BOEUF, TOMATE, FROMAGE, PAIN, CEREALIER));
-
-		///Gateau
-		recettes.push_back(Recette("Gateau", OEUF, FRAISE, LAIT, FARINE, LAITIER));
-
-		recettes.push_back(Recette("Gateau", OEUF, CAROTTE, LAIT, FARINE, LAITIER));
-
-		///Dejeuner
-		recettes.push_back(Recette("Dejeuner", SAUCISSE, TOMATE, LAIT, CREPE, LAITIER));
-		recettes.push_back(Recette("Dejeuner", SAUCISSE, TOMATE, LAIT, CREPE, LEGUME_FRUIT));
-
-		recettes.push_back(Recette("Dejeuner", SAUCISSE, ORANGE, LAIT, CREPE, LAITIER));
-
-		recettes.push_back(Recette("Dejeuner", SAUCISSE, TOMATE, YOGOURT, CREPE, LEGUME_FRUIT));
-
-		recettes.push_back(Recette("Dejeuner", SAUCISSE, TOMATE, LAIT, PAIN, LAITIER));
-		recettes.push_back(Recette("Dejeuner", SAUCISSE, TOMATE, LAIT, PAIN, LEGUME_FRUIT));
-		recettes.push_back(Recette("Dejeuner", SAUCISSE, TOMATE, LAIT, PAIN, CEREALIER));
-
-		recettes.push_back(Recette("Dejeuner", SAUCISSE, ORANGE, LAIT, PAIN, LAITIER));
-		recettes.push_back(Recette("Dejeuner", SAUCISSE, ORANGE, LAIT, PAIN, CEREALIER));
-
-		recettes.push_back(Recette("Dejeuner", SAUCISSE, TOMATE, YOGOURT, PAIN, LEGUME_FRUIT));
-		recettes.push_back(Recette("Dejeuner", SAUCISSE, TOMATE, YOGOURT, PAIN, CEREALIER));
-		/**/
-		recettes.push_back(Recette("Dejeuner", OEUF, TOMATE, LAIT, CREPE, LAITIER));
-		recettes.push_back(Recette("Dejeuner", OEUF, TOMATE, LAIT, CREPE, LEGUME_FRUIT));
-
-		recettes.push_back(Recette("Dejeuner", OEUF, ORANGE, LAIT, CREPE, LAITIER));
-
-		recettes.push_back(Recette("Dejeuner", OEUF, TOMATE, YOGOURT, CREPE, LEGUME_FRUIT));
-
-		recettes.push_back(Recette("Dejeuner", OEUF, TOMATE, LAIT, PAIN, LAITIER));
-		recettes.push_back(Recette("Dejeuner", OEUF, TOMATE, LAIT, PAIN, LEGUME_FRUIT));
-		recettes.push_back(Recette("Dejeuner", OEUF, TOMATE, LAIT, PAIN, CEREALIER));
-
-		recettes.push_back(Recette("Dejeuner", OEUF, ORANGE, LAIT, PAIN, LAITIER));
-		recettes.push_back(Recette("Dejeuner", OEUF, ORANGE, LAIT, PAIN, CEREALIER));
-
-		recettes.push_back(Recette("Dejeuner", OEUF, TOMATE, YOGOURT, PAIN, LEGUME_FRUIT));
-		recettes.push_back(Recette("Dejeuner", OEUF, TOMATE, YOGOURT, PAIN, CEREALIER));
-		/**/
-		recettes.push_back(Recette("Dejeuner", JAMBON, TOMATE, LAIT, CREPE, LAITIER));
-		recettes.push_back(Recette("Dejeuner", JAMBON, TOMATE, LAIT, CREPE, LEGUME_FRUIT));
-
-		recettes.push_back(Recette("Dejeuner", JAMBON, ORANGE, LAIT, CREPE, LAITIER));
-
-		recettes.push_back(Recette("Dejeuner", JAMBON, TOMATE, YOGOURT, CREPE, LEGUME_FRUIT));
-
-		recettes.push_back(Recette("Dejeuner", JAMBON, TOMATE, LAIT, PAIN, LAITIER));
-		recettes.push_back(Recette("Dejeuner", JAMBON, TOMATE, LAIT, PAIN, LEGUME_FRUIT));
-		recettes.push_back(Recette("Dejeuner", JAMBON, TOMATE, LAIT, PAIN, CEREALIER));
-
-		recettes.push_back(Recette("Dejeuner", JAMBON, ORANGE, LAIT, PAIN, LAITIER));
-		recettes.push_back(Recette("Dejeuner", JAMBON, ORANGE, LAIT, PAIN, CEREALIER));
-
-		recettes.push_back(Recette("Dejeuner", JAMBON, TOMATE, YOGOURT, PAIN, LEGUME_FRUIT));
-		recettes.push_back(Recette("Dejeuner", JAMBON, TOMATE, YOGOURT, PAIN, CEREALIER));
-
-		///Spaghetti (pas assez d'alterations)
-		recettes.push_back(Recette("Spaghetti", BOEUF, TOMATE, FROMAGE, PATES, LEGUME_FRUIT));
-
-		///Sandwich
-		recettes.push_back(Recette("Sandwich", POULET, TOMATE, FROMAGE, PAIN, VIANDE));
-		recettes.push_back(Recette("Sandwich", POULET, TOMATE, FROMAGE, PAIN, LEGUME_FRUIT));
-		recettes.push_back(Recette("Sandwich", POULET, TOMATE, FROMAGE, PAIN, CEREALIER));
-
-		recettes.push_back(Recette("Sandwich", POULET, LAITUE, FROMAGE, PAIN, VIANDE));
-		recettes.push_back(Recette("Sandwich", POULET, LAITUE, FROMAGE, PAIN, CEREALIER));
-		/**/
-		recettes.push_back(Recette("Sandwich", JAMBON, TOMATE, FROMAGE, PAIN, LEGUME_FRUIT));
-		recettes.push_back(Recette("Sandwich", JAMBON, TOMATE, FROMAGE, PAIN, CEREALIER));
-
-		recettes.push_back(Recette("Sandwich", JAMBON, LAITUE, FROMAGE, PAIN, CEREALIER));
-		/**/
-		recettes.push_back(Recette("Sandwich", BACON, TOMATE, FROMAGE, PAIN, LEGUME_FRUIT));
-		recettes.push_back(Recette("Sandwich", BACON, TOMATE, FROMAGE, PAIN, CEREALIER));
-
-		recettes.push_back(Recette("Sandwich", BACON, LAITUE, FROMAGE, PAIN, CEREALIER));
 }
 
 void Robot::exempleThread()

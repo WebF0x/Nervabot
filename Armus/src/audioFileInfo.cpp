@@ -1,6 +1,7 @@
 #include "audioFileInfo.h"
 audioFileInfo::audioFileInfo()
 {
+    nbFact = 0;
     duration["1000.wav"] = 0.696009;
     duration["recette3reponse.wav"] = 4.844172;
     duration["recette4.wav"] = 2.32966;
