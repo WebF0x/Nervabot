@@ -12,6 +12,7 @@
 #include <string>
 #include <fstream>
 #include <map>
+#include <libarmus.h>
 
 using namespace std;
 

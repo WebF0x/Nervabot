@@ -17,6 +17,7 @@
 #include <vector>
 #include "Recette.h"
 #include "Servomoteur.h"
+#include "voice.h"
 #include <string>
 
 class Robot

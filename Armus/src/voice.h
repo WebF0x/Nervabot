@@ -13,6 +13,7 @@
 #include <string>
 #include <unistd.h>
 
+#include <libarmus.h>
 #include "audioFileInfo.h"
 
 using namespace std;
@@ -22,12 +23,13 @@ using namespace std;
 class Voice
 {
     private:
+    string audioFileFormat;
+    string andioFileDirectory;
  
     audioFileInfo info;
-
     
-    string audioFileFormat = ".wav";
-    string andioFileDirectory = "/audifile/";
+    
+    
     void playNumber(int cent, int number);
     
     public:

@@ -11,21 +11,27 @@
 
 
 Voice::Voice()
-{}
+{
+    audioFileFormat = ".wav";
+    andioFileDirectory = "/audifile/";
+}
 
 int Voice::play(string fileName)
 {
-    fileName = fileName + audioFileFormat;
-    //AUDIO_Play(fileName);
-    cout << "ss";
-    sleep(info.duration[fileName]);
+    fileName = fileName+audioFileFormat;
+    AUDIO_PlayFile(fileName.data());
+    sleep(info.duration[fileName]+1);
     return 0;
 }
 
 int Voice::play(int number)
 {
     if(number <= 100 || number%100 == 0 )
-        play(to_string(number));
+    {
+        string temp;
+        temp = ("%d", number);
+        play(temp);
+    }
     else if(number <= 1000)
     {
         play(number - number%100);
