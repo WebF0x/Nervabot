@@ -12,11 +12,13 @@ using namespace std;
 
 int main()
 {
-	while(true)
-	{
-		LCD_Printf("%d\n",choixMenu(10));
-	}
+	/*
+	AUDIO_SetVolume(100);
+	AUDIO_PlayFile("audio.wav");
+	THREAD_MSleep(10000);
+	*/
 
+	choixMenu(SERVO_325);
 
 	return 0;
 }
