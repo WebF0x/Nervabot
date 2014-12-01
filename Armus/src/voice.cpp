@@ -20,7 +20,7 @@ int Voice::play(string fileName)
 {
     fileName = fileName+audioFileFormat;
     AUDIO_PlayFile(fileName.data());
-    sleep(info.duration[fileName]+1);
+    THREAD_MSleep(int(info.duration[fileName]*1000-200));
     return 0;
 }
 
@@ -28,8 +28,11 @@ int Voice::play(int number)
 {
     if(number <= 100 || number%100 == 0 )
     {
+        char buffer[4];
+        snprintf(buffer, 10, "%d", number);
         string temp;
-        temp = ("%d", number);
+        temp = buffer;
+        temp = temp;
         play(temp);
     }
     else if(number <= 1000)
