@@ -48,6 +48,7 @@ public:
 	bool demanderGroupeAlimentaire(GroupeAlimentaire groupe);
 	bool demanderAliment(GroupeAlimentaire groupe);
 	void jeuRecette();
+	void initRecettes(Recette& recettes);
 
 	/** Returns true if the thread was successfully started, false if there was an error starting the thread */
 	template<typename T>
