@@ -48,7 +48,7 @@ public:
 	bool demanderGroupeAlimentaire(GroupeAlimentaire groupe);
 	bool demanderAliment(GroupeAlimentaire groupe);
 	void jeuRecette();
-	void initRecettes(Recette& recettes);
+	void initRecettes(std::vector<Recette>& recettes);
 	void exempleThread();
 
 	/** Returns true if the thread was successfully started, false if there was an error starting the thread */

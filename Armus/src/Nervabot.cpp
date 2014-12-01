@@ -12,7 +12,7 @@ using namespace std;
 
 int main()
 {
-	Robot bob(true);
+	choixMenu(9);
 
 	return 0;
 }

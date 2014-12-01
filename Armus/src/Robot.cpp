@@ -476,7 +476,7 @@ void Robot::jeuRecette()
     LCD_Printf("La bonne reponse est %s", exempleAliment(recette.groupeManquant).data());
 }
 
-void Robot::initRecettes(Recette& recettes)
+void Robot::initRecettes(vector<Recette>& recettes)
 {
 	/// Hamburger
 	    recettes.push_back(Recette("Hamburger", POULET, LAITUE, FROMAGE, PAIN, VIANDE));
