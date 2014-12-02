@@ -85,7 +85,7 @@ int Voice::play(THREAD* thread, int number)
 int Voice::playQuestionRecette(THREAD* thread1, THREAD* thread2, THREAD* thread3, int numeroRecette)
 {
     char buffer1[4];
-    int i = random2(1,3); // a quoi ca sert ?
+    int i = random2(1,3);
     snprintf(buffer1, 10, "%d", i);
     string temp1;
     temp1 = "questionRecette";

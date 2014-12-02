@@ -1,7 +1,7 @@
 //#include "Parcours.h"
 #include "Robot.h"
 
-Parcours::Parcours():_pos(3), _r(NULL), _derniereReponse(true)
+Parcours::Parcours():_pos(4), _r(NULL), _derniereReponse(true)
 {
 }
 
@@ -48,7 +48,7 @@ void Parcours::avancerRobot()
 		{
 			_r->tournerSurPlace(184);
 		}
-		_r->avancer(40);
+		_r->avancer(35);
 	/*}
 	else
 	{
