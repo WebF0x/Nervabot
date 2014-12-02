@@ -1,6 +1,11 @@
 #include "audioFileInfo.h"
 audioFileInfo::audioFileInfo()
 {
+    duration["tempsPartie.wav"] = 1.732653;
+    duration["tempsQuesion.wav"] = 1.248707;
+    duration["seconde.wav"] = 0.853515;
+    duration["questionAliment.wav"] = 2.318957;
+    duration["questionGroupe.wav"] = 2.100499;
     duration["recette37reponse.wav"] = 4.535329;
     duration["recette6.wav"] = 2.532063;
     duration["recette6reponse.wav"] = 4.633288;
@@ -97,7 +102,7 @@ audioFileInfo::audioFileInfo()
     duration["gagne2.wav"] = 2.382948;
     duration["gagne3.wav"] = 2.359501;
     duration["gagnePartie.wav"] = 5.155692;
-    duration["intro.wav"] = 12.631565;
+    duration["intro.wav"] = 13.751202;
     duration["introQuestion.wav"] = 18.072789;
     duration["pays11.wav"] = 16.966213;
     duration["pays12.wav"] = 19.595737;
