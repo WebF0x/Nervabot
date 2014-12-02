@@ -45,10 +45,10 @@ int Voice::play(string fileName, int id)
 	while(id != queue.front());	//Wait until you're first
 
 	//It's your turn to talk!
-	fileName = fileName + audioFileFormat;
-	AUDIO_PlayFile(fileName.data());
+	string fileNameWAV = fileName + audioFileFormat;
+	AUDIO_PlayFile(fileNameWAV.data());
 	THREAD_MSleep(getFileDuration(fileName));
-
+    
 	//I'm done talking
 	queue.pop();
 
@@ -99,11 +99,8 @@ int Voice::playQuestionRecette(THREAD* thread1, THREAD* thread2, THREAD* thread3
     temp2 = temp2+buffer2;
     threadedPlay(thread2, temp2);
 
-    char buffer3[4];
-    snprintf(buffer3, 10, "%d", numeroRecette);
     string temp3;
-    temp2 = "recette";
-    temp2 = temp3+buffer3;
+    temp2 = "questionRecetteFin";
     threadedPlay(thread3, temp3);
 
     return getFileDuration(temp1)+getFileDuration(temp2)+getFileDuration(temp3);
@@ -156,6 +153,7 @@ int Voice::playFact(THREAD* thread)
 
 int Voice::getFileDuration(string fileName)
 {
+    fileName = fileName + audioFileFormat;
     return int(info.duration[fileName]*1000);//-200);
 }
 
