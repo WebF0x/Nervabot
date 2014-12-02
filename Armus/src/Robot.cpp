@@ -432,6 +432,10 @@ void Robot::printPosition()
 bool Robot::demanderGroupeAlimentaire(GroupeAlimentaire groupe)
 {
 	//int choix = choixMenu(SERVO_325);
+
+	//return (choix-1==groupe);
+
+	/******* On utilise les bumper au lieu des servo moteur pour des fin de debug *******/
 	GroupeAlimentaire choix;
 
     LCD_Printf("Front: Viande\nRear: Legume_fruit\nLeft: Laitier\nRight: Cerealier\n");
@@ -464,7 +468,6 @@ bool Robot::demanderGroupeAlimentaire(GroupeAlimentaire groupe)
 	LCD_Printf("Choisi: %i\n", choix);
 
 	return (choix == groupe);
-	//return (choix-1==groupe);
 }
 
 bool Robot::demanderAliment(GroupeAlimentaire groupe)
@@ -472,6 +475,9 @@ bool Robot::demanderAliment(GroupeAlimentaire groupe)
 	//int choix = choixMenu(SERVO_605);
 
 	//return (choix-1==groupe);
+
+
+	/******* On utilise les bumper au lieu des servo moteur pour des fin de debug *******/
 	GroupeAlimentaire choix;
 
 	LCD_Printf("Front: Viande\nRear: Legume_fruit\nLeft: Laitier\nRight: Cerealier\n");
@@ -506,6 +512,7 @@ bool Robot::demanderAliment(GroupeAlimentaire groupe)
 	return (choix == groupe);
 }
 
+// initialisation du jeu nécéssaire
 void Robot::initJeu()
 {
 	_parcours.initRobot(this);
@@ -513,6 +520,7 @@ void Robot::initJeu()
     initRecettes(recettes);
 }
 
+// le jeu principale
 void Robot::jeuRecette()
 {
 	//Attendre le signal avant et arrière
@@ -570,7 +578,7 @@ bool Robot::jeuQuiDemandeGroupe()
     //Afficher la recette a l'écran
     afficherRecette(recette);
     //L'audio de la recette est joué
-    int tempsAudio = voice.playQuestionRecette(&t1, &t1, numeroDeRecette + 1);
+    int tempsAudio = voice.playQuestionRecette(&t1, &t1, &t1, numeroDeRecette + 1);
 
     //information de debug
     LCD_Printf("temps de parler: %i\n", tempsAudio);

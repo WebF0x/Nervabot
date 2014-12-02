@@ -81,10 +81,11 @@ int Voice::play(THREAD* thread, int number)
     return 1000;
 }
 
-int Voice::playQuestionRecette(THREAD* thread1, THREAD* thread2, int numeroRecette)
+
+int Voice::playQuestionRecette(THREAD* thread1, THREAD* thread2, THREAD* thread3, int numeroRecette)
 {
     char buffer1[4];
-    int i = random2(1,3);
+    int i = random2(1,3); // a quoi ca sert ?
     snprintf(buffer1, 10, "%d", i);
     string temp1;
     temp1 = "questionRecette";
@@ -98,7 +99,14 @@ int Voice::playQuestionRecette(THREAD* thread1, THREAD* thread2, int numeroRecet
     temp2 = temp2+buffer2;
     threadedPlay(thread2, temp2);
 
-    return getFileDuration(temp1)+getFileDuration(temp2);
+    char buffer3[4];
+    snprintf(buffer3, 10, "%d", numeroRecette);
+    string temp3;
+    temp2 = "recette";
+    temp2 = temp3+buffer3;
+    threadedPlay(thread3, temp3);
+
+    return getFileDuration(temp1)+getFileDuration(temp2)+getFileDuration(temp3);
 }
 
 int Voice::playReponseRecette(THREAD* thread, int numeroRecette)
