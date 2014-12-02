@@ -44,6 +44,11 @@ public:
 
 class Robot
 {
+	void jeuQuiDemandeGroupe();
+	void jeuQuiDemandeAliment();
+	void afficherReponse(bool bonnereponse, Recette recette);
+    //Definir les recettes
+    vector<Recette> recettes;
 public:
 	Robot(bool isArmu022);
 
@@ -72,6 +77,7 @@ public:
 	bool demanderAliment(GroupeAlimentaire groupe);
 	void jeuRecette();
 	void initRecettes(std::vector<Recette>& recettes);
+	void initJeu();
 	void exempleThread();
 
 	/** Returns true if the thread was successfully started, false if there was an error starting the thread */

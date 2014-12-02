@@ -11,7 +11,8 @@
 
 #include <libarmus.h>
 
-int capteurInfrarouge(int entree,int distance);
+bool capteurInfrarouge(int entree,int distance);
+bool capteurAttendreDebut();
 
 
 #endif /* CAPTEURINFRAROUGE_H_ */

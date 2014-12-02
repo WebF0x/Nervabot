@@ -13,7 +13,7 @@
 
 #include <libarmus.h> 	//LCD_Printf
 
-enum Viande
+typedef enum Viande
 {
     POULET,
     BOEUF,

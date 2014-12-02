@@ -10,6 +10,12 @@
 
 #include <libarmus.h>
 
-void del(int sortie,int repeat);
+const int LAMBDA = 500;
+const int DEL_O = 9;
+const int DEL_X = 10;
+
+void delFlash(int delId, int duree);
+void delOpen(int sortie);
+void delClose(int sortie);
 
 #endif /* DEL_H_ */

@@ -42,14 +42,14 @@ void Parcours::deplacer(bool reponsecourrante)
 
 void Parcours::avancerRobot()
 {
-	if(_pos != 4)
-	{
+	//if(_pos != 4)
+	//{
 		if(_derniereReponse == false)
 		{
 			_r->tournerSurPlace(184);
 		}
-		_r->avancer(50);
-	}
+		_r->avancer(40);
+	/*}
 	else
 	{
 		if(_derniereReponse == true)
@@ -61,7 +61,7 @@ void Parcours::avancerRobot()
 			_r->tournerSurPlace(184);
 		}
 		_r->avancer(50);
-	}
+	}*/
 	_pos++;
 
 
@@ -69,14 +69,14 @@ void Parcours::avancerRobot()
 
 void Parcours::reculerRobot()
 {
-	if(_pos != 4)
-	{
+	//if(_pos != 4)
+	//{
 		if(_derniereReponse == true)
 		{
 			_r->tournerSurPlace(184);
 		}
 		_r->avancer(50);
-	}
+	/*}
 	else
 	{
 		if(_derniereReponse == false)
@@ -88,6 +88,6 @@ void Parcours::reculerRobot()
 			_r->tournerSurPlace(184);
 		}
 		_r->avancer(50);
-	}
+	}*/
 	_pos--;
 }

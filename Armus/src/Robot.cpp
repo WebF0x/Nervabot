@@ -432,9 +432,40 @@ void Robot::printPosition()
 
 bool Robot::demanderGroupeAlimentaire(GroupeAlimentaire groupe)
 {
-	int choix = choixMenu(SERVO_325);
+	//int choix = choixMenu(SERVO_325);
+	GroupeAlimentaire choix;
 
-	return (choix-1==groupe);
+    LCD_Printf("Front: Viande\nRear: Legume_fruit\nLeft: Laitier\nRight: Cerealier\n");
+
+	while (true)
+	{
+		if(DIGITALIO_Read(BMP_FRONT))
+		{
+			choix = VIANDE;
+			break;
+		}
+		else if (DIGITALIO_Read(BMP_REAR))
+		{
+			choix = LEGUME_FRUIT;
+			break;
+		}
+		else if (DIGITALIO_Read(BMP_LEFT))
+		{
+			choix = LAITIER;
+			break;
+		}
+		else if (DIGITALIO_Read(BMP_RIGHT))
+		{
+			choix = CEREALIER;
+			break;
+		}
+		THREAD_MSleep(100);
+	}
+
+	LCD_Printf("Choisi: %i\n", choix);
+
+	return (choix == groupe);
+	//return (choix-1==groupe);
 }
 
 bool Robot::demanderAliment(GroupeAlimentaire groupe)
@@ -444,49 +475,71 @@ bool Robot::demanderAliment(GroupeAlimentaire groupe)
 	return (choix-1==groupe);
 }
 
-void Robot::jeuRecette()
+void Robot::initJeu()
 {
 	_parcours.initRobot(this);
 
-	/*_parcours.deplacer(false);
-	_parcours.deplacer(false);
-	_parcours.deplacer(true);
-	_parcours.deplacer(true);
-	_parcours.deplacer(true);
-	_parcours.deplacer(true);
-	_parcours.deplacer(true);
-	_parcours.deplacer(true);*/
-
-    //Definir les recettes
-    vector<Recette> recettes;
     initRecettes(recettes);
+}
 
+void Robot::jeuRecette()
+{
+	//Attendre le signal avant et arrière
+	capteurAttendreDebut();
 
+	jeuQuiDemandeGroupe();
+}
+
+void Robot::jeuQuiDemandeAliment()
+{
     //Selectionner une recette au hasard
     int numeroDeRecette = random(0, recettes.size()-1);
     Recette& recette = recettes.at(numeroDeRecette);
 
     //Afficher la recette
     afficherRecette(recette);
-    
-    
-    //Demander groupe alimentaire manquant
-    LCD_Printf("Il manque un groupe alimentaire. Lequel?\n");
-    bool bonneReponse = demanderGroupeAlimentaire(recette.groupeManquant);
 
-    if(bonneReponse)    LCD_Printf("Bravo!");
-    else                LCD_Printf("Faux!");
-
-    LCD_Printf("Le groupe manquant est: %s", toString(recette.groupeManquant).data());
+    LCD_Printf("Le groupe manquant est: %s ", toString(recette.groupeManquant).data());
 
     //Demander un aliment de ce groupe
-    LCD_Printf("Quel aliment fait partie des %s",toString(recette.groupeManquant).data());
-    bonneReponse = demanderAliment(recette.groupeManquant);
+    LCD_Printf("Quel aliment fait partie des %s ",toString(recette.groupeManquant).data());
+    bool bonneReponse = demanderAliment(recette.groupeManquant);
 
-    if(bonneReponse)    LCD_Printf("Bravo!");
-    else                LCD_Printf("Faux!");
+    afficherReponse(bonneReponse, recette);
 
-    LCD_Printf("La bonne reponse est %s", exempleAliment(recette.groupeManquant).data());
+}
+
+void Robot::jeuQuiDemandeGroupe()
+{
+    //Selectionner une recette au hasard
+    int numeroDeRecette = random(0, recettes.size()-1);
+    Recette& recette = recettes.at(numeroDeRecette);
+
+    //Afficher la recette
+    afficherRecette(recette);
+
+    //Demander groupe alimentaire manquant
+    LCD_Printf("Il manque un groupe alimentaire. Lequel? \n");
+    bool bonneReponse = demanderGroupeAlimentaire(recette.groupeManquant);
+
+    afficherReponse(bonneReponse, recette);
+}
+
+void Robot::afficherReponse(bool bonnereponse, Recette recette)
+{
+    if(bonnereponse)
+    {
+    	LCD_Printf("Bravo!\n");
+    	delFlash(DEL_O, 3000);
+    }
+    else
+    {
+    	LCD_Printf("Faux!\n");
+        LCD_Printf("La bonne reponse est: %s ", toString(recette.groupeManquant).data());
+
+    	delFlash(DEL_X, 3000);
+    }
+    //_parcours.deplacer(bonnereponse);
 }
 
 void Robot::initRecettes(vector<Recette>& recettes)
