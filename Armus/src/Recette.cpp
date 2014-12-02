@@ -104,11 +104,11 @@ string exempleAliment(GroupeAlimentaire aliment)
 
 void afficherRecette(const Recette& recette)
 {
-    LCD_Printf("%s", recette.nom.data());
-    if(recette.groupeManquant != VIANDE)        LCD_Printf("%s\t", toString(recette.viande).data());
-    if(recette.groupeManquant != LEGUME_FRUIT)  LCD_Printf("%s\t", toString(recette.legumeFruit).data());
-    if(recette.groupeManquant != LAITIER)       LCD_Printf("%s\t", toString(recette.laitier).data());
-    if(recette.groupeManquant != CEREALIER)     LCD_Printf("%s\t", toString(recette.cerealier).data());
+    LCD_Printf("%s ", recette.nom.data());
+    if(recette.groupeManquant != VIANDE)        LCD_Printf("%s \t", toString(recette.viande).data());
+    if(recette.groupeManquant != LEGUME_FRUIT)  LCD_Printf("%s \t", toString(recette.legumeFruit).data());
+    if(recette.groupeManquant != LAITIER)       LCD_Printf("%s \t", toString(recette.laitier).data());
+    if(recette.groupeManquant != CEREALIER)     LCD_Printf("%s \t", toString(recette.cerealier).data());
 
     LCD_Printf("\n");
 }

@@ -40,7 +40,7 @@ public:
     int playGagne(THREAD* thread);
     int playFact(THREAD* thread);
     //Return duration of file in ms or -1 if fine ddint exist
-    int getFileDuration(std::string fileName);
+    int getFileDuration(string fileName);
 
 private:
     int m_threadID;

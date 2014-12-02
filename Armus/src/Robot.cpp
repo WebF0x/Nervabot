@@ -9,10 +9,9 @@
 
 using namespace std;
 
-Robot::Robot(bool isArmu022)
+Robot::Robot()
 {
-	if(isArmu022) initB();
-	else initA();
+	AUDIO_SetVolume(100);
 }
 
 void Robot::stop()
@@ -470,9 +469,41 @@ bool Robot::demanderGroupeAlimentaire(GroupeAlimentaire groupe)
 
 bool Robot::demanderAliment(GroupeAlimentaire groupe)
 {
-	int choix = choixMenu(SERVO_605);
+	//int choix = choixMenu(SERVO_605);
 
-	return (choix-1==groupe);
+	//return (choix-1==groupe);
+	GroupeAlimentaire choix;
+
+	LCD_Printf("Front: Viande\nRear: Legume_fruit\nLeft: Laitier\nRight: Cerealier\n");
+
+	while (true)
+	{
+		if(DIGITALIO_Read(BMP_FRONT))
+		{
+			choix = VIANDE;
+			break;
+		}
+		else if (DIGITALIO_Read(BMP_REAR))
+		{
+			choix = LEGUME_FRUIT;
+			break;
+		}
+		else if (DIGITALIO_Read(BMP_LEFT))
+		{
+			choix = LAITIER;
+			break;
+		}
+		else if (DIGITALIO_Read(BMP_RIGHT))
+		{
+			choix = CEREALIER;
+			break;
+		}
+		THREAD_MSleep(100);
+	}
+
+	LCD_Printf("Choisi: %i\n", choix);
+
+	return (choix == groupe);
 }
 
 void Robot::initJeu()
@@ -487,11 +518,30 @@ void Robot::jeuRecette()
 	//Attendre le signal avant et arrière
 	capteurAttendreDebut();
 
-	jeuQuiDemandeGroupe();
+	bool reponse1 = jeuQuiDemandeGroupe();
+	//bool reponse2 = jeuQuiDemandeAliment();
+
+	// si les 2 réponse sont bonne, le robot avant de une position
+	/*if(reponse1 && reponse2)
+	{
+		_parcours.deplacer(true);
+	}
+	//si il a 2 mauvaise réponse il recule
+	else if(!reponse1 && !reponse2)
+	{
+		_parcours.deplacer(false);
+	}
+	//Si il a une bonne et une mauvaise il fait rien
+	else
+	{
+	}*/
+
 }
 
-void Robot::jeuQuiDemandeAliment()
+bool Robot::jeuQuiDemandeAliment()
 {
+	THREAD t1;
+
     //Selectionner une recette au hasard
     int numeroDeRecette = random(0, recettes.size()-1);
     Recette& recette = recettes.at(numeroDeRecette);
@@ -507,22 +557,31 @@ void Robot::jeuQuiDemandeAliment()
 
     afficherReponse(bonneReponse, recette);
 
+    return bonneReponse;
 }
 
-void Robot::jeuQuiDemandeGroupe()
+bool Robot::jeuQuiDemandeGroupe()
 {
+	THREAD t1;
     //Selectionner une recette au hasard
     int numeroDeRecette = random(0, recettes.size()-1);
     Recette& recette = recettes.at(numeroDeRecette);
 
     //Afficher la recette
     afficherRecette(recette);
+    //Entendre la recette
+    int t = voice.playQuestionRecette(&t1, &t1, numeroDeRecette + 1);
+    LCD_Printf("temps de parler: %i\n", t);
+    delFlash(DEL_O, 2000);
+    pthread_join(t1, NULL);
 
     //Demander groupe alimentaire manquant
     LCD_Printf("Il manque un groupe alimentaire. Lequel? \n");
     bool bonneReponse = demanderGroupeAlimentaire(recette.groupeManquant);
 
     afficherReponse(bonneReponse, recette);
+
+    return bonneReponse;
 }
 
 void Robot::afficherReponse(bool bonnereponse, Recette recette)
@@ -539,7 +598,6 @@ void Robot::afficherReponse(bool bonnereponse, Recette recette)
 
     	delFlash(DEL_X, 3000);
     }
-    //_parcours.deplacer(bonnereponse);
 }
 
 void Robot::initRecettes(vector<Recette>& recettes)

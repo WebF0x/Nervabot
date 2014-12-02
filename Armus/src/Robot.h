@@ -45,15 +45,15 @@ public:
 
 class Robot
 {
-	void jeuQuiDemandeGroupe();
-	void jeuQuiDemandeAliment();
+	bool jeuQuiDemandeGroupe();
+	bool jeuQuiDemandeAliment();
 	void afficherReponse(bool bonnereponse, Recette recette);
     //Definir les recettes
     vector<Recette> recettes;
 public:
 	Voice voice;
 
-	Robot(bool isArmu022);
+	Robot();
 
 	void dispSpeedDifferences();
 	void stop();
