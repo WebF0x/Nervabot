@@ -21,6 +21,7 @@
 #include "Del.h"
 #include "CapteurInfrarouge.h"
 #include <string>
+#include "voice.h"
 
 class Robot;
 
@@ -45,6 +46,8 @@ public:
 class Robot
 {
 public:
+	Voice voice;
+
 	Robot(bool isArmu022);
 
 	void dispSpeedDifferences();
@@ -105,7 +108,6 @@ public:
 	*/
 
 private:
-
 	Parcours _parcours;
 	float m_posX,m_posY;
 	float m_orientation;

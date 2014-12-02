@@ -12,10 +12,10 @@
 #include <iostream>
 #include <string>
 #include <unistd.h>
+#include <queue>
 
 #include <libarmus.h>
 #include "audioFileInfo.h"
-#include "Robot.h"
 
 class Voice
 {
@@ -27,16 +27,48 @@ class Voice
 
     void playNumber(int cent, int number);
     
-    public:
+public:
     Voice();
-    int play(std::string fileName);
-    int play(int);
-    int playQuestionRecette(int numeroRecette);
-    int playReponseRecette(int numeroRecette);
-    int playPerdre();
-    int playGagne();
-    int playFact();
+
+    //Jouer un fichier en parallèle dans un thread
+    bool threadedPlay(THREAD* thread, std::string fileName);
+
+    int play(THREAD* thread, int);	//Jouer un nombre
+    int playQuestionRecette(THREAD* thread, THREAD* thread2, int numeroRecette);
+    int playReponseRecette(THREAD* thread, int numeroRecette);
+    int playPerdre(THREAD* thread);
+    int playGagne(THREAD* thread);
+    int playFact(THREAD* thread);
     //Return duration of file in ms or -1 if fine ddint exist
     int getFileDuration(std::string fileName);
+
+private:
+    int m_threadID;
+
+    int play(std::string fileName, int id);	//Toujours appeler cette methode dans un thread sinon elle bloque l'execution du programme
+
+    /* To use a thread we must pass as parameters a pointer to itself and our parameters */
+	template <typename T>
+	struct ThreadArg
+	{
+		Voice * voicePtr;
+		T var;
+		int id;
+	};
+
+	//This method takes care of freeing up "arg"
+	template<typename T>
+	static void * InternalThreadEntryPassArg(void * arg)
+	{
+		ThreadArg<T> arguments;
+		arguments.voicePtr = ((ThreadArg<T> *)arg)->voicePtr;
+		arguments.var = ((ThreadArg<T> *)arg)->var;
+		arguments.id = ((ThreadArg<T> *)arg)->id;
+
+		arguments.voicePtr->play(arguments.var, arguments.id);
+
+		delete ((ThreadArg<T> *)arg);
+		return NULL;
+	}
 };
 #endif
