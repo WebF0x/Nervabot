@@ -526,23 +526,11 @@ void Robot::jeuRecette()
 	//Attendre le signal avant et arrière
 	capteurAttendreDebut();
 
-	bool reponse1 = jeuQuiDemandeGroupe();
+	bool bonnereponse = jeuQuiDemandeGroupe();
 	//bool reponse2 = jeuQuiDemandeAliment();
 
-	// si les 2 réponse sont bonne, le robot avant de une position
-	/*if(reponse1 && reponse2)
-	{
-		_parcours.deplacer(true);
-	}
-	//si il a 2 mauvaise réponse il recule
-	else if(!reponse1 && !reponse2)
-	{
-		_parcours.deplacer(false);
-	}
-	//Si il a une bonne et une mauvaise il fait rien
-	else
-	{
-	}*/
+	// si il a une bonne réponse le robot avance sinon il recule
+	_parcours.deplacer(bonnereponse);
 
 }
 
