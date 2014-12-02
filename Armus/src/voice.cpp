@@ -100,7 +100,7 @@ int Voice::playQuestionRecette(THREAD* thread1, THREAD* thread2, THREAD* thread3
     threadedPlay(thread2, temp2);
 
     string temp3;
-    temp2 = "questionRecetteFin";
+    temp3 = "questionRecetteFin";
     threadedPlay(thread3, temp3);
 
     return getFileDuration(temp1)+getFileDuration(temp2)+getFileDuration(temp3);
@@ -109,7 +109,7 @@ int Voice::playQuestionRecette(THREAD* thread1, THREAD* thread2, THREAD* thread3
 int Voice::playReponseRecette(THREAD* thread, int numeroRecette)
 {
     char buffer[4];
-    snprintf(buffer, 10, "%d", numeroRecette+1);
+    snprintf(buffer, 10, "%d", numeroRecette);
     string temp, temp2;
     temp = "recette";
     temp2 = "reponse";
@@ -117,40 +117,79 @@ int Voice::playReponseRecette(THREAD* thread, int numeroRecette)
     threadedPlay(thread, temp);
     return getFileDuration(temp);
 }
-int Voice::playPerdre(THREAD* thread)
+int Voice::playPerdre(THREAD* thread1, THREAD* thread2)
+{
+    string temp1;
+    temp1 = "perdreSound";
+    threadedPlay(thread1, temp1);
+    
+    char buffer[4];
+    int i = random2(1,3);
+    snprintf(buffer, 10, "%d", i);
+    string temp2;
+    temp2 = "perdre";
+    temp2 = temp2+buffer;
+    threadedPlay(thread2, temp2);
+    return getFileDuration(temp1)+getFileDuration(temp2);
+}
+int Voice::playGagne(THREAD* thread1, THREAD* thread2)
+{
+    string temp1;
+    temp1 = "gagneSound";
+    threadedPlay(thread1, temp1);
+    
+    char buffer[4];
+    int i = random2(1,3);
+    snprintf(buffer, 10, "%d", i);
+    string temp2;
+    temp2 = "gagne";
+    temp2 = temp2+buffer;
+    threadedPlay(thread2, temp2);
+    return getFileDuration(temp1)+getFileDuration(temp2);
+}
+int Voice::playPays(THREAD* thread, int numeroPays)
+{
+    char buffer1[4];
+    int i = numeroPays;
+    snprintf(buffer1, 10, "%d", i);
+    
+    char buffer2[4];
+    i = random2(1,2);
+    snprintf(buffer2, 10, "%d", i);
+    
+    string temp;
+    temp = "pays";
+    temp = temp+buffer1+buffer2;
+    threadedPlay(thread, temp);
+    
+    return getFileDuration(temp);
+}
+int Voice::playAvance(THREAD* thread)
 {
     char buffer[4];
     int i = random2(1,3);
     snprintf(buffer, 10, "%d", i);
+    
     string temp;
-    temp = "perdre";
+    temp = "avance";
     temp = temp+buffer;
     threadedPlay(thread, temp);
+    
     return getFileDuration(temp);
 }
-int Voice::playGagne(THREAD* thread)
+int Voice::playRecule(THREAD* thread)
 {
     char buffer[4];
     int i = random2(1,3);
     snprintf(buffer, 10, "%d", i);
+    
     string temp;
-    temp = "gagne";
+    temp = "recule";
     temp = temp+buffer;
     threadedPlay(thread, temp);
+    
     return getFileDuration(temp);
 }
-int Voice::playFact(THREAD* thread)
-{
-    char buffer[4];
-    int i = random2(1,info.nbFact);
-    snprintf(buffer, 10, "%d", i);
-    string temp;
-    temp = "fact";
-    temp = temp+buffer;
-    threadedPlay(thread, temp);
-    return getFileDuration(temp);
-}
-
 int Voice::getFileDuration(string fileName)
 {
     fileName = fileName + audioFileFormat;

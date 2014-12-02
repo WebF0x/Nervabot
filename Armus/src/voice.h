@@ -36,9 +36,12 @@ public:
     int play(THREAD* thread, int);	//Jouer un nombre
     int playQuestionRecette(THREAD* thread, THREAD* thread2, THREAD* thread3,  int numeroRecette);
     int playReponseRecette(THREAD* thread, int numeroRecette);
-    int playPerdre(THREAD* thread);
-    int playGagne(THREAD* thread);
-    int playFact(THREAD* thread);
+    int playPerdre(THREAD* thread1, THREAD* thread2);
+    int playGagne(THREAD* thread1, THREAD* thread2);
+    int playPays(THREAD* thread1, int numeroPays);
+    int playAvance(THREAD* thread1);
+    int playRecule(THREAD* thread1);
+
     //Return duration of file in ms or -1 if fine ddint exist
     int getFileDuration(string fileName);
 

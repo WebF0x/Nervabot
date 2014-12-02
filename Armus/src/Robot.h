@@ -45,8 +45,7 @@ public:
 
 class Robot
 {
-	bool jeuQuiDemandeGroupe();
-	bool jeuQuiDemandeAliment();
+	bool jeuQuestion();
 	void afficherReponse(bool bonnereponse, Recette recette);
     //Definir les recettes
     vector<Recette> recettes;
