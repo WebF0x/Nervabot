@@ -136,8 +136,6 @@ private:
 	static const int BLEU = 0;
 	static const float FLECHE_CIBLE = 30.f;
 
-	bool m_isArmu022;
-
 	/* To use a thread we must pass as parameteres a pointer to itself and our parameters */
 	template <typename T>
 	struct ThreadArg

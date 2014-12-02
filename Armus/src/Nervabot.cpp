@@ -13,7 +13,6 @@ using namespace std;
 int main()
 {
 	Robot robot;
-	AUDIO_SetVolume(100);
 
 	robot.initJeu();
 	robot.jeuRecette();
