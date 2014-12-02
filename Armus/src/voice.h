@@ -17,15 +17,11 @@
 #include "audioFileInfo.h"
 #include "Robot.h"
 
-using namespace std;
-
-
-
 class Voice
 {
     private:
-    string audioFileFormat;
-    string andioFileDirectory;
+    std::string audioFileFormat;
+    std::string andioFileDirectory;
  
     audioFileInfo info;
 
@@ -33,7 +29,7 @@ class Voice
     
     public:
     Voice();
-    int play(string fileName);
+    int play(std::string fileName);
     int play(int);
     int playQuestionRecette(int numeroRecette);
     int playReponseRecette(int numeroRecette);
@@ -41,6 +37,6 @@ class Voice
     int playGagne();
     int playFact();
     //Return duration of file in ms or -1 if fine ddint exist
-    int getFileDuration(string fileName);
+    int getFileDuration(std::string fileName);
 };
 #endif
