@@ -567,14 +567,16 @@ bool Robot::jeuQuiDemandeGroupe()
     int numeroDeRecette = random(0, recettes.size()-1);
     Recette& recette = recettes.at(numeroDeRecette);
 
-    //Afficher la recette
+    //Afficher la recette a l'écran
     afficherRecette(recette);
     //L'audio de la recette est joué
     int tempsAudio = voice.playQuestionRecette(&t1, &t1, numeroDeRecette + 1);
+
     //information de debug
     LCD_Printf("temps de parler: %i\n", tempsAudio);
     //test de l'efficacité du thread
     delFlash(DEL_O, tempsAudio);
+
     //Call bloquant où on attent que le thread ait fini de faire jouer l'audio
     pthread_join(t1, NULL);
 
