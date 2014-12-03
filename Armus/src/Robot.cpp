@@ -45,18 +45,18 @@ void Robot::avancer(float distance)
 		{
 			if(nbLeftTotal < nbRightTotal)
 			{
-				MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
+				MOTOR_SetSpeed(MOTOR_LEFT, -speedLeft);
 				MOTOR_SetSpeed(MOTOR_RIGHT, 0);
 			}
 			else if(nbLeftTotal > nbRightTotal)
 			{
 				MOTOR_SetSpeed(MOTOR_LEFT, 0);
-				MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
+				MOTOR_SetSpeed(MOTOR_RIGHT, -speedRight);
 			}
 			else
 			{
-				MOTOR_SetSpeed(MOTOR_LEFT, speedLeft);
-				MOTOR_SetSpeed(MOTOR_RIGHT, speedRight);
+				MOTOR_SetSpeed(MOTOR_LEFT, -speedLeft);
+				MOTOR_SetSpeed(MOTOR_RIGHT, -speedRight);
 			}
 				nbLeft = ENCODER_Read(ENCODER_LEFT);
 				nbRight = ENCODER_Read(ENCODER_RIGHT);

@@ -1,11 +1,11 @@
 //#include "Parcours.h"
 #include "Robot.h"
 
-Parcours::Parcours():_pos(4), _r(NULL), _derniereReponse(true)
+Parcours::Parcours():_pos(3), _r(NULL), _derniereReponse(false)
 {
 }
 
-Parcours::Parcours(unsigned int pos): _pos(pos), _r(NULL), _derniereReponse(true)
+Parcours::Parcours(unsigned int pos): _pos(pos), _r(NULL), _derniereReponse(false)
 {
 }
 
@@ -21,17 +21,18 @@ void Parcours::initRobot(Robot* r)
 
 void Parcours::deplacer(bool reponsecourrante)
 {
+	LCD_Printf("Position: %i: \n", _pos);
 	if(_pos > 0 && _pos < 8)
 	{
 		if (reponsecourrante)
 		{
-            reculerRobot();
+			avancerRobot();
 		}
 		else
 		{
-            avancerRobot();
+            reculerRobot();
 		}
-		_derniereReponse = reponsecourrante;
+		_derniereReponse = !reponsecourrante;
 	}
 	else
 	{
@@ -43,7 +44,7 @@ void Parcours::avancerRobot()
 {
 	//if(_pos != 4)
 	//{
-		if(_derniereReponse == false)
+		if(_derniereReponse == true)
 		{
 			_r->tournerSurPlace(180);
 		}
@@ -70,11 +71,11 @@ void Parcours::reculerRobot()
 {
 	//if(_pos != 4)
 	//{
-		if(_derniereReponse == true)
+		if(_derniereReponse == false)
 		{
 			_r->tournerSurPlace(180);
 		}
-		_r->avancer(50);
+		_r->avancer(35);
 	/*}
 	else
 	{
