@@ -36,7 +36,6 @@ int choixMenu(int servomoteur)
 	SERVO_Enable(servomoteur);
 	setAngleAjuste(servomoteur, 0);
 
-	//int angle = 0;
 	int choix = 1;
 
 	LCD_Printf("CHOIX #%d\n", choix);
@@ -49,10 +48,8 @@ int choixMenu(int servomoteur)
 
 		if(ANALOG_Read(BOUTON_CHOIX) != 0) // Si on appuie sur le bouton choix
 		{
-			//angle = angle + 60; //Le servo tourne de 60° pour montrer le choix suivant
-			if(choix > 4)	//angle > 180) // Si on est rendu au 4e choix et qu'on appuie encore, on retourne au choix #1
+			if(choix >= 4)	//angle > 180) // Si on est rendu au 4e choix et qu'on appuie encore, on retourne au choix #1
 			{
-				//angle = 0;
 				choix = 1;
 			}
 			else
