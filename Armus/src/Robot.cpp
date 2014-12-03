@@ -542,6 +542,7 @@ void Robot::jeuRecette()
         while(continuerPartie)
         {
             voice.playPays(&t1, nbPays);
+            pthread_join(t1, NULL);
             bool bonnereponse = jeuQuestion();
             
             //avancer ou reculer et affectant nbPays
@@ -604,6 +605,8 @@ bool Robot::jeuQuestion()
     {
 		//Demander groupe alimentaire manquant
 		LCD_Printf("Quel aliment fait parti du groupe: %s ?\n", toString(recette.groupeManquant).data());
+		voice.threadedPlay(&t1, "questionAliment");
+		pthread_join(t1, NULL);
 		bonneReponse = demanderAliment(recette.groupeManquant);
 
 		direReponse(bonneReponse, recette, numeroDeRecette);
@@ -632,9 +635,8 @@ void Robot::direReponse(bool bonnereponse, Recette recette, int numeroDeRecette)
     	delFlash(DEL_X, flashingTime);
         pthread_join(t1, NULL);
 
-        voice.playReponseRecette(&t1, numeroDeRecette);
-    	pthread_join(t1, NULL);
-    	LCD_Printf("allo\n");
+        voice.playReponseRecette(&t2, numeroDeRecette);
+    	pthread_join(t2, NULL);
     }
 }
 

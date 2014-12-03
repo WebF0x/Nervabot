@@ -104,7 +104,7 @@ string exempleAliment(GroupeAlimentaire aliment)
 
 void afficherRecette(const Recette& recette)
 {
-    LCD_Printf("%s: ", recette.nom.data());
+    LCD_ClearAndPrint("%s: ", recette.nom.data());
     if(recette.groupeManquant != VIANDE)        LCD_Printf("%s ", toString(recette.viande).data());
     if(recette.groupeManquant != LEGUME_FRUIT)  LCD_Printf("%s ", toString(recette.legumeFruit).data());
     if(recette.groupeManquant != LAITIER)       LCD_Printf("%s ", toString(recette.laitier).data());
