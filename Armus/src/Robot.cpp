@@ -472,13 +472,13 @@ bool Robot::demanderGroupeAlimentaire(GroupeAlimentaire groupe)
 
 bool Robot::demanderAliment(GroupeAlimentaire groupe)
 {
-	//int choix = choixMenu(SERVO_605);
+	int choix = choixMenu(SERVO_605);
 
-	//return (choix-1==groupe);
+	return (choix-1==groupe);
 
 
 	/******* On utilise les bumper au lieu des servo moteur pour des fin de debug *******/
-	GroupeAlimentaire choix;
+	/*GroupeAlimentaire choix;
 
 	LCD_Printf("Front: Viande\nRear: Legume_fruit\nLeft: Laitier\nRight: Cerealier\n");
 
@@ -509,7 +509,7 @@ bool Robot::demanderAliment(GroupeAlimentaire groupe)
 
 	LCD_Printf("Choisi: %i\n", choix);
 
-	return (choix == groupe);
+	return (choix == groupe);*/
 }
 
 // initialisation du jeu nécéssaire
@@ -526,6 +526,7 @@ void Robot::jeuRecette()
     bool continuerJouer = true;
     while(continuerJouer)
     {
+        LCD_ClearAndPrint("");
         THREAD t1, t2;
         //Attendre le signal avant et arrière
         capteurAttendreDebut();
@@ -582,7 +583,7 @@ bool Robot::jeuQuestion()
 {
 	THREAD t1, t2;
     //Selectionner une recette au hasard
-    int numeroDeRecette = random(0, recettes.size()-1);
+    int numeroDeRecette = random(1, recettes.size()-1);
     Recette& recette = recettes.at(numeroDeRecette);
 
     //Afficher la recette a l'écran
@@ -599,6 +600,14 @@ bool Robot::jeuQuestion()
 
     direReponse(bonneReponse, recette, numeroDeRecette);
 
+    if (bonneReponse)
+    {
+		//Demander groupe alimentaire manquant
+		LCD_Printf("Quel aliment fait parti du groupe: %s ?\n", toString(recette.groupeManquant).data());
+		bonneReponse = demanderAliment(recette.groupeManquant);
+
+		direReponse(bonneReponse, recette, numeroDeRecette);
+    }
     return bonneReponse;
 }
 
@@ -625,6 +634,7 @@ void Robot::direReponse(bool bonnereponse, Recette recette, int numeroDeRecette)
 
         voice.playReponseRecette(&t1, numeroDeRecette);
     	pthread_join(t1, NULL);
+    	LCD_Printf("allo\n");
     }
 }
 

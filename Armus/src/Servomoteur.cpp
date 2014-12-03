@@ -35,11 +35,12 @@ int choixMenu(int servomoteur)
 {
 	SERVO_Enable(servomoteur);
 	setAngleAjuste(servomoteur, 0);
+	bool choixValider = false;
 
 	int choix = 1;
 
-	LCD_Printf("1: %i: CHOIX #%d\n",servomoteur, choix);
-	while(true)
+	//LCD_Printf("1: %i: CHOIX #%d\n",servomoteur, choix);
+	while(!choixValider)
 	{
 		while(ANALOG_Read(BOUTON_CHOIX) == 0 && ANALOG_Read(BOUTON_VALIDER) == 0)
 		{
@@ -59,18 +60,45 @@ int choixMenu(int servomoteur)
 
 			setAngleAjuste(servomoteur, (choix-1)*60);
 			//setAngleAjuste(servomoteur, angle);
-			THREAD_MSleep(500);
+			THREAD_MSleep(250);
 
-			LCD_Printf("1: %i: CHOIX #%d\n",servomoteur, choix);
+			//LCD_Printf("2: %i: CHOIX #%d\n",servomoteur, choix);
 		}
 		if(ANALOG_Read(BOUTON_VALIDER) != 0) // Si on appuie sur le bouton valider
 		{
-			LCD_Printf("Vous avez fait le Choix #%d\n", choix);
-			break; // On valide le choix et on sort de la fonction
+			choixValider = true; // On valide le choix et on sort de la fonction
 		}
 	}
 
+	if (servomoteur == SERVO_605)
+	{
+		choix = convertToServo605(choix);
+	}
+
+	LCD_Printf("Vous avez fait le Choix #%d\n", choix);
 	SERVO_Disable(servomoteur);
+	return choix;
+}
+
+int convertToServo605(int choix)
+{
+	if (choix == 1)
+	{
+		choix = 3;
+	}
+	else if(choix == 2)
+	{
+		choix = 4;
+	}
+	else if(choix == 3)
+	{
+		choix = 1;
+	}
+	else if(choix == 4)
+	{
+		choix = 2;
+	}
+
 	return choix;
 }
 

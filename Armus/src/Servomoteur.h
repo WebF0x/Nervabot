@@ -24,6 +24,8 @@ const int SERVO_605 		= 10;	//Connecteur A25
 const int BOUTON_CHOIX 		= 3;
 const int BOUTON_VALIDER 	= 4;
 
+int convertToServo605(int choix);
+
 void setAngleServo325(int angle);
 void setAngleServo605(int angle);
 void setAngleAjuste(int servo, int angle);

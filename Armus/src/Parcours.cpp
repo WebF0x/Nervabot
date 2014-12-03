@@ -25,12 +25,10 @@ void Parcours::deplacer(bool reponsecourrante)
 	{
 		if (reponsecourrante)
 		{
-			LCD_Printf("Le robot avance. Pos: %i\n", _pos);
 			//avancerRobot();
 		}
 		else
 		{
-			LCD_Printf("Le robot recule. Pos: %i\n", _pos);
 			//reculerRobot();
 		}
 		_derniereReponse = reponsecourrante;
@@ -39,7 +37,6 @@ void Parcours::deplacer(bool reponsecourrante)
 	{
 		LCD_Printf("Hors position\n");
 	}
-	LCD_Printf("position:%i\n", _pos);
 }
 
 void Parcours::avancerRobot()
