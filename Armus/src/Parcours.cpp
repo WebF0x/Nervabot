@@ -21,15 +21,17 @@ void Parcours::initRobot(Robot* r)
 
 void Parcours::deplacer(bool reponsecourrante)
 {
-	if(_pos > 1 && _pos < 7)
+	if(_pos > 0 && _pos < 8)
 	{
 		if (reponsecourrante)
 		{
-			avancerRobot();
+			LCD_Printf("Le robot avance. Pos: %i\n", _pos);
+			//avancerRobot();
 		}
 		else
 		{
-			reculerRobot();
+			LCD_Printf("Le robot recule. Pos: %i\n", _pos);
+			//reculerRobot();
 		}
 		_derniereReponse = reponsecourrante;
 	}

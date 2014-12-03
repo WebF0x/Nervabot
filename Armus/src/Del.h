@@ -10,9 +10,9 @@
 
 #include <libarmus.h>
 
-const int LAMBDA = 500;
-const int DEL_O = 9;
-const int DEL_X = 10;
+const int LAMBDA 	= 500;
+const int DEL_O 	= 10;
+const int DEL_X 	= 9;
 
 void delFlash(int delId, int duree);
 void delOpen(int sortie);

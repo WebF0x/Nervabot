@@ -38,12 +38,12 @@ int choixMenu(int servomoteur)
 
 	int choix = 1;
 
-	LCD_Printf("CHOIX #%d\n", choix);
+	LCD_Printf("1: %i: CHOIX #%d\n",servomoteur, choix);
 	while(true)
 	{
 		while(ANALOG_Read(BOUTON_CHOIX) == 0 && ANALOG_Read(BOUTON_VALIDER) == 0)
 		{
-			THREAD_MSleep(20);
+			THREAD_MSleep(50);
 		}
 
 		if(ANALOG_Read(BOUTON_CHOIX) != 0) // Si on appuie sur le bouton choix
@@ -61,7 +61,7 @@ int choixMenu(int servomoteur)
 			//setAngleAjuste(servomoteur, angle);
 			THREAD_MSleep(500);
 
-			LCD_Printf("CHOIX #%d\n", choix);
+			LCD_Printf("1: %i: CHOIX #%d\n",servomoteur, choix);
 		}
 		if(ANALOG_Read(BOUTON_VALIDER) != 0) // Si on appuie sur le bouton valider
 		{

@@ -17,6 +17,8 @@ int main()
 	while(true)
 	{
 		LCD_Printf("%d\n", choixMenu(SERVO_325));
+		LCD_Printf("%d\n", choixMenu(SERVO_605));
+		THREAD_MSleep(150);
 	}
 
 	THREAD_MSleep(5000);

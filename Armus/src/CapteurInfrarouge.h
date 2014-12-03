@@ -11,6 +11,10 @@
 
 #include <libarmus.h>
 
+
+const int CAPTEUR_GAUCHE 	= 1;
+const int CAPTEUR_DROIT 	= 2;
+
 bool capteurInfrarouge(int entree,int distance);
 bool capteurAttendreDebut();
 

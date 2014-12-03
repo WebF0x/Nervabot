@@ -25,8 +25,8 @@ bool capteurAttendreDebut()
 
 	while(capteur1ready == false && capteur2ready == false)
 	{
-		capteur1ready = capteurInfrarouge(1,260);
-		capteur2ready = capteurInfrarouge(2,260);
+		capteur1ready = capteurInfrarouge(CAPTEUR_GAUCHE,260);
+		capteur2ready = capteurInfrarouge(CAPTEUR_DROIT,260);
 		THREAD_MSleep(50);
 	}
 

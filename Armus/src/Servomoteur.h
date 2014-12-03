@@ -11,18 +11,18 @@
 #include <libarmus.h>
 
 //Trouver experimentalement
-const int DEBUT_325 = (-43);//Tested for 180 degrees
-const int FIN_325 = (110);	//Tested for 180 degrees
-const int DEBUT_605 = (-5);	//Tested for 180 degrees
-const int FIN_605 = (135);	//Tested for 180 degrees
+const int DEBUT_325 = (-43); //Tested for 180 degrees
+const int FIN_325 	= (110); //Tested for 180 degrees
+const int DEBUT_605 = (-5);	 //Tested for 180 degrees
+const int FIN_605 	= (135); //Tested for 180 degrees
 
 
 //Branchement du fil jaune du servomoteur
-const int SERVO_325 = 9;	//Connecteur A26
-const int SERVO_605 = 10;	//Connecteur A25
+const int SERVO_325 		= 9;	//Connecteur A26
+const int SERVO_605 		= 10;	//Connecteur A25
 
-const int BOUTON_CHOIX = 2;
-const int BOUTON_VALIDER = 3;
+const int BOUTON_CHOIX 		= 3;
+const int BOUTON_VALIDER 	= 4;
 
 void setAngleServo325(int angle);
 void setAngleServo605(int angle);

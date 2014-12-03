@@ -431,12 +431,12 @@ void Robot::printPosition()
 
 bool Robot::demanderGroupeAlimentaire(GroupeAlimentaire groupe)
 {
-	//int choix = choixMenu(SERVO_325);
+	int choix = choixMenu(SERVO_325);
 
-	//return (choix-1==groupe);
+	return (choix-1==groupe);
 
 	/******* On utilise les bumper au lieu des servo moteur pour des fin de debug *******/
-	GroupeAlimentaire choix;
+	/*GroupeAlimentaire choix;
 
     LCD_Printf("Front: Viande\nRear: Legume_fruit\nLeft: Laitier\nRight: Cerealier\n");
 
@@ -467,7 +467,7 @@ bool Robot::demanderGroupeAlimentaire(GroupeAlimentaire groupe)
 
 	LCD_Printf("Choisi: %i\n", choix);
 
-	return (choix == groupe);
+	return (choix == groupe);*/
 }
 
 bool Robot::demanderAliment(GroupeAlimentaire groupe)
@@ -535,12 +535,12 @@ void Robot::jeuRecette()
         pthread_join(t1, NULL);
         voice.threadedPlay(&t1, "introQuestion");
         pthread_join(t1, NULL);
-        
+
         int nbPays = 5;//Commence a ce pays
         bool continuerPartie = true;
         while(continuerPartie)
         {
-            //voice.playPays(&t1, nbPays);
+            voice.playPays(&t1, nbPays);
             bool bonnereponse = jeuQuestion();
             
             //avancer ou reculer et affectant nbPays
@@ -584,17 +584,12 @@ bool Robot::jeuQuestion()
     //Selectionner une recette au hasard
     int numeroDeRecette = random(0, recettes.size()-1);
     Recette& recette = recettes.at(numeroDeRecette);
-    LCD_Printf("Numero recette: %d\n", numeroDeRecette);
+
     //Afficher la recette a l'écran
     afficherRecette(recette);
+
     //L'audio de la recette est joué
     int tempsAudio = voice.playQuestionRecette(&t1, &t1, &t1, numeroDeRecette);
-
-    //information de debug
-    LCD_Printf("temps de parler: %i\n", tempsAudio);
-    //test de l'efficacité du thread
-    delFlash(DEL_O, tempsAudio);
-
     //Call bloquant où on attent que le thread ait fini de faire jouer l'audio
     pthread_join(t1, NULL);
 
@@ -602,36 +597,34 @@ bool Robot::jeuQuestion()
     LCD_Printf("Il manque un groupe alimentaire. Lequel? \n");
     bool bonneReponse = demanderGroupeAlimentaire(recette.groupeManquant);
 
-    afficherReponse(bonneReponse, recette);
-    
-    if(bonneReponse)
-    {
-        voice.playGagne(&t1, &t2);
-    }
-    else
-    {
-        voice.playPerdre(&t1, &t2);
-    }
-    pthread_join(t1, NULL);
-    voice.playReponseRecette(&t1, numeroDeRecette);
-    pthread_join(t1, NULL);
+    direReponse(bonneReponse, recette, numeroDeRecette);
 
     return bonneReponse;
 }
 
-void Robot::afficherReponse(bool bonnereponse, Recette recette)
+void Robot::direReponse(bool bonnereponse, Recette recette, int numeroDeRecette)
 {
+	int flashingTime = 0;
+	THREAD t1, t2;
+
     if(bonnereponse)
     {
     	LCD_Printf("Bravo!\n");
-    	delFlash(DEL_O, 3000);
+    	flashingTime = voice.playGagne(&t1, &t2);
+    	delFlash(DEL_O, flashingTime);
+    	pthread_join(t1, NULL);
     }
     else
     {
     	LCD_Printf("Faux!\n");
-        LCD_Printf("La bonne reponse est: %s ", toString(recette.groupeManquant).data());
 
-    	delFlash(DEL_X, 3000);
+    	flashingTime = voice.playPerdre(&t1, &t2);
+        LCD_Printf("La bonne reponse est: %s ", toString(recette.groupeManquant).data());
+    	delFlash(DEL_X, flashingTime);
+        pthread_join(t1, NULL);
+
+        voice.playReponseRecette(&t1, numeroDeRecette);
+    	pthread_join(t1, NULL);
     }
 }
 
