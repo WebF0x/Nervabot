@@ -75,8 +75,8 @@ public:
 	float getX(){return m_posX;}
 	float getY(){return m_posY;}
 
-	bool demanderGroupeAlimentaire(GroupeAlimentaire groupe);
-	bool demanderAliment(GroupeAlimentaire groupe);
+	float demanderGroupeAlimentaire(GroupeAlimentaire groupe);
+	float demanderAliment(GroupeAlimentaire groupe);
 	void jeuRecette();
 	void initRecettes(std::vector<Recette>& recettes);
 	void initJeu();

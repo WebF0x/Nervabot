@@ -13,20 +13,28 @@ using namespace std;
 int main()
 {
 	Robot robot;
-
-	/*while(true)
+    Voice voice;
+    
+    SYSTEM_ResetTimer();
+    
+    while (true)
 	{
-		LCD_Printf("%d\n", choixMenu(SERVO_605));
-		THREAD_MSleep(500);
-		LCD_Printf("%d\n", choixMenu(SERVO_325));
-		THREAD_MSleep(500);
+		
+		if (DIGITALIO_Read(BMP_RIGHT))
+		{
+			break;
+		}
+        
 	}
-
-	THREAD_MSleep(5000);
-	return 0;*/
-
-	robot.initJeu();
-	robot.jeuRecette();
-
+    float temps = SYSTEM_ReadTimerMSeconds()/1000;
+    LCD_Printf("Temps: %f\n", temps);
+    
+    
+    THREAD t1, t2, t3;
+    voice.playTempsPartie(&t1, &t2, &t3, temps);
+    pthread_join(t3, NULL);
+    voice.playTempsQuestion(&t1, &t2, &t3, temps+10);
+    pthread_join(t3, NULL);
+    
 	return 0;
 }

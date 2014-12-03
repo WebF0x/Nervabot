@@ -429,16 +429,18 @@ void Robot::printPosition()
 	LCD_Printf("Position: %f , %f\nOrientation: %f\n", m_posX, m_posY, m_orientation);
 }
 
-bool Robot::demanderGroupeAlimentaire(GroupeAlimentaire groupe)
+float Robot::demanderGroupeAlimentaire(GroupeAlimentaire groupe)
 {
-	int choix = choixMenu(SERVO_325);
+	/*int choix = choixMenu(SERVO_325);
 
-	return (choix-1==groupe);
+	return (choix-1==groupe);*/
 
 	/******* On utilise les bumper au lieu des servo moteur pour des fin de debug *******/
-	/*GroupeAlimentaire choix;
+	GroupeAlimentaire choix;
 
     LCD_Printf("Front: Viande\nRear: Legume_fruit\nLeft: Laitier\nRight: Cerealier\n");
+    
+    SYSTEM_ResetTimer();
 
 	while (true)
 	{
@@ -464,21 +466,26 @@ bool Robot::demanderGroupeAlimentaire(GroupeAlimentaire groupe)
 		}
 		THREAD_MSleep(100);
 	}
-
+    
+    LCD_Printf("Temps: %f\n", SYSTEM_ReadTimerMSeconds()/1000);
 	LCD_Printf("Choisi: %i\n", choix);
-
-	return (choix == groupe);*/
+    
+    if(choix == groupe)
+        return SYSTEM_ReadTimerMSeconds()/1000;
+    else
+        return 0;
+	
 }
 
-bool Robot::demanderAliment(GroupeAlimentaire groupe)
+float Robot::demanderAliment(GroupeAlimentaire groupe)
 {
-	int choix = choixMenu(SERVO_605);
+	//int choix = choixMenu(SERVO_605);
 
-	return (choix-1==groupe);
+	//return (choix-1==groupe);
 
 
 	/******* On utilise les bumper au lieu des servo moteur pour des fin de debug *******/
-	/*GroupeAlimentaire choix;
+	GroupeAlimentaire choix;
 
 	LCD_Printf("Front: Viande\nRear: Legume_fruit\nLeft: Laitier\nRight: Cerealier\n");
 
@@ -509,7 +516,7 @@ bool Robot::demanderAliment(GroupeAlimentaire groupe)
 
 	LCD_Printf("Choisi: %i\n", choix);
 
-	return (choix == groupe);*/
+	return (choix == groupe);
 }
 
 // initialisation du jeu nécéssaire
@@ -526,23 +533,24 @@ void Robot::jeuRecette()
     bool continuerJouer = true;
     while(continuerJouer)
     {
-        LCD_ClearAndPrint("");
         THREAD t1, t2;
+        int tempsQuestion = 0;
+        int tempsTotalPartie = 0;
         //Attendre le signal avant et arrière
-        capteurAttendreDebut();
+        //capteurAttendreDebut();
         
         //Introduction au joueur(context, instruction, et intro au premier pays)
-        voice.threadedPlay(&t1, "intro");
+        /*voice.threadedPlay(&t1, "intro");
         pthread_join(t1, NULL);
         voice.threadedPlay(&t1, "introQuestion");
-        pthread_join(t1, NULL);
+        pthread_join(t1, NULL);*/
 
         int nbPays = 5;//Commence a ce pays
         bool continuerPartie = true;
         while(continuerPartie)
         {
-            voice.playPays(&t1, nbPays);
-            pthread_join(t1, NULL);
+            //voice.playPays(&t1, nbPays);
+ 
             bool bonnereponse = jeuQuestion();
             
             //avancer ou reculer et affectant nbPays
@@ -584,7 +592,7 @@ bool Robot::jeuQuestion()
 {
 	THREAD t1, t2;
     //Selectionner une recette au hasard
-    int numeroDeRecette = random(1, recettes.size()-1);
+    int numeroDeRecette = random(0, recettes.size()-1);
     Recette& recette = recettes.at(numeroDeRecette);
 
     //Afficher la recette a l'écran
@@ -601,16 +609,6 @@ bool Robot::jeuQuestion()
 
     direReponse(bonneReponse, recette, numeroDeRecette);
 
-    if (bonneReponse)
-    {
-		//Demander groupe alimentaire manquant
-		LCD_Printf("Quel aliment fait parti du groupe: %s ?\n", toString(recette.groupeManquant).data());
-		voice.threadedPlay(&t1, "questionAliment");
-		pthread_join(t1, NULL);
-		bonneReponse = demanderAliment(recette.groupeManquant);
-
-		direReponse(bonneReponse, recette, numeroDeRecette);
-    }
     return bonneReponse;
 }
 
@@ -635,8 +633,8 @@ void Robot::direReponse(bool bonnereponse, Recette recette, int numeroDeRecette)
     	delFlash(DEL_X, flashingTime);
         pthread_join(t1, NULL);
 
-        voice.playReponseRecette(&t2, numeroDeRecette);
-    	pthread_join(t2, NULL);
+        voice.playReponseRecette(&t1, numeroDeRecette);
+    	pthread_join(t1, NULL);
     }
 }
 

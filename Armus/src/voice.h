@@ -41,6 +41,9 @@ public:
     int playPays(THREAD* thread1, int numeroPays);
     int playAvance(THREAD* thread1);
     int playRecule(THREAD* thread1);
+    int playTempsQuestion(THREAD* thread1, THREAD* thread2, THREAD* thread3, float tempsQuestion);
+    int playTempsPartie(THREAD* thread1, THREAD* thread2, THREAD* thread3, float tempsPartie);
+    
 
     //Return duration of file in ms or -1 if fine ddint exist
     int getFileDuration(string fileName);
