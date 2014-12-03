@@ -12,8 +12,8 @@
 #include <libarmus.h>
 
 
-const int CAPTEUR_GAUCHE 	= 1;
-const int CAPTEUR_DROIT 	= 2;
+const int CAPTEUR_GAUCHE 	= 1; //connecteur D1
+const int CAPTEUR_DROIT 	= 2; //connecteur D2
 
 bool capteurInfrarouge(int entree,int distance);
 bool capteurAttendreDebut();
