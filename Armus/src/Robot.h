@@ -45,7 +45,7 @@ public:
 
 class Robot
 {
-	bool jeuQuestion();
+	float jeuQuestion();
 	void direReponse(bool bonnereponse, Recette recette, int numeroDeRecette);
     //Definir les recettes
     vector<Recette> recettes;

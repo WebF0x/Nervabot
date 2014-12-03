@@ -34,7 +34,7 @@ public:
     bool threadedPlay(THREAD* thread, std::string fileName);
 
     int play(THREAD* thread, int);	//Jouer un nombre
-    int playQuestionRecette(THREAD* thread, THREAD* thread2, THREAD* thread3,  int numeroRecette);
+    int playQuestionGroupe(THREAD* thread, THREAD* thread2, THREAD* thread3,  int numeroRecette);
     int playReponseRecette(THREAD* thread, int numeroRecette);
     int playPerdre(THREAD* thread1, THREAD* thread2);
     int playGagne(THREAD* thread1, THREAD* thread2);

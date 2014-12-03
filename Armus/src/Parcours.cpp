@@ -25,11 +25,11 @@ void Parcours::deplacer(bool reponsecourrante)
 	{
 		if (reponsecourrante)
 		{
-			//avancerRobot();
+            reculerRobot();
 		}
 		else
 		{
-			//reculerRobot();
+            avancerRobot();
 		}
 		_derniereReponse = reponsecourrante;
 	}
@@ -45,7 +45,7 @@ void Parcours::avancerRobot()
 	//{
 		if(_derniereReponse == false)
 		{
-			_r->tournerSurPlace(184);
+			_r->tournerSurPlace(180);
 		}
 		_r->avancer(35);
 	/*}
@@ -72,7 +72,7 @@ void Parcours::reculerRobot()
 	//{
 		if(_derniereReponse == true)
 		{
-			_r->tournerSurPlace(184);
+			_r->tournerSurPlace(180);
 		}
 		_r->avancer(50);
 	/*}

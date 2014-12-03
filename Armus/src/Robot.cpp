@@ -431,9 +431,13 @@ void Robot::printPosition()
 
 float Robot::demanderGroupeAlimentaire(GroupeAlimentaire groupe)
 {
+    SYSTEM_ResetTimer();
 	int choix = choixMenu(SERVO_325);
-
-	return (choix-1==groupe);
+    
+    if(choix-1==groupe)
+        return SYSTEM_ReadTimerMSeconds()/1000;
+	else
+        return false;
 
 	/******* On utilise les bumper au lieu des servo moteur pour des fin de debug *******/
 	/*GroupeAlimentaire choix;
@@ -472,9 +476,13 @@ float Robot::demanderGroupeAlimentaire(GroupeAlimentaire groupe)
 
 float Robot::demanderAliment(GroupeAlimentaire groupe)
 {
+	SYSTEM_ResetTimer();
 	int choix = choixMenu(SERVO_605);
-
-	return (choix-1==groupe);
+    
+    if(choix-1==groupe)
+        return SYSTEM_ReadTimerMSeconds()/1000;
+        else
+            return false;
 
 
 	/******* On utilise les bumper au lieu des servo moteur pour des fin de debug *******/
@@ -538,27 +546,30 @@ void Robot::jeuRecette()
         pthread_join(t1, NULL);
 
         int nbPays = 5;//Commence a ce pays
+        float tempsPartie = 0;
         bool continuerPartie = true;
         while(continuerPartie)
         {
             voice.playPays(&t1, nbPays);
             pthread_join(t1, NULL);
-            bool bonnereponse = jeuQuestion();
+            float bonneReponse = jeuQuestion();
+            tempsPartie += bonneReponse;
             
             //avancer ou reculer et affectant nbPays
-            if(bonnereponse)
+            if(bonneReponse)
             {
                 nbPays--;
                 //Verifie si la partie est terminer
                 if(nbPays == 0)
                 {
                     voice.threadedPlay(&t1, "gagnePartie");
+                    voice.playTempsPartie(&t1, &t1, &t1, tempsPartie);
                     continuerPartie = false;
                 }
                 else
                 {
                     voice.playAvance(&t1);
-                    _parcours.deplacer(bonnereponse);
+                    _parcours.deplacer(bonneReponse);
                 }
             }
             else
@@ -573,14 +584,14 @@ void Robot::jeuRecette()
                 else
                 {
                     voice.playRecule(&t1);
-                    _parcours.deplacer(bonnereponse);
+                    _parcours.deplacer(bonneReponse);
                 }
             }
         }
     }
 }
 
-bool Robot::jeuQuestion()
+float Robot::jeuQuestion()
 {
 	THREAD t1, t2;
     //Selectionner une recette au hasard
@@ -591,13 +602,13 @@ bool Robot::jeuQuestion()
     afficherRecette(recette);
 
     //L'audio de la recette est joué
-    int tempsAudio = voice.playQuestionRecette(&t1, &t1, &t1, numeroDeRecette);
+    int tempsAudio = voice.playQuestionGroupe(&t1, &t1, &t1, numeroDeRecette);
     //Call bloquant où on attent que le thread ait fini de faire jouer l'audio
     pthread_join(t1, NULL);
 
     //Demander groupe alimentaire manquant
     LCD_Printf("Il manque un groupe alimentaire. Lequel? \n");
-    bool bonneReponse = demanderGroupeAlimentaire(recette.groupeManquant);
+    float bonneReponse = demanderGroupeAlimentaire(recette.groupeManquant);
 
     direReponse(bonneReponse, recette, numeroDeRecette);
 
@@ -607,9 +618,10 @@ bool Robot::jeuQuestion()
 		LCD_Printf("Quel aliment fait parti du groupe: %s ?\n", toString(recette.groupeManquant).data());
 		voice.threadedPlay(&t1, "questionAliment");
 		pthread_join(t1, NULL);
+        
 		bonneReponse = demanderAliment(recette.groupeManquant);
-
-		direReponse(bonneReponse, recette, numeroDeRecette);
+        
+        direReponse(bonneReponse, recette, numeroDeRecette);
     }
     return bonneReponse;
 }
