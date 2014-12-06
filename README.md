@@ -12,7 +12,7 @@ But: Créer un robot-jouet éducatif et amusant pour les enfants
 ![Parcours du CRJ](/Images/ParcoursCRJ.jpg "Parcours du CRJ")
 
 Jeu:
-+ Aidez la chef cuisinière Nervabotte à créer des repas avec les quatre groupes alimentaires
++ Aidez la chef cuisinière Nervabotte à créer des repas santé contenant les quatre groupes alimentaires
 
 Grande Course
 ----------------
@@ -32,4 +32,4 @@ Il faut parcourir la plus grande distance sans toucher les lignes du côté.
 
 Résultat: 6e / 24
 
-![Parcours](/Images/ParcoursQualification.jpg "Parcours")
+![Parcours](/Images/ParcoursQualification.png "Parcours")
