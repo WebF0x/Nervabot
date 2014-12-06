@@ -7,6 +7,8 @@ Concours Robot-Jouet
 --------------------
 But: Créer un robot-jouet éducatif et amusant pour les enfants
 
+Notre robot: Aidez la chef cuisinière Nervabotte à créer des repas avec les quatre groupes alimentaires
+
 ![Chef cuisinière](/Images/ChefCuisiniere.jpg "Chef cuisinière")
 ![Menu tournant](/Images/MenuServomoteurs.jpg "Menu tournant")
 ![Parcours du CRJ](/Images/ParcoursCRJ.jpg "Parcours du CRJ")
