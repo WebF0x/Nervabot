@@ -1,34 +1,35 @@
 Nervabot
 ========
 
-Robot fait par 7 étudiants de l'Université de Sherbrooke en Génie Informatique et Électrique
+Robot fait par 7 étudiants de l'Université de Sherbrooke en Génie Informatique et Électrique dans le cadre du Concours Robot-Jouet 2014.
 
-Milestones
-----------
-- Avance droit d'une certaine distance
-- Tourner d'un certain angle
-- Parcours de la qualification hardcodé
-- 6e position lors de la qualification
+Concours Robot-Jouet
+--------------------
+But: Créer un robot-jouet éducatif et amusant pour les enfants
 
-La Grande Course
+![Chef cuisinière](/Images/ChefCuisiniere.jpg "Chef cuisinière")
+![Menu tournant](/Images/MenuServomoteurs.jpg "Menu tournant")
+![Parcours du CRJ](/Images/ParcoursCRJ.jpg "Parcours du CRJ")
+
+Jeu:
++ Aidez la chef cuisinière Nervabotte à créer des repas avec les quatre groupes alimentaires
+
+Grande Course
 ----------------
-Date: Jeudi le 30 octobre 2014
+Résultat: 1ère place!
 
 ![Parcours](/Images/ParcoursGrandeCourse.jpg "Parcours")
 
+Règles:
 + Bleu : 20 points
 + Vert : 10 points
 + Jaune : 5 Points
++ Une roue en dehors de la bande rouge = robot retiré du parcours
 
-Une roue en dehors de la bande rouge = robot retiré du parcours
+Qualification
+----------------
+Il faut parcourir la plus grande distance sans toucher les lignes du côté.
 
-<a href="http://www.gel.usherbrooke.ca/crj/2014/">Concours Robot-Jouet 2014</a>
--------------------------------------------------------------------------------
-Date: Fin de la session d'automne 2014
+Résultat: 6e / 24
 
-Construire un robot éducatif et amusant pour les enfants
-
-Thème: La Cuisine
-
-<a href="http://www.gel.usherbrooke.ca/armus/index.php/Accueil">Wiki d'ArmUS</a>
---------------------------------------------------------------------------------
+![Parcours](/Images/ParcoursQualification.jpg "Parcours")
