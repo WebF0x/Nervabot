@@ -46,9 +46,13 @@ void Parcours::avancerRobot()
 	//{
 		if(_derniereReponse == true)
 		{
-			_r->tournerSurPlace(180);
+			_r->tournerSurPlace(186);
+			_r->avancer(27);
 		}
-		_r->avancer(35);
+		else
+		{
+			_r->avancer(35);
+		}
 	/*}
 	else
 	{
@@ -73,9 +77,13 @@ void Parcours::reculerRobot()
 	//{
 		if(_derniereReponse == false)
 		{
-			_r->tournerSurPlace(180);
+			_r->tournerSurPlace(186);
+			_r->avancer(27);
 		}
-		_r->avancer(35);
+		else
+		{
+			_r->avancer(35);
+		}
 	/*}
 	else
 	{
